@@ -1,0 +1,9 @@
+TestData\BigTIFF\BigTIFF.tif
+TestData\BigTIFF\BigTIFFLong.tif
+TestData\BigTIFF\BigTIFFLong8.tif
+TestData\BigTIFF\BigTIFFLong8Tiles.tif
+TestData\BigTIFF\BigTIFFMotorola.tif
+TestData\BigTIFF\BigTIFFMotorolaLongStrips.tif
+TestData\BigTIFF\BigTIFFSubIFD4.tif
+TestData\BigTIFF\BigTIFFSubIFD8.tif
+TestData\BigTIFF\Classic.tif

@@ -1,0 +1,7 @@
+TestData\Apple\sample.3gp
+TestData\Apple\sample_3GPP2.3g2
+TestData\Apple\sample_iPod.m4v
+TestData\Apple\sample_iTunes.mov
+TestData\Apple\sample_mpeg2.m2v
+TestData\Apple\sample_mpeg4.mp4
+TestData\Apple\sample_sorenson.mov

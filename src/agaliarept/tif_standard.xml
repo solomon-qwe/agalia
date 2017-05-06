@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dic>
+<!-- TIFF -->
+<elem tag="00FE" enu="NewSubfileType" />
+<elem tag="00FF" enu="SubfileType" />
+<elem tag="0100" enu="ImageWidth" jpn="画像の幅" />
+<elem tag="0101" enu="ImageLength" jpn="画像の高さ" />
+<elem tag="0102" enu="BitsPerSample" jpn="画像のビットの深さ" />
+<elem tag="0103" enu="Compression" jpn="圧縮の種類" />
+<elem tag="0106" enu="PhotometricInterpretation" jpn="画素構成" />
+<elem tag="0107" enu="Threshholding" />
+<elem tag="0108" enu="CellWidth" />
+<elem tag="0109" enu="CellLength" />
+<elem tag="010A" enu="FillOrder" />
+<elem tag="010D" enu="DocumentName" />
+<elem tag="010E" enu="ImageDescription" jpn="画像タイトル" />
+<elem tag="010F" enu="Make" jpn="画像入力機器のメーカ名" />
+<elem tag="0110" enu="Model" jpn="画像入力機器のモデル名" />
+<elem tag="0111" enu="StripOffsets" jpn="画像データのロケーション" />
+<elem tag="0112" enu="Orientation" jpn="画像方向" />
+<elem tag="0115" enu="SamplesPerPixel" jpn="コンポーネント数" />
+<elem tag="0116" enu="RowsPerStrip" jpn="1ストリップあたりの行の数" />
+<elem tag="0117" enu="StripByteCounts" jpn="ストリップの総バイト数" />
+<elem tag="0118" enu="MinSampleValue" />
+<elem tag="0119" enu="MaxSampleValue" />
+<elem tag="011A" enu="XResolution" jpn="画像の幅の解像度" />
+<elem tag="011B" enu="YResolution" jpn="画像の高さの解像度" />
+<elem tag="011C" enu="PlanarConfiguration" jpn="画像データの並び" />
+<elem tag="011D" enu="PageName" />
+<elem tag="011E" enu="XPosition" />
+<elem tag="011F" enu="YPosition" />
+<elem tag="0120" enu="FreeOffsets" />
+<elem tag="0121" enu="FreeByteCounts" />
+<elem tag="0122" enu="GrayResponseUnit" />
+<elem tag="0123" enu="GrayResponseCurve" />
+<elem tag="0124" enu="T4Options" />
+<elem tag="0125" enu="T6Options" />
+<elem tag="0128" enu="ResolutionUnit" jpn="画像の幅と高さの解像度の単位" />
+<elem tag="0129" enu="PageNumber" />
+<elem tag="012D" enu="TransferFunction" jpn="再生階調カーブ特性" />
+<elem tag="0131" enu="Software" jpn="ソフトウェア" />
+<elem tag="0132" enu="DateTime" jpn="ファイル変更日時" />
+<elem tag="013B" enu="Artist" jpn="アーティスト" />
+<elem tag="013C" enu="HostComputer" />
+<elem tag="013D" enu="Predictor" />
+<elem tag="013E" enu="WhitePoint" jpn="参照白色点の色度座標値" />
+<elem tag="013F" enu="PrimaryChromaticities" jpn="原色の色度座標値" />
+<elem tag="0140" enu="ColorMap" />
+<elem tag="0141" enu="HalftoneHints" />
+<elem tag="0142" enu="TileWidth" />
+<elem tag="0143" enu="TileLength" />
+<elem tag="0144" enu="TileOffsets" />
+<elem tag="0145" enu="TileByteCounts" />
+<elem tag="014C" enu="InkSet" />
+<elem tag="014D" enu="InkNames" />
+<elem tag="014E" enu="NumberOfInks" />
+<elem tag="0150" enu="DotRange" />
+<elem tag="0151" enu="TargetPrinter" />
+<elem tag="0152" enu="ExtraSamples" />
+<elem tag="0153" enu="SampleFormat" />
+<elem tag="0154" enu="SMinSampleValue" />
+<elem tag="0155" enu="SMaxSampleValue" />
+<elem tag="0156" enu="TransferRange" />
+<elem tag="0200" enu="JPEGProc" />
+<elem tag="0201" enu="JPEGInterchangeFormat" jpn="JPEGのSOIへのオフセット" />
+<elem tag="0202" enu="JPEGInterchangeFormatLngth" jpn="JPEGデータのバイト数" />
+<elem tag="0203" enu="JPEGRestartInterval" />
+<elem tag="0205" enu="JPEGLosslessPredictors" />
+<elem tag="0206" enu="JPEGPointTransforms" />
+<elem tag="0207" enu="JPEGQTables" />
+<elem tag="0208" enu="JPEGDCTables" />
+<elem tag="0209" enu="JPEGACTables" />
+<elem tag="0211" enu="YCbCrCoefficients" jpn="色変換マトリクス係数" />
+<elem tag="0212" enu="YCbCrSubSampling" jpn="YCCの画素構成(Cの間引き率)" />
+<elem tag="0213" enu="YCbCrPositioning" jpn="YCCの画素構成(YとCの位置)" />
+<elem tag="0214" enu="ReferenceBlackWhite" jpn="参照黒色点値と参照白色点値" />
+<elem tag="8298" enu="Copyright" jpn="撮影著作権者／編集著作権者" />
+<elem tag="015B" enu="JPEGTables" />
+<elem tag="935C" enu="ImageSourceData" />
+<elem tag="014A" enu="SubIFDs" />
+<elem tag="0157" enu="ClipPath" />
+<elem tag="0158" enu="XClipPathUnits" />
+<elem tag="0159" enu="YClipPathUnits" />
+<elem tag="015A" enu="Indexed" />
+<elem tag="015F" enu="OPIProxy" />
+<elem tag="800D" enu="ImageID" />
+<elem tag="84E3" enu="IT8RasterPadding" />
+<elem tag="84E6" enu="IT8ColorTable" />
+<!-- Exif -->
+<elem tag="8769" enu="Exif IFD Pointer" jpn="Exif IFDへのポインタ" />
+<elem tag="8825" enu="GPSInfo IFD Pointer" jpn="GPS IFDへのポインタ" />
+<elem tag="A005" enu="Interoperability IFD Pointer" jpn="互換性IFDへのポインタ" />
+<!-- Exif IFD -->
+<group tag="8769">
+<elem tag="9000" enu="ExifVersion" jpn="Exifバージョン" />
+<elem tag="A000" enu="FlashpixVersion" jpn="対応フラッシュピックスバージョン" />
+<elem tag="A001" enu="ColorSpace" jpn="色空間情報" />
+<elem tag="A500" enu="Gamma" jpn="再生ガンマ" />
+<elem tag="9101" enu="ComponentsConfiguration" jpn="各コンポーネントの意味" />
+<elem tag="9102" enu="CompressedBitsPerPixel" jpn="画像圧縮モード" />
+<elem tag="A002" enu="PixelXDimension" jpn="実効画像幅" />
+<elem tag="A003" enu="PixelYDimension" jpn="実効画像高さ" />
+<elem tag="927C" enu="MakerNote" jpn="メーカノート" />
+<elem tag="9286" enu="UserComment" jpn="ユーザコメント" />
+<elem tag="A004" enu="RelatedSoundFile" jpn="関連音声ファイル" />
+<elem tag="9003" enu="DateTimeOriginal" jpn="原画像データの生成日時" />
+<elem tag="9004" enu="DateTimeDigitized" jpn="ディジタルデジタルデータの作成日時" />
+<elem tag="9010" enu="OffsetTime" jpn="DateTimeの時差データ" />
+<elem tag="9011" enu="OffsetTimeOriginal" jpn="DateTimeOriginalの時差データ" />
+<elem tag="9012" enu="OffsetTimeDigitized" jpn="DateTimeDigitizedの時差データ" />
+<elem tag="9290" enu="SubSecTime" jpn="DateTimeのサブセック" />
+<elem tag="9291" enu="SubSecTimeOriginal" jpn="DateTimeOriginalのサブセック" />
+<elem tag="9292" enu="SubSecTimeDigitized" jpn="DateTimeDigitizedのサブセック" />
+<elem tag="829A" enu="ExposureTime" jpn="露出時間" />
+<elem tag="829D" enu="FNumber" jpn="Fナンバー" />
+<elem tag="8822" enu="ExposureProgram" jpn="露出プログラム" />
+<elem tag="8824" enu="SpectralSensitivity" jpn="スペクトル感度" />
+<elem tag="8827" enu="PhotographicSensitivity" jpn="撮影感度" />
+<elem tag="8828" enu="OECF" jpn="光電変換関数" />
+<elem tag="8830" enu="SensitivityType" jpn="感度種別" />
+<elem tag="8831" enu="StandardOutputSensitivity" jpn="標準出力感度" />
+<elem tag="8832" enu="RecommendedExposureIndex" jpn="推奨露光指数" />
+<elem tag="8833" enu="ISOSpeed" jpn="ISOスピード" />
+<elem tag="8834" enu="ISOSpeedLatitudeyyy" jpn="ISOスピードラチチュードyyy" />
+<elem tag="8835" enu="ISOSpeedLatitudezzz" jpn="ISOスピードラチチュードzzz" />
+<elem tag="9201" enu="ShutterSpeedValue" jpn="シャッタースピード" />
+<elem tag="9202" enu="ApertureValue" jpn="絞り値" />
+<elem tag="9203" enu="BrightnessValue" jpn="輝度値" />
+<elem tag="9204" enu="ExposureBiasValue" jpn="露光補正値" />
+<elem tag="9205" enu="MaxApertureValue" jpn="レンズ最小Ｆ値" />
+<elem tag="9206" enu="SubjectDistance" jpn="被写体距離" />
+<elem tag="9207" enu="MeteringMode" jpn="測光方式" />
+<elem tag="9208" enu="LightSource" jpn="光源" />
+<elem tag="9209" enu="Flash" jpn="フラッシュ" />
+<elem tag="920A" enu="FocalLength" jpn="レンズ焦点距離" />
+<elem tag="9214" enu="SubjectArea" jpn="被写体領域" />
+<elem tag="A20B" enu="FlashEnergy" jpn="フラッシュ強度" />
+<elem tag="A20C" enu="SpatialFrequencyResponse" jpn="空間周波数応答" />
+<elem tag="A20E" enu="FocalPlaneXResolution" jpn="焦点面の幅の解像度" />
+<elem tag="A20F" enu="FocalPlaneYResolution" jpn="焦点面の高さの解像度" />
+<elem tag="A210" enu="FocalPlaneResolutionUnit" jpn="焦点面解像度単位" />
+<elem tag="A214" enu="SubjectLocation" jpn="被写体位置" />
+<elem tag="A215" enu="ExposureIndex" jpn="露出インデックス" />
+<elem tag="A217" enu="SensingMethod" jpn="センサ方式" />
+<elem tag="A300" enu="FileSource" jpn="ファイルソース" />
+<elem tag="A301" enu="SceneType" jpn="シーンタイプ" />
+<elem tag="A302" enu="CFAPattern" jpn="CFAパターン" />
+<elem tag="A401" enu="CustomRendered" jpn="個別画像処理" />
+<elem tag="A402" enu="ExposureMode" jpn="露出モード" />
+<elem tag="A403" enu="WhiteBalance" jpn="ホワイトバランス" />
+<elem tag="A404" enu="DigitalZoomRatio" jpn="デジタルズーム倍率" />
+<elem tag="A405" enu="FocalLengthIn35mmFilm" jpn="35mm換算レンズ焦点距離" />
+<elem tag="A406" enu="SceneCaptureType" jpn="撮影シーンタイプ" />
+<elem tag="A407" enu="GainControl" jpn="ゲイン制御" />
+<elem tag="A408" enu="Contrast" jpn="撮影コントラスト" />
+<elem tag="A409" enu="Saturation" jpn="撮影彩度" />
+<elem tag="A40A" enu="Sharpness" jpn="撮影シャープネス" />
+<elem tag="A40B" enu="DeviceSettingDescription" jpn="撮影条件記述情報" />
+<elem tag="A40C" enu="SubjectDistanceRange" jpn="被写体距離レンジ" />
+<elem tag="9400" enu="Temperature" jpn="温度" />
+<elem tag="9401" enu="Humidity" jpn="湿度" />
+<elem tag="9402" enu="Pressure" jpn="圧力" />
+<elem tag="9403" enu="WaterDepth" jpn="水深" />
+<elem tag="9404" enu="Acceleration" jpn="加速度" />
+<elem tag="9405" enu="CameraElevationAngle" jpn="カメラの仰角" />
+<elem tag="A420" enu="ImageUniqueID" jpn="画像ユニークID" />
+<elem tag="A430" enu="CameraOwnerName" jpn="カメラ所有者名" />
+<elem tag="A431" enu="BodySerialNumber" jpn="カメラシリアル番号" />
+<elem tag="A432" enu="LensSpecification" jpn="レンズの仕様情報" />
+<elem tag="A433" enu="LensMake" jpn="レンズのメーカ名" />
+<elem tag="A434" enu="LensModel" jpn="レンズのモデル名" />
+<elem tag="A435" enu="LensSerialNumber" jpn="レンズシリアル番号" />
+</group>
+<!-- GPSInfo IFD -->
+<group tag="8825">
+<elem tag="0000" enu="GPSVersionID" jpn="GPSタグのバージョン" />
+<elem tag="0001" enu="GPSLatitudeRef" jpn="北緯(N)or南緯(S)" />
+<elem tag="0002" enu="GPSLatitude" jpn="緯度(数値)" />
+<elem tag="0003" enu="GPSLongitudeRef" jpn="東経(E)or西経(W)" />
+<elem tag="0004" enu="GPSLongitude" jpn="経度(数値)" />
+<elem tag="0005" enu="GPSAltitudeRef" jpn="高度の基準" />
+<elem tag="0006" enu="GPSAltitude" jpn="高度(数値)" />
+<elem tag="0007" enu="GPSTimeStamp" jpn="GPS時間(原子時計の時間)" />
+<elem tag="0008" enu="GPSSatellites" jpn="測位に使った衛星信号" />
+<elem tag="0009" enu="GPSStatus" jpn="GPS受信機の状態" />
+<elem tag="000A" enu="GPSMeasureMode" jpn="GPSの測位方法" />
+<elem tag="000B" enu="GPSDOP" jpn="測位の信頼性" />
+<elem tag="000C" enu="GPSSpeedRef" jpn="速度の単位" />
+<elem tag="000D" enu="GPSSpeed" jpn="速度(数値)" />
+<elem tag="000E" enu="GPSTrackRef" jpn="進行方向の単位" />
+<elem tag="000F" enu="GPSTrack" jpn="進行方向(数値)" />
+<elem tag="0010" enu="GPSImgDirectionRef" jpn="撮影した画像の方向の単位" />
+<elem tag="0011" enu="GPSImgDirection" jpn="撮影した画像の方向(数値)" />
+<elem tag="0012" enu="GPSMapDatum" jpn="測位に用いた地図データ" />
+<elem tag="0013" enu="GPSDestLatitudeRef" jpn="目的地の北緯(N)or南緯(S)" />
+<elem tag="0014" enu="GPSDestLatitude" jpn="目的地の緯度(数値)" />
+<elem tag="0015" enu="GPSDestLongitudeRef" jpn="目的地の東経(E)or西経(W)" />
+<elem tag="0016" enu="GPSDestLongitude" jpn="目的地の経度(数値)" />
+<elem tag="0017" enu="GPSDestBearingRef" jpn="目的地の方角の単位" />
+<elem tag="0018" enu="GPSDestBearing" jpn="目的の方角(数値)" />
+<elem tag="0019" enu="GPSDestDistanceRef" jpn="目的地までの距離の単位" />
+<elem tag="001A" enu="GPSDestDistance" jpn="目的地までの距離(数値)" />
+<elem tag="001B" enu="GPSProcessingMethod" jpn="測位方式の名称" />
+<elem tag="001C" enu="GPSAreaInformation" jpn="測位地点の名称" />
+<elem tag="001D" enu="GPSDateStamp" jpn="GPS日付" />
+<elem tag="001E" enu="GPSDifferential" jpn="GPS補正測位" />
+<elem tag="001F" enu="GPSHPositioningError" jpn="水平方向測位誤差" />
+</group>
+<!-- Interoperability IFD -->
+<group tag="A005">
+<elem tag="0001" enu="InteroperabilityIndex" jpn="互換性識別子" />
+<elem tag="0002" enu="InteroperabilityVersion" jpn="互換バージョン" />
+<elem tag="1000" enu="RelatedImageFileFormat" jpn="関連画像ファイル形式" />
+<elem tag="1001" enu="RelatedImageWidth" jpn="関連画像の幅" />
+<elem tag="1002" enu="RelatedImageLength" jpn="関連画像の高さ" />
+</group>
+<!-- Microsoft -->
+<elem tag="9C9D" enu="Author" />
+<elem tag="9C9C" enu="Comment" />
+<elem tag="4747" enu="Keywords" />
+<elem tag="9C9E" enu="Keywords" />
+<elem tag="4749" enu="Rating" />
+<elem tag="4746" enu="SimpleRating" />
+<elem tag="9C9F" enu="Subject" />
+<elem tag="9C9B" enu="Title" />
+<elem tag="4748" enu="TranscodedForSync" />
+<elem tag="EA1D" enu="OffsetSchema" />
+<!-- ICC Profile -->
+<elem tag="8773" enu="ICC Profile" />
+</dic>
