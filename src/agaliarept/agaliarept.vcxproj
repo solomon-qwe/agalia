@@ -23,7 +23,6 @@
     <ProjectGuid>{3DD31263-A5C9-41D5-9E58-3BBB6B8BEFDA}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>agaliarept</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
