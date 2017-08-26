@@ -164,8 +164,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_02379FFAA83F4C05978DF103079A4748"
             {
-            "SourcePath" = "8:..\\..\\README.txt"
-            "TargetName" = "8:README.txt"
+            "SourcePath" = "8:..\\..\\README.md"
+            "TargetName" = "8:README.md"
             "Tag" = "8:"
             "Folder" = "8:_CCB4B33068EF491ABFAC0C1A85AEA57F"
             "Condition" = "8:"
