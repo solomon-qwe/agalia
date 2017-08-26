@@ -75,7 +75,7 @@
         "InstallerBootstrapper" = "3:2"
             "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
             {
-            "Enabled" = "11:TRUE"
+            "Enabled" = "11:FALSE"
             "PromptEnabled" = "11:TRUE"
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
@@ -107,7 +107,7 @@
         "InstallerBootstrapper" = "3:2"
             "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
             {
-            "Enabled" = "11:TRUE"
+            "Enabled" = "11:FALSE"
             "PromptEnabled" = "11:TRUE"
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
@@ -138,14 +138,6 @@
         {
             "LaunchCondition"
             {
-                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_0AF1A9CCD54C49EE9D89B5DFE5A63745"
-                {
-                "Name" = "8:.NET Framework"
-                "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.6.1"
-                "AllowLaterVersions" = "11:FALSE"
-                "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=671728"
-                }
             }
         }
         "File"
@@ -318,7 +310,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:agalia"
         "ProductCode" = "8:{540D83E3-6545-438E-B4A4-FF60AD44ED53}"
-        "PackageCode" = "8:{54A11BBC-4EE6-4524-91B2-81BCE8D879B8}"
+        "PackageCode" = "8:{1098B117-D1A0-4869-90A2-4F3D979FF324}"
         "UpgradeCode" = "8:{4A23654E-07F6-445D-A77F-4044BFC6E96F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
