@@ -384,7 +384,7 @@ void print_riff_ascii(int subItem, const uint8_t* base_addr, uint64_t offset, ui
 	size_t bufSize = 1 + size + 1 + 1;
 	CHeapPtr<wchar_t> q;
 	q.Allocate(bufSize);
-	q[bufSize-1] = 0;
+	q[bufSize - 1] = 0;
 
 	swprintf_s(q, bufSize, L"\"%S\"", p.m_pData);
 	callback->print(subItem, q);
@@ -670,7 +670,7 @@ void parseRiffDirectory(const uint8_t* base_addr, uint64_t offset, uint64_t data
 		// data 
 		subItem++;
 		putDataAsByteArray(subItem, base_addr, pos, read_size, callback, config);
-		
+
 		// Value 
 		subItem++;
 		FOURCC fourCC = 0;
@@ -738,11 +738,11 @@ void parseRiffDirectory(const uint8_t* base_addr, uint64_t offset, uint64_t data
 			break;
 		}
 
-		pos += ((chunkSize+1)&~1);
+		pos += ((chunkSize + 1)&~1);
 
 		config->is_abort(agalia::config::throw_on_abort);
 
-	} while (chunkSize != 0 && pos < data_size);
+	} while (chunkSize != 0 && (pos - offset) < data_size);
 }
 
 #include "image_file.h"
