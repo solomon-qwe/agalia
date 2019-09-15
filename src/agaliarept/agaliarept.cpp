@@ -1,192 +1,226 @@
-// agaliarept.cpp : Defines the exported functions for the DLL application.
-//
-
-#include "stdafx.h"
-
-#include "../inc/agaliarept.h"
-#include "../inc/handle_wrapper.h"
-
-#include "image_file.h"
-#include "callback.h"
-#include "util.h"
-#include <Objbase.h>	// for CoInitialize 
+ï»¿#include "pch.h"
+#include "agaliareptImpl.h"
 
 
-HRESULT create_callback_instance(agalia_ptr<callback_cls>* callback, const agalia::config* config)
+
+
+_agaliaHeapImpl::_agaliaHeapImpl()
 {
-	if (config->hwndListCtrl) {
-		callback->p = new callback_obj_ListCtrl(config->hwndListCtrl, config->abort_event);
-	}
-	else if (config->stream) {
-		callback->p = new callback_obj_stream(config->stream, L"\t");
-	}
-	else {
-		callback->p = new callback_obj_null;
-	}
+}
+
+_agaliaHeapImpl::~_agaliaHeapImpl()
+{
+	Free();
+}
+
+void _agaliaHeapImpl::Release(void)
+{
+	delete this;
+}
+
+HRESULT _agaliaHeapImpl::Free(void)
+{
+	if (_p == nullptr) return E_FAIL;
+
+	auto temp = _p;
+	_p = nullptr;
+	free(temp);
 
 	return S_OK;
 }
 
-
-HRESULT determin_format(agalia_ptr<image_file>* image, uint8_t* base_addr, uint64_t base_offset, uint64_t data_size)
+HRESULT _agaliaHeapImpl::AllocateBytes(rsize_t size, bool init)
 {
-	// ƒtƒH[ƒ}ƒbƒg”»•Ê 
-	uint8_t* p = base_addr + base_offset;
-	if (image_file_bmp::is_supported(p, data_size))
-	{
-		image->p = new image_file_bmp;
+	if (_p) return E_FAIL;
+
+	void* p = nullptr;
+	if (init) {
+		p = calloc(size, 1);
 	}
-	else if (image_file_tiff::is_supported(p, data_size))
-	{
-		image->p = new image_file_tiff;
+	else {
+		p = malloc(size);
 	}
-	else if (image_file_riff::is_supported(p, data_size))
+
+	if (p == nullptr) return E_OUTOFMEMORY;
+	_p = p;
+	_size = size;
+
+	return S_OK;
+}
+
+rsize_t _agaliaHeapImpl::GetSize(void) const
+{
+	return _size;
+}
+
+void* _agaliaHeapImpl::GetData(void) const
+{
+	return _p;
+}
+
+
+
+
+
+// item class 
+
+_agaliaItemBase::_agaliaItemBase(const GUID& guid, uint64_t offset, uint64_t size)
+{
+	this->guid = guid;
+	item_data_offset = offset;
+	item_data_size = size;
+}
+
+_agaliaItemBase::~_agaliaItemBase()
+{
+}
+
+void _agaliaItemBase::Release(void)
+{
+	delete this;
+}
+
+
+
+#include "container_ASF.h"
+#include "container_BMP.h"
+#include "container_DCM.h"
+#include "container_ISO.h"
+#include "container_JPEG.h"
+#include "container_M2P.h"
+#include "container_RIFF.h"
+#include "container_TIFF.h"
+
+// ãã®ã‚¯ãƒ©ã‚¹ãŒã‚µãƒãƒ¼ãƒˆã—ã¦ã„ã‚‹ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§ã‚ã‚Œã°ã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ã¦trueã‚’è¿”ã™ 
+template <class T>
+bool generator(agaliaContainer** image, const wchar_t* path, IStream* stream)
+{
+	return T::IsSupported(stream) ? (*image = T::CreateInstance(path, stream)) : false;
+}
+
+
+typedef bool(*tf)(agaliaContainer**, const wchar_t*, IStream*);
+static tf generators[] =
+{
+	generator<analyze_ASF::container_ASF>,
+	generator<analyze_BMP::container_BMP>,
+	generator<analyze_DCM::container_DCM>,
+	generator<analyze_ISO::container_ISO>,
+	generator<analyze_JPEG::container_JPEG>,
+	generator<analyze_M2P::container_M2P>,
+	generator<analyze_RIFF::container_RIFF>,
+	generator<analyze_TIFF::container_TIFF>
+};
+
+
+typedef HRESULT (*cn)(agaliaString** name);
+static cn container_names[] = {
+	analyze_ASF::container_ASF::GetContainerName,
+	analyze_BMP::container_BMP::GetContainerName,
+	analyze_DCM::container_DCM::GetContainerName,
+	analyze_ISO::container_ISO::GetContainerName,
+	analyze_JPEG::container_JPEG::GetContainerName,
+	analyze_M2P::container_M2P::GetContainerName,
+	analyze_RIFF::container_RIFF::GetContainerName,
+	analyze_TIFF::container_TIFF::GetContainerName
+};
+
+
+
+HRESULT getAgaliaImage(agaliaContainer** image, const wchar_t* path, uint64_t offset, uint64_t size, int format)
+{
+	if (image == nullptr) return E_POINTER;
+
+	CComPtr<IStream> stream;
+	auto hr = getAgaliaStream(&stream, path, offset, size);
+	if (FAILED(hr)) return hr;
+
+	if (format == agalia_format_auto)
 	{
-		image->p = new image_file_riff;
+		for (int i = 0; i < _countof(generators); i++)
+			if (generators[i](image, path, stream))
+				return S_OK;
 	}
-	else if (image_file_jpeg::is_supported(p, data_size))
+	else if (0 <= format && format < _countof(generators))
 	{
-		image->p = new image_file_jpeg;
-	}
-	else if (image_file_dicom::is_supported(p, data_size))
-	{
-		image->p = new image_file_dicom;
-	}
-	else if (image_file_iso::is_supported(p, data_size))
-	{
-		image->p = new image_file_iso;
-	}
-	else if (image_file_asf::is_supported(p, data_size))
-	{
-		image->p = new image_file_asf;
-	}
-	else if (image_file_m2p::is_supported(p, data_size))
-	{
-		image->p = new image_file_m2p;
+		if (generators[format](image, path, stream))
+			return S_OK;
 	}
 	else
 	{
-		return AGALIA_ERR_UNSUPPORTED;
+		return E_INVALIDARG;
 	}
+	return HRESULT_FROM_WIN32(ERROR_UNSUPPORTED_TYPE);
+}
 
-	image->p->attach(base_addr, base_offset, data_size);
 
+
+HRESULT getAgaliaSupportTypeCount(int* count)
+{
+	if (count == nullptr) return E_POINTER;
+	*count = _countof(container_names);
 	return S_OK;
 }
 
 
-HRESULT _AgaliaMain_Run(const agalia::config* config, uint8_t* base_addr, uint64_t base_offset, uint64_t data_size)
+
+HRESULT getAgaliaSupportTypeName(int index, agaliaString** name)
 {
-	// ƒtƒH[ƒ}ƒbƒg”»•Ê 
-	agalia_ptr<image_file> image;
-	HRESULT result = determin_format(&image, base_addr, base_offset, data_size);
-	if (FAILED(result)) {
-		return result;
-	}
-
-	// ƒR[ƒ‹ƒoƒbƒNˆ—‚ğ‰Šú‰» 
-	agalia_ptr<callback_cls> callback;
-	create_callback_instance(&callback, config);
-
-	// ƒtƒH[ƒ}ƒbƒg‚É‰‚¶‚½‰ğÍ‚ğÀs 
-	image.p->parse(callback.p, config);
-
-	return S_OK;
+	if (name == nullptr) return E_POINTER;
+	if (index < 0 || _countof(container_names) <= index) return E_INVALIDARG;
+	return container_names[index](name);
 }
 
 
-HRESULT _AgaliaMain_Open(const agalia::config* config)
+
+
+
+int agalia_pref_dic_lang = PreferredDictonaryLanguage::English;
+int agalia_pref_dicom_vr = 0;
+
+HRESULT setAgaliaPreference(int property, int value)
 {
-	// ‰ğÍ‘ÎÛƒtƒ@ƒCƒ‹‚ğƒƒ‚ƒŠ‚Éƒ}ƒbƒv 
-	handle_wrapper hFile(INVALID_HANDLE_VALUE);
-	hFile = ::CreateFile(config->get_input_file_path(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hFile.isErr()) {
-		return HRESULT_FROM_WIN32(::GetLastError());
-	}
-	handle_wrapper hMap(NULL);
-	hMap = ::CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
-	if (hMap.isErr()) {
-		return HRESULT_FROM_WIN32(::GetLastError());
-	}
-	LPVOID pFile = ::MapViewOfFile(hMap, FILE_MAP_READ, 0, 0, 0);
-	if (pFile == NULL) {
-		return HRESULT_FROM_WIN32(::GetLastError());
-	}
-
-	// ƒAƒNƒZƒX”ÍˆÍ‚ğŒˆ’è 
-	LARGE_INTEGER liFileSize = {};
-	::GetFileSizeEx(hFile, &liFileSize);
-	uint64_t data_size = config->data_size ? min(liFileSize.QuadPart - config->offset, config->data_size) : (liFileSize.QuadPart - config->offset);
-	uint64_t base_offset = config->offset;
-	uint8_t* base_addr = reinterpret_cast<uint8_t*>(pFile);
-
-	// ‰ğÍÀs 
-	HRESULT result= _AgaliaMain_Run(config, base_addr, base_offset, data_size);
-
-	// ƒAƒ“ƒ}ƒbƒviƒnƒ“ƒhƒ‹‚ÍƒfƒXƒgƒ‰ƒNƒ^‚ÅƒNƒ[ƒYj 
-	::UnmapViewOfFile(pFile);
-
-	return result;
-}
-
-
-void _agalia_trans_func(unsigned int u, struct _EXCEPTION_POINTERS* /*e*/)
-{
-	// \‘¢‰»—áŠO‚ğC++—áŠO‚É•ÏŠ· 
-	switch (u)
+	switch (property)
 	{
-	case EXCEPTION_IN_PAGE_ERROR:
-		// ƒlƒbƒgƒ[ƒNØ’fAUSBƒƒ‚ƒŠ”²‹ ‚È‚Ç‚É‚æ‚éƒy[ƒWƒGƒ‰[ 
-		throw agalia::exception(AGALIA_ERR_IN_PAGE_ERROR);
+	case dictionary_lang:
+		switch (value)
+		{
+		case PreferredDictonaryLanguage::English:
+		case PreferredDictonaryLanguage::Japanese:
+			agalia_pref_dic_lang = value;
+			return S_OK;
+		}
+		break;
+
+	case dicom_force_dictionary_vr:
+		switch (value)
+		{
+		case 0:
+		case 1:
+			agalia_pref_dicom_vr = value;
+			return S_OK;
+		}
+		break;
 	}
 
-	// •ÏŠ·‚µ‚È‚¢ƒGƒ‰[‚ÍƒfƒtƒHƒ‹ƒg‚Ìˆ— 
+	return E_INVALIDARG;
 }
 
-
-HRESULT _AgaliaMain_ExceptionHandling(const agalia::config* config)
+HRESULT getAgaliaPreference(int property, int* value)
 {
-	HRESULT result = S_OK;
+	if (value == nullptr) return E_POINTER;
 
-	// ƒƒ‚ƒŠƒ}ƒbƒv‚ğg‚Á‚Ä‚¢‚é‚Ì‚Åƒy[ƒWƒGƒ‰[‚ğƒgƒ‰ƒbƒv‚·‚é 
-	_se_translator_function pre = _set_se_translator(_agalia_trans_func);
-	try
+	switch (property)
 	{
-		result = _AgaliaMain_Open(config);
-	}
-	catch (agalia::exception e)
-	{
-		result = e.e;
-	}
-	_set_se_translator(pre);
+	case dictionary_lang:
+		*value = agalia_pref_dic_lang;
+		return S_OK;
 
-	return result;
-}
-
-
-HRESULT _AgaliaMain_LeakCheck(const agalia::config* param)
-{
-	_CrtMemState s1 = {}, s2 = {}, s3 = {};
-
-	// ƒƒCƒ“ˆ—‚Ì‘OŒã‚ÅƒfƒoƒbƒOƒq[ƒvó‘Ô‚ÌƒXƒiƒbƒvƒVƒ‡ƒbƒg‚ğì¬ 
-	_CrtMemCheckpoint(&s1);
-	HRESULT result = _AgaliaMain_ExceptionHandling(param);
-	_CrtMemCheckpoint(&s2);
-	
-	// ƒŠ[ƒN‚µ‚Ä‚¢‚ê‚ÎƒRƒ“ƒ\[ƒ‹‚Éo—Í 
-	if (_CrtMemDifference(&s3, &s1, &s2)) {
-		_CrtMemDumpStatistics(&s3);
-#if defined(_DEBUG)
-		result = AGALIA_ERR_MEMORY_LEAK;
-#endif
+	case dicom_force_dictionary_vr:
+		*value = agalia_pref_dicom_vr;
+		return S_OK;
 	}
 
-	return result;
-}
+	return E_INVALIDARG;
 
-
-extern "C" AGALIAREPT_API
-HRESULT AgaliaMain(const agalia::config* param)
-{
-	return _AgaliaMain_LeakCheck(param);
 }

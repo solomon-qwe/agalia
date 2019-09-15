@@ -77,21 +77,78 @@
 <elem tag="8298" enu="Copyright" jpn="撮影著作権者／編集著作権者" />
 <elem tag="015B" enu="JPEGTables" />
 <elem tag="935C" enu="ImageSourceData" />
+<!-- TIFF/EP -->
+<elem tag="828D" enu="CFARepeatPatternDim" />
+<elem tag="828E" enu="CFAPattern " />
+<elem tag="828F" enu="BatteryLevel" />
+<elem tag="829A" enu="ExposureTime" />
+<elem tag="829D" enu="FNumber" />
+<elem tag="83BB" enu="IPTC/NAA" />
+<elem tag="8822" enu="ExposureProgram" />
+<elem tag="8824" enu="SpectralSensitivity" />
+<elem tag="8827" enu="ISOSpeedRatings" />
+<elem tag="8828" enu="OECF" />
+<elem tag="8829" enu="Interlace" />
+<elem tag="882A" enu="TimeZoneOffset" />
+<elem tag="882B" enu="SelfTimerMode" />
+<elem tag="9003" enu="DateTimeOriginal" />
+<elem tag="9102" enu="CompressedBitsPerPixel" />
+<elem tag="9201" enu="ShutterSpeedValue" />
+<elem tag="9202" enu="ApertureValue" />
+<elem tag="9203" enu="BrightnessValue" />
+<elem tag="9204" enu="ExposureBiasValue" />
+<elem tag="9205" enu="MaxApertureValue" />
+<elem tag="9206" enu="SubjectDistance" />
+<elem tag="9207" enu="MeteringMode" />
+<elem tag="9208" enu="LightSource" />
+<elem tag="9209" enu="Flash" />
+<elem tag="920A" enu="FocalLength" />
+<elem tag="920B" enu="FlashEnergy" />
+<elem tag="920C" enu="SpatialFrequencyResponse" />
+<elem tag="920D" enu="Noise" />
+<elem tag="920E" enu="FocalPlaneXResolution" />
+<elem tag="920F" enu="FocalPlaneYResolution" />
+<elem tag="9210" enu="FocalPlaneResolutionUnit" />
+<elem tag="9211" enu="ImageNumber" />
+<elem tag="9212" enu="SecurityClassification" />
+<elem tag="9213" enu="ImageHistory" />
+<elem tag="9214" enu="SubjectLocation" />
+<elem tag="9215" enu="ExposureIndex" />
+<elem tag="9216" enu="TIFF/EPStandardID" />
+<elem tag="9217" enu="SensingMethod" />
+<!-- TIFF/IT -->
+<elem tag="84E0" enu="Site" />
+<elem tag="84E1" enu="ColorSequence" />
+<elem tag="84E2" enu="IT8Header" />
+<elem tag="84E3" enu="RasterPadding" />
+<elem tag="84E4" enu="BitsPerRunLength" />
+<elem tag="84E5" enu="BitsPerExtendedRunLength" />
+<elem tag="84E6" enu="ColorTable" />
+<elem tag="84E7" enu="ImageColorIndicator" />
+<elem tag="84E8" enu="BackgroundColorIndicator" />
+<elem tag="84E9" enu="ImageColorValue" />
+<elem tag="84EA" enu="BackgroundColorValue" />
+<elem tag="84EB" enu="PixelIntensityRange" />
+<elem tag="84EC" enu="TransparencyIndicator" />
+<elem tag="84ED" enu="ColorCharacterization" />
+<elem tag="84EE" enu="HCUsage" />
+<elem tag="84EF" enu="TrapIndicator" />
+<elem tag="84F0" enu="CMYKEquivalent" />
+<!-- TIFF/PM -->
 <elem tag="014A" enu="SubIFDs" />
 <elem tag="0157" enu="ClipPath" />
 <elem tag="0158" enu="XClipPathUnits" />
 <elem tag="0159" enu="YClipPathUnits" />
 <elem tag="015A" enu="Indexed" />
-<elem tag="015F" enu="OPIProxy" />
 <elem tag="800D" enu="ImageID" />
-<elem tag="84E3" enu="IT8RasterPadding" />
-<elem tag="84E6" enu="IT8ColorTable" />
+<elem tag="015F" enu="OPIProxy" />
 <!-- Exif -->
 <elem tag="8769" enu="Exif IFD Pointer" jpn="Exif IFDへのポインタ" />
 <elem tag="8825" enu="GPSInfo IFD Pointer" jpn="GPS IFDへのポインタ" />
-<elem tag="A005" enu="Interoperability IFD Pointer" jpn="互換性IFDへのポインタ" />
+
 <!-- Exif IFD -->
 <group tag="8769">
+<elem tag="A005" enu="Interoperability IFD Pointer" jpn="互換性IFDへのポインタ" />
 <elem tag="9000" enu="ExifVersion" jpn="Exifバージョン" />
 <elem tag="A000" enu="FlashpixVersion" jpn="対応フラッシュピックスバージョン" />
 <elem tag="A001" enu="ColorSpace" jpn="色空間情報" />
@@ -105,9 +162,6 @@
 <elem tag="A004" enu="RelatedSoundFile" jpn="関連音声ファイル" />
 <elem tag="9003" enu="DateTimeOriginal" jpn="原画像データの生成日時" />
 <elem tag="9004" enu="DateTimeDigitized" jpn="ディジタルデジタルデータの作成日時" />
-<elem tag="9010" enu="OffsetTime" jpn="DateTimeの時差データ" />
-<elem tag="9011" enu="OffsetTimeOriginal" jpn="DateTimeOriginalの時差データ" />
-<elem tag="9012" enu="OffsetTimeDigitized" jpn="DateTimeDigitizedの時差データ" />
 <elem tag="9290" enu="SubSecTime" jpn="DateTimeのサブセック" />
 <elem tag="9291" enu="SubSecTimeOriginal" jpn="DateTimeOriginalのサブセック" />
 <elem tag="9292" enu="SubSecTimeDigitized" jpn="DateTimeDigitizedのサブセック" />
@@ -157,12 +211,6 @@
 <elem tag="A40A" enu="Sharpness" jpn="撮影シャープネス" />
 <elem tag="A40B" enu="DeviceSettingDescription" jpn="撮影条件記述情報" />
 <elem tag="A40C" enu="SubjectDistanceRange" jpn="被写体距離レンジ" />
-<elem tag="9400" enu="Temperature" jpn="温度" />
-<elem tag="9401" enu="Humidity" jpn="湿度" />
-<elem tag="9402" enu="Pressure" jpn="圧力" />
-<elem tag="9403" enu="WaterDepth" jpn="水深" />
-<elem tag="9404" enu="Acceleration" jpn="加速度" />
-<elem tag="9405" enu="CameraElevationAngle" jpn="カメラの仰角" />
 <elem tag="A420" enu="ImageUniqueID" jpn="画像ユニークID" />
 <elem tag="A430" enu="CameraOwnerName" jpn="カメラ所有者名" />
 <elem tag="A431" enu="BodySerialNumber" jpn="カメラシリアル番号" />
@@ -170,7 +218,22 @@
 <elem tag="A433" enu="LensMake" jpn="レンズのメーカ名" />
 <elem tag="A434" enu="LensModel" jpn="レンズのモデル名" />
 <elem tag="A435" enu="LensSerialNumber" jpn="レンズシリアル番号" />
+<!-- Exif 2.31 -->
+<elem tag="9010" enu="OffsetTime" jpn="DateTimeの時差データ" />
+<elem tag="9011" enu="OffsetTimeOriginal" jpn="DateTimeOriginalの時差データ" />
+<elem tag="9012" enu="OffsetTimeDigitized" jpn="DateTimeDigitizedの時差データ" />
+<elem tag="9400" enu="Temperature" jpn="温度" />
+<elem tag="9401" enu="Humidity" jpn="湿度" />
+<elem tag="9402" enu="Pressure" jpn="圧力" />
+<elem tag="9403" enu="WaterDepth" jpn="水深" />
+<elem tag="9404" enu="Acceleration" jpn="加速度" />
+<elem tag="9405" enu="CameraElevationAngle" jpn="カメラの仰角" />
+<!-- Exif 2.32 -->
+<elem tag="A460" enu="CompositeImage" jpn="合成画像" />
+<elem tag="A461" enu="SourceImageNumberOfCompositeImage" jpn="合成画像のソース画像数" />
+<elem tag="A462" enu="SourceExposureTimesOfCompositeImage" jpn="合成画像のソース画像露光時間" />
 </group>
+
 <!-- GPSInfo IFD -->
 <group tag="8825">
 <elem tag="0000" enu="GPSVersionID" jpn="GPSタグのバージョン" />
@@ -206,6 +269,7 @@
 <elem tag="001E" enu="GPSDifferential" jpn="GPS補正測位" />
 <elem tag="001F" enu="GPSHPositioningError" jpn="水平方向測位誤差" />
 </group>
+
 <!-- Interoperability IFD -->
 <group tag="A005">
 <elem tag="0001" enu="InteroperabilityIndex" jpn="互換性識別子" />
@@ -214,6 +278,7 @@
 <elem tag="1001" enu="RelatedImageWidth" jpn="関連画像の幅" />
 <elem tag="1002" enu="RelatedImageLength" jpn="関連画像の高さ" />
 </group>
+
 <!-- Microsoft -->
 <elem tag="9C9D" enu="Author" />
 <elem tag="9C9C" enu="Comment" />
@@ -227,4 +292,106 @@
 <elem tag="EA1D" enu="OffsetSchema" />
 <!-- ICC Profile -->
 <elem tag="8773" enu="ICC Profile" />
+<!-- XMP  -->
+<elem tag="02BC" enu="XMP metadata" />
+<!-- DNG -->
+<elem tag="C612" enu="DNGVersion" />
+<elem tag="C613" enu="DNGBackwardVersion" />
+<elem tag="C614" enu="UniqueCameraModel" />
+<elem tag="C615" enu="LocalizedCameraModel" />
+<elem tag="C616" enu="CFAPlaneColor" />
+<elem tag="C617" enu="CFALayout" />
+<elem tag="C618" enu="LinearizationTable" />
+<elem tag="C619" enu="BlackLevelRepeatDim" />
+<elem tag="C61A" enu="BlackLevel" />
+<elem tag="C61B" enu="BlackLevelDeltaH" />
+<elem tag="C61C" enu="BlackLevelDeltaV" />
+<elem tag="C61D" enu="WhiteLevel" />
+<elem tag="C61E" enu="DefaultScale" />
+<elem tag="C65C" enu="BestQualityScale" />
+<elem tag="C61F" enu="DefaultCropOrigin" />
+<elem tag="C620" enu="DefaultCropSize" />
+<elem tag="C65A" enu="CalibrationIlluminant1" />
+<elem tag="C65B" enu="CalibrationIlluminant2" />
+<elem tag="C621" enu="ColorMatrix1" />
+<elem tag="C622" enu="ColorMatrix2" />
+<elem tag="C623" enu="CameraCalibration1" />
+<elem tag="C624" enu="CameraCalibration2" />
+<elem tag="C625" enu="ReductionMatrix1" />
+<elem tag="C626" enu="ReductionMatrix2" />
+<elem tag="C627" enu="AnalogBalance" />
+<elem tag="C628" enu="AsShotNeutral" />
+<elem tag="C629" enu="AsShotWhiteXY" />
+<elem tag="C62A" enu="BaselineExposure" />
+<elem tag="C62B" enu="BaselineNoise" />
+<elem tag="C62C" enu="BaselineSharpness" />
+<elem tag="C62D" enu="BayerGreenSplit" />
+<elem tag="C62E" enu="LinearResponseLimit" />
+<elem tag="C62F" enu="CameraSerialNumber" />
+<elem tag="C630" enu="LensInfo" />
+<elem tag="C631" enu="ChromaBlurRadius" />
+<elem tag="C632" enu="AntiAliasStrength" />
+<elem tag="C633" enu="ShadowScale" />
+<elem tag="C634" enu="DNGPrivateData" />
+<elem tag="C635" enu="MakerNoteSafety" />
+<elem tag="C65D" enu="RawDetaUniqueID" />
+<elem tag="C68B" enu="OriginalRawFileName" />
+<elem tag="C68C" enu="OriginalRawFileData" />
+<elem tag="C68D" enu="ActiveArea" />
+<elem tag="C68E" enu="MaskedAreas" />
+<elem tag="C68F" enu="AsShotICCProfile" />
+<elem tag="C690" enu="AsShotPreProfileMatrix" />
+<elem tag="C691" enu="CurrentICCProfile" />
+<elem tag="C692" enu="CurrentPreProfileMatrix" />
+<!-- DNG 1.2 -->
+<elem tag="C6BF" enu="ColorimetricReference" />
+<elem tag="C6F3" enu="CameraCalibrationSignature" />
+<elem tag="C6F4" enu="ProfileCalibrationSignature" />
+<elem tag="C6F5" enu="ExtraCameraProfiles" />
+<elem tag="C6F6" enu="AsShotProfileName" />
+<elem tag="C6F7" enu="NoiseReductionApplied" />
+<elem tag="C6F8" enu="ProfileName" />
+<elem tag="C6F9" enu="ProfileHueSatMapDims" />
+<elem tag="C6FA" enu="ProfileHueSatMapData1" />
+<elem tag="C6FB" enu="ProfileHueSatMapData2" />
+<elem tag="C6FC" enu="ProfileToneCurve" />
+<elem tag="C6FD" enu="ProfileEmbedPolicy" />
+<elem tag="C6FE" enu="ProfileCopyright" />
+<elem tag="C714" enu="FowardMatrix1" />
+<elem tag="C715" enu="FowardMatrix2" />
+<elem tag="C716" enu="PreviewApplicationName" />
+<elem tag="C717" enu="PreviewApplicationVersion" />
+<elem tag="C718" enu="PreviewSettingsName" />
+<elem tag="C719" enu="PreviewSettingsDigest" />
+<elem tag="C71A" enu="PreviewColorSpace" />
+<elem tag="C71B" enu="PreviewDateTime" />
+<elem tag="C71C" enu="RawImageDigest" />
+<elem tag="C71D" enu="OriginalRawFileDigest" />
+<elem tag="C71E" enu="SubTileBlockSize" />
+<elem tag="C71F" enu="RowInterleaveFactor" />
+<elem tag="C725" enu="ProfileLookTableDims" />
+<elem tag="C726" enu="ProfileLookTableData" />
+<!-- DNG 1.3 -->
+<elem tag="C740" enu="OpcodeList1" />
+<elem tag="C741" enu="OpcodeList2" />
+<elem tag="C74E" enu="OpcodeList3" />
+<elem tag="C761" enu="NoiseProfile" />
+<!-- DNG 1.4 -->
+<elem tag="C7B5" enu="DefaultUserCrop" />
+<elem tag="C7A6" enu="DefaultBlackRender" />
+<elem tag="C7A5" enu="BaselineExposureOffset" />
+<elem tag="C7A4" enu="ProfileLookTableEncoding" />
+<elem tag="C7A3" enu="ProfileHueSatMapEncoding" />
+<elem tag="C791" enu="OriginalDefaultFinalSize" />
+<elem tag="C792" enu="OriginalBestQualityFinalSize" />
+<elem tag="C793" enu="OriginalDefaultCropSize" />
+<elem tag="C7A7" enu="NewRawImageDigest" />
+<elem tag="C7A8" enu="RawToPreviewGain" />
+<!-- DNG 1.5 -->
+<elem tag="C7E9" enu="DepthFormat" />
+<elem tag="C7EA" enu="DepthNear" />
+<elem tag="C7EB" enu="DepthFar" />
+<elem tag="C7EC" enu="DepthUnits" />
+<elem tag="C7ED" enu="DepthMeasureType" />
+<elem tag="C7EE" enu="EnhanceParams" />
 </dic>

@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #ifdef AGALIAREPT_EXPORTS
 #define AGALIAREPT_API __declspec(dllexport)
@@ -6,135 +6,195 @@
 #define AGALIAREPT_API __declspec(dllimport)
 #endif
 
-#include <stdint.h>	// for uint**_t 
-#include <stdio.h>	// for FILE* 
-#include <Windows.h>	// for HWND 
+#include <stdint.h>
 
+struct IStream;
+class agaliaContainer;
+
+// heap memory wrapper 
+
+class agaliaHeap
+{
+public:
+	virtual void Release(void) = 0;
+	virtual HRESULT Free(void) = 0;
+	virtual HRESULT AllocateBytes(rsize_t size, bool init = false) = 0;
+	virtual rsize_t GetSize(void) const = 0;
+	virtual void* GetData(void) const = 0;
+};
+
+
+// string wrapper 
+
+class agaliaString
+{
+public:
+	agaliaString();
+	agaliaString(const wchar_t* src);
+	virtual ~agaliaString();
+	virtual void Release(void);
+
+	virtual void Free(void);
+	HRESULT Alloc(rsize_t size);
+
+	HRESULT Copy(const wchar_t* src);
+
+	wchar_t* GetData(void) const { return reinterpret_cast<wchar_t*>(_p); }
+
+	wchar_t* _p = nullptr;
+
+	static agaliaString* create(const wchar_t* src);
+};
+
+
+
+// command line parser 
+
+class agaliaCmdLineParam
+{
+public:
+	virtual void Release(void) = 0;
+	virtual uint64_t getOffset(void) const = 0;
+	virtual uint64_t getSize(void) const = 0;
+	virtual const wchar_t* getTargetFilePath(void) const = 0;
+	virtual const wchar_t* getOutputFilePath(void) const = 0;
+
+	AGALIAREPT_API static HRESULT parseCmdLine(agaliaCmdLineParam** param);
+};
+
+
+
+// core object 
+
+class agaliaItem
+{
+public:
+	virtual void Release(void) = 0;
+
+	virtual const GUID& getGUID(void) const = 0;
+	virtual uint64_t getOffset(void) const = 0;
+	virtual uint64_t getSize(void) const = 0;
+
+	virtual HRESULT getItemName(agaliaString** str) const = 0;
+	virtual HRESULT getItemPropCount(uint32_t* count) const = 0;
+	virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const = 0;
+	virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const = 0;
+
+	virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const = 0;
+	virtual HRESULT getNextItem(agaliaItem** next) const = 0;
+
+	virtual HRESULT getAsocImage(const agaliaContainer** imageAsoc) const = 0;
+	virtual HRESULT getValueAreaOffset(uint64_t* offset) const = 0;
+	virtual HRESULT getValueAreaSize(uint64_t* size) const = 0;
+};
+
+
+class agaliaContainer
+{
+public:
+	virtual void Release(void) = 0;
+
+	virtual HRESULT getRootItem(agaliaItem** root) const = 0;
+
+	virtual HRESULT getColumnCount(uint32_t* count) const = 0;
+	virtual HRESULT getColumnWidth(uint32_t column, int32_t* length) const = 0;
+	virtual HRESULT getColumnName(uint32_t column, agaliaString** str) const = 0;
+
+	virtual HRESULT getGridRowCount(const agaliaItem* item, uint32_t* row) const = 0;
+	virtual HRESULT getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const = 0;
+
+	enum PropertyType
+	{
+		ContainerType,
+		FormatType,
+		ImageWidth,
+		ImageHeight,
+		ShootingDateTime,
+		CreationDateTime
+	};
+	virtual HRESULT getPropertyValue(PropertyType type, agaliaString** str) const = 0;
+	virtual HRESULT getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const = 0;
+	virtual HRESULT getColorProfile(agaliaHeap** buf) const = 0;
+
+	virtual HRESULT LockStream(void) const = 0;
+	virtual HRESULT UnlockStream(void) const = 0;
+	virtual HRESULT ReadData(void* buf, uint64_t pos, uint64_t size) const = 0;
+	virtual HRESULT getAsocStream(IStream** stream) const = 0;
+
+	virtual HRESULT getFilePath(agaliaString** str) const = 0;
+};
+
+
+// smart pointer 
+
+template <class T>
+class agaliaPtr
+{
+public:
+	agaliaPtr() {}
+	agaliaPtr(T* p) { _p = p; }
+	~agaliaPtr() { attach(nullptr); }
+
+	void attach(T* p) { if (_p) { auto temp = _p; _p = p; temp->Release(); } else { _p = p; } }
+
+	T* detach(void) { auto temp = _p; _p = nullptr; return temp; }
+
+	T* operator =(T* p) { attach(p); return _p; }
+	T** operator &() { attach(nullptr); return &_p; }
+	T* operator->() { return _p; }
+	operator T* () { return _p; }
+
+	T* _p = nullptr;
+};
+
+class agaliaStringPtr : public agaliaPtr<agaliaString>
+{
+public:
+	agaliaStringPtr() {}
+	agaliaStringPtr(agaliaString* p) :agaliaPtr(p) {}
+	virtual ~agaliaStringPtr() {}
+
+	agaliaString* operator =(agaliaString* p) { attach(p); return _p; }
+	operator bool() const { return _p && _p->GetData(); }
+	operator const wchar_t* () const { return _p->GetData(); }
+};
+
+
+enum PreferenceProperty {
+	dictionary_lang,
+	dicom_force_dictionary_vr
+};
+
+enum PreferredDictonaryLanguage {
+	English,
+	Japanese
+};
+
+
+extern "C"
+{
+	const int agalia_format_auto = -1;
+	AGALIAREPT_API HRESULT getAgaliaImage(agaliaContainer** image, const wchar_t* path, uint64_t offset, uint64_t size, int format = agalia_format_auto);
+	AGALIAREPT_API HRESULT getAgaliaStream(IStream** stream, const wchar_t* path, uint64_t offset, uint64_t size);
+	AGALIAREPT_API HRESULT setAgaliaPreference(int property, int value);
+	AGALIAREPT_API HRESULT getAgaliaPreference(int property, int* value);
+
+	AGALIAREPT_API HRESULT getAgaliaSupportTypeCount(int* count);
+	AGALIAREPT_API HRESULT getAgaliaSupportTypeName(int index, agaliaString** name);
+}
 
 namespace agalia
 {
-	class config
-	{
-	public:
-		enum lang {
-			enu,
-			jpn
-		};
-		enum out_stream {
-			console,
-			file
-		};
-		// コマンドライン引数 
-		unsigned int byte_stream_limit_length;
-		unsigned int preferred_language;
-		bool force_dictionary_vr;
-		uint64_t offset;
-		uint64_t data_size;
+	const uint32_t CP_US_ASCII = 20127;	// ISO 646 
+	const uint32_t CP_LATIN1 = 28591;	// ISO 8859-1 Latin 1 
+	const uint32_t CP_CYRILLIC = 28595;	// ISO 8859-5 Cyrillic 
+	const uint32_t CP_ARABIC = 28596;	// ISO 8859-6 Arabic 
+	const uint32_t CP_GREEK = 28597;	// ISO 8859-7 Greek 
+	const uint32_t CP_HEBREW = 28598;	// ISO 8859-8 Hebrew 
+	const uint32_t CP_JIS = 50221;		// JIS X 0201/0208/0212 
+	const uint32_t CP_KOREAN = 949;		// Korean 
+	const uint32_t CP_GB18030 = 54936;	// GB18030 
 
-		// 共通変数 
-		HWND hwndListCtrl;
-		HANDLE abort_event;
 
-	protected:
-		config()
-		{
-			// default settings 
-			byte_stream_limit_length = 128;
-			force_dictionary_vr = true;
-			input_file_path = nullptr;
-			output_file_path = nullptr;
-
-			offset = 0;
-			data_size = 0;
-
-			hwndListCtrl = NULL;
-			stream = nullptr;
-			abort_event = NULL;
-		}
-		virtual ~config();
-
-	public:
-		static config* create_instance(void);
-
-		virtual void release(void);
-
-		virtual void set_output_file_path(const wchar_t* path);
-		virtual void set_input_file_path(const wchar_t* path);
-		virtual const wchar_t* get_output_file_path(void) const { return output_file_path; }
-		virtual const wchar_t* get_input_file_path(void) const { return input_file_path; }
-
-		virtual HRESULT open_out_stream(int mode);
-		virtual void close_out_stream(void);
-		virtual bool is_open_stream(void) const { return (stream != nullptr); }
-
-		virtual HRESULT parse_command_line(void);
-
-		enum abort_flag {
-			no_throw_on_abort,
-			throw_on_abort
-		};
-		virtual bool is_abort(abort_flag flag) const;
-
-		virtual void usage(void);
-
-	protected:
-		virtual void set_file_path(wchar_t** pp, const wchar_t* path);
-		wchar_t* input_file_path;
-		wchar_t* output_file_path;
-
-	public:
-		FILE* stream;
-	};
-
-	// config クラスのスマートポインタ 
-	class config_ptr
-	{
-	public:
-		config_ptr() { p = nullptr; }
-		virtual ~config_ptr() { if(p) p->release(); }
-		config_ptr(config* body) { p = body; }
-		operator config*() const { return p; }
-		config* operator =(config* body) { p = body;  return p; }
-		config* operator->(void) const { return p; }
-		config** operator&(void) { return &p; }
-
-	public:
-		config* p;
-	};
-
-	class exception
-	{
-	public:
-		exception(HRESULT e) { this->e = e; }
-		HRESULT e;
-	};
-
-	// リストビューコントロールの LPARAM 
-	struct list_item_param
-	{
-		uint64_t offset;
-		uint64_t size;
-	};
+	const HRESULT AGALIA_ERR_DATA_CORRUPT = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x0001);
 }
-
-/// <summary>
-/// Analyze image file.</summary>
-/// <returns> 
-/// Returns S_OK if successful, or an error value otherwise.</returns>
-/// <param name="param">Specifies the pointer to a agalia::config structure containing analyze configuration</param>
-extern "C" AGALIAREPT_API
-HRESULT AgaliaMain(const agalia::config* param);
-
-// <summary>
-/// Create agalia::config structure.</summary>
-/// <returns> 
-/// Returns S_OK if successful, or an error value otherwise.</returns>
-/// <param name="param">Points to a buffer allocated by this method and initialized default configuration</param>
-extern "C" AGALIAREPT_API
-HRESULT AgaliaGetConfig(agalia::config** config);
-
-#define AGALIA_ERR_UNSUPPORTED		MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x0001)
-#define AGALIA_ERR_IN_PAGE_ERROR	MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x0002)
-#define AGALIA_ERR_MEMORY_LEAK		MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x0003)
-#define AGALIA_ERR_ABORT			E_ABORT
-#define AGALIA_ERR_PATH_NOT_FOUND	MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_PATH_NOT_FOUND)

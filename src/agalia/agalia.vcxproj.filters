@@ -7,7 +7,7 @@
     </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
@@ -18,7 +18,7 @@
     <ClInclude Include="agalia.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
@@ -30,28 +30,55 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="TagListView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImageViewer.h">
+    <ClInclude Include="ChildListView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AgaliaController.h">
+    <ClInclude Include="ChildTreeView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextViewer.h">
+    <ClInclude Include="ChildTextView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenFileDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageDrawD2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageDrawGDI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageDraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CSVString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TextViewer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OptionDlg.h">
+    <ClInclude Include="handle_wrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OpenFileDialog.h">
+    <ClInclude Include="controller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,19 +86,37 @@
     <ClCompile Include="agalia.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="MainFrm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainFrm.cpp">
+    <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TagListView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImageViewer.cpp">
+    <ClCompile Include="ChildListView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AgaliaController.cpp">
+    <ClCompile Include="ChildTreeView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChildTextView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenFileDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageDrawD2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageDrawGDI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextViewer.cpp">
@@ -80,10 +125,10 @@
     <ClCompile Include="util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OptionDlg.cpp">
+    <ClCompile Include="controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OpenFileDialog.cpp">
+    <ClCompile Include="OptionDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

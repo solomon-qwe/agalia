@@ -1,27 +1,21 @@
 #pragma once
 
 
-// CTagListView
+// TagListView
 
-class CTagListView : public CListCtrl
+class TagListView : public CListCtrl
 {
-	DECLARE_DYNAMIC(CTagListView)
+	DECLARE_DYNAMIC(TagListView)
 
 public:
-	CTagListView();
-	virtual ~CTagListView();
+	TagListView();
+	virtual ~TagListView();
 
-	CString m_strFilePath;
-	CFindReplaceDialog* m_pFindDlg;
+	CFindReplaceDialog* m_pFindDlg = nullptr;
 
 protected:
 	DECLARE_MESSAGE_MAP()
-public:
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	afx_msg void OnDropFiles(HDROP hDropInfo);
 	afx_msg void OnCopyToClipboardCSV();
-	afx_msg void OnShowImage();
-	afx_msg void OnDestroy();
 	afx_msg void OnSaveDump();
 	afx_msg void OnAnalyze();
 	afx_msg void OnCopyToClipboardTab();
@@ -32,13 +26,15 @@ public:
 	afx_msg void OnShowTextUtf16();
 	afx_msg void OnShowTextUtf8();
 	afx_msg void OnShowTextJis();
-	afx_msg void OnUpdateEditCopy(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateEditSelectAll(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateEditCopy(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateEditSelectAll(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateCommand(CCmdUI* pCmdUI, UINT id);
 	afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
 	void OpenPopup(POINT& pos);
 	afx_msg void OnEditFind();
-	afx_msg void OnUpdateEditFind(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateEditFind(CCmdUI* pCmdUI);
 	afx_msg LRESULT OnFindReplace(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnLvnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult);
 };

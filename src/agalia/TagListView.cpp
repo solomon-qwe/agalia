@@ -1,22 +1,26 @@
-// TagListView.cpp : 
+// TagListView.cpp : implementation file
 //
 
-#include "stdafx.h"
+#include "pch.h"
 #include "agalia.h"
 #include "TagListView.h"
-#include "ImageViewer.h"
+
 #include "TextViewer.h"
-
-#include "AgaliaController.h"
-
 #include "CSVString.h"
 #include "util.h"
 #include <vector>
 
+#include "../inc/agaliarept.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
 
 template <class T>
 void copy_to_clipboard(CListCtrl* pCtrl, T& dst)
 {
+	CWaitCursor wait;
+
 	int columns = pCtrl->GetHeaderCtrl()->GetItemCount();
 
 	std::vector<int> v(columns);
@@ -69,18 +73,118 @@ void copy_to_clipboard(CListCtrl* pCtrl, T& dst)
 }
 
 
-// CTagListView
+void dump(LPARAM lParam)
+{
+	auto param = reinterpret_cast<agaliaItem*>(lParam);
+
+	CFileDialog dlg(FALSE);
+	if (dlg.DoModal() == IDOK)
+	{
+		const agaliaContainer* image = nullptr;
+		auto hr = param->getAsocImage(&image);
+		if (FAILED(hr)) return;
+		agaliaStringPtr path;
+		hr = image->getFilePath(&path);
+		if (FAILED(hr)) return;
+
+		HANDLE hFile = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (hFile == INVALID_HANDLE_VALUE) {
+			::AfxGetMainWnd()->MessageBox(_T("File Open Error."), nullptr, MB_ICONWARNING);
+			return;
+		}
+
+		HANDLE hMap = ::CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
+		if (hMap == NULL) {
+			::CloseHandle(hFile);
+			::AfxGetMainWnd()->MessageBox(_T("File Mapping Error."), nullptr, MB_ICONWARNING);
+			return;
+		}
+
+		LPVOID pFile = ::MapViewOfFile(hMap, FILE_MAP_READ, 0, 0, 0);
+		if (pFile == NULL) {
+			::CloseHandle(hMap);
+			::CloseHandle(hFile);
+			::AfxGetMainWnd()->MessageBox(_T("File Mapping Error."), nullptr, MB_ICONWARNING);
+			return;
+		}
+
+		uint64_t offset = 0;
+		uint64_t size = 0;
+		param->getValueAreaOffset(&offset);
+		param->getValueAreaSize(&size);
+
+		HANDLE h = ::CreateFile(dlg.GetOFN().lpstrFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		DWORD dwNumberOfBytesWritten = 0;
+		::WriteFile(h, reinterpret_cast<BYTE*>(pFile) + offset, (DWORD)size, &dwNumberOfBytesWritten, NULL);
+		::CloseHandle(h);
+
+		::UnmapViewOfFile(pFile);
+		::CloseHandle(hMap);
+		::CloseHandle(hFile);
+	}
+}
+
+void analyze(LPARAM lParam)
+{
+	auto param = reinterpret_cast<agaliaItem*>(lParam);
+
+	const agaliaContainer* image;
+	auto hr = param->getAsocImage(&image);
+	if (FAILED(hr)) return;
+	agaliaStringPtr path;
+	image->getFilePath(&path);
+	if (FAILED(hr)) return;
+
+	std::wstring str;
+	wchar_t temp[1024] = {};
+
+	::GetModuleFileName(NULL, temp, _countof(temp));
+	::PathQuoteSpaces(temp);
+	str += temp;
+	str += L" ";
+
+	wcscpy_s(temp, path);
+	::PathQuoteSpaces(temp);
+	str += temp;
+	str += L" ";
+
+	uint64_t offset = 0;
+	param->getValueAreaOffset(&offset);
+	swprintf_s(temp, L"/offset:%llu ", offset);
+	str += temp;
+
+	uint64_t size = 0;
+	param->getValueAreaSize(&size);
+	swprintf_s(temp, L"/size:%llu ", size);
+	str += temp;
+
+	PROCESS_INFORMATION pi = {};
+	STARTUPINFO si = {};
+	si.cb = sizeof(si);
+
+	wchar_t* cmdline = _wcsdup(str.c_str());
+	BOOL ret = ::CreateProcess(NULL, cmdline, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi);
+	if (ret)
+	{
+		::CloseHandle(pi.hProcess);
+		::CloseHandle(pi.hThread);
+	}
+	free(cmdline);
+}
+
+
+// TagListView
 
 static UINT WM_FINDREPLACE = ::RegisterWindowMessage(FINDMSGSTRING);
 
-IMPLEMENT_DYNAMIC(CTagListView, CListCtrl)
+IMPLEMENT_DYNAMIC(TagListView, CListCtrl)
 
-CTagListView::CTagListView()
+TagListView::TagListView()
 {
-	m_pFindDlg = nullptr;
+
 }
 
-CTagListView::~CTagListView()
+TagListView::~TagListView()
 {
 }
 
@@ -91,82 +195,46 @@ CTagListView::~CTagListView()
 		(static_cast< void (AFX_MSG_CALL CCmdTarget::*)(CCmdUI*,UINT) > \
 		(memberFxn)) },
 
-BEGIN_MESSAGE_MAP(CTagListView, CListCtrl)
-	ON_WM_DROPFILES()
-	ON_WM_DESTROY()
+BEGIN_MESSAGE_MAP(TagListView, CListCtrl)
 	ON_WM_INITMENUPOPUP()
 	ON_WM_CONTEXTMENU()
-	ON_REGISTERED_MESSAGE(WM_FINDREPLACE, &CTagListView::OnFindReplace)
-	ON_MY_UPDATE_COMMAND_UI_RANGE(IDM_COPY_TO_CLIPBOARD_TAB, IDM_ANALYZE, &CTagListView::OnUpdateCommand)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_COPY, &CTagListView::OnUpdateEditCopy)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_FIND, &CTagListView::OnUpdateEditFind)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_SELECT_ALL, &CTagListView::OnUpdateEditSelectAll)
-	ON_COMMAND(IDM_COPY_TO_CLIPBOARD_TAB, &CTagListView::OnCopyToClipboardTab)
-	ON_COMMAND(IDM_COPY_TO_CLIPBOARD_CSV, &CTagListView::OnCopyToClipboardCSV)
-	ON_COMMAND(IDM_SHOW_TEXT_ASCII, &CTagListView::OnShowTextAscii)
-	ON_COMMAND(IDM_SHOW_TEXT_LATIN1, &CTagListView::OnShowTextLatin1)
-	ON_COMMAND(IDM_SHOW_TEXT_UTF16, &CTagListView::OnShowTextUtf16)
-	ON_COMMAND(IDM_SHOW_TEXT_UTF8, &CTagListView::OnShowTextUtf8)
-	ON_COMMAND(IDM_SHOW_TEXT_JIS, &CTagListView::OnShowTextJis)
-	ON_COMMAND(IDM_SHOW_IMAGE, &CTagListView::OnShowImage)
-	ON_COMMAND(IDM_SAVE_DUMP, &CTagListView::OnSaveDump)
-	ON_COMMAND(IDM_ANALYZE, &CTagListView::OnAnalyze)
-	ON_COMMAND(ID_EDIT_COPY, &CTagListView::OnEditCopy)
-	ON_COMMAND(ID_EDIT_FIND, &CTagListView::OnEditFind)
-	ON_COMMAND(ID_EDIT_SELECT_ALL, &CTagListView::OnSelectAll)
+	ON_REGISTERED_MESSAGE(WM_FINDREPLACE, &TagListView::OnFindReplace)
+	ON_MY_UPDATE_COMMAND_UI_RANGE(IDM_COPY_TO_CLIPBOARD_TAB, IDM_ANALYZE, &TagListView::OnUpdateCommand)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_COPY, &TagListView::OnUpdateEditCopy)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_FIND, &TagListView::OnUpdateEditFind)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_SELECT_ALL, &TagListView::OnUpdateEditSelectAll)
+	ON_COMMAND(IDM_COPY_TO_CLIPBOARD_TAB, &TagListView::OnCopyToClipboardTab)
+	ON_COMMAND(IDM_COPY_TO_CLIPBOARD_CSV, &TagListView::OnCopyToClipboardCSV)
+	ON_COMMAND(IDM_SHOW_TEXT_ASCII, &TagListView::OnShowTextAscii)
+	ON_COMMAND(IDM_SHOW_TEXT_LATIN1, &TagListView::OnShowTextLatin1)
+	ON_COMMAND(IDM_SHOW_TEXT_UTF16, &TagListView::OnShowTextUtf16)
+	ON_COMMAND(IDM_SHOW_TEXT_UTF8, &TagListView::OnShowTextUtf8)
+	ON_COMMAND(IDM_SHOW_TEXT_JIS, &TagListView::OnShowTextJis)
+	ON_COMMAND(IDM_SAVE_DUMP, &TagListView::OnSaveDump)
+	ON_COMMAND(IDM_ANALYZE, &TagListView::OnAnalyze)
+	ON_COMMAND(ID_EDIT_COPY, &TagListView::OnEditCopy)
+	ON_COMMAND(ID_EDIT_FIND, &TagListView::OnEditFind)
+	ON_COMMAND(ID_EDIT_SELECT_ALL, &TagListView::OnSelectAll)
+#pragma warning(suppress: 26454)	// warning C26454: Arithmetic overflow: '-' operation produces a negative unsigned result at compile time (io.5). 
+	ON_NOTIFY_REFLECT(LVN_DELETEITEM, &TagListView::OnLvnDeleteitem)
 END_MESSAGE_MAP()
 
-// PreCreateWindow virtual function 
-BOOL CTagListView::PreCreateWindow(CREATESTRUCT& cs)
-{
-	cs.dwExStyle |= WS_EX_CLIENTEDGE | WS_EX_ACCEPTFILES;
-	cs.style &= ~WS_BORDER;
 
-	return CListCtrl::PreCreateWindow(cs);
-}
+
+// TagListView message handlers
+
+
+
 
 // WM_INIT_MENU_POPUP message handler 
-void CTagListView::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
+void TagListView::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 {
 	::OnInitMenuPopup(this, pPopupMenu, nIndex, bSysMenu);
 }
 
-// WM_DESTROY message handler 
-void CTagListView::OnDestroy()
-{
-	LVITEM item = { 0 };
-	item.mask = LVIF_PARAM;
-
-	int counts = GetItemCount();
-	for (int i = 0; i < counts; i++)
-	{
-		item.iItem = i;
-		GetItem(&item);
-
-		LPARAM p = item.lParam;
-		item.lParam = NULL;
-		if (p) {
-			::CoTaskMemFree(reinterpret_cast<LPVOID>(p));
-		}
-	}
-
-	CListCtrl::OnDestroy();
-}
-
-// WM_DROPFILES message handler 
-void CTagListView::OnDropFiles(HDROP hDropInfo)
-{
-	TCHAR szFilePath[_MAX_PATH] = {};
-	UINT ret = ::DragQueryFile(hDropInfo, 0, szFilePath, _countof(szFilePath));
-	if (ret != 0) {
-		theApp.pController->ResetContents(szFilePath);
-	}
-
-	CListCtrl::OnDropFiles(hDropInfo);
-}
 
 // WM_CONTEXT_MENU message handler 
-void CTagListView::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
+void TagListView::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 {
 	int focused = GetNextItem(-1, LVNI_FOCUSED);
 	if (focused < 0) {
@@ -186,21 +254,21 @@ void CTagListView::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 }
 
 // IDM_COPY_TO_CLIPBOARD_TAB command message handler 
-void CTagListView::OnCopyToClipboardTab()
+void TagListView::OnCopyToClipboardTab()
 {
 	CTSVString dst;
 	copy_to_clipboard(this, dst);
 }
 
 // IDM_COPY_TO_CLIPBOARD_CSV command message handler 
-void CTagListView::OnCopyToClipboardCSV()
+void TagListView::OnCopyToClipboardCSV()
 {
 	CCSVString dst;
 	copy_to_clipboard(this, dst);
 }
 
 // IDM_SHOW_TEXT_ASCII command message handler 
-void CTagListView::OnShowTextAscii()
+void TagListView::OnShowTextAscii()
 {
 	POSITION pos = GetFirstSelectedItemPosition();
 	if (pos == NULL) {
@@ -215,11 +283,11 @@ void CTagListView::OnShowTextAscii()
 		return;
 	}
 
-	CTextViewer::CreateViewer(m_strFilePath, item.lParam, CTextViewer::ascii);
+	CTextViewer::CreateViewer(item.lParam, CTextViewer::ascii);
 }
 
 // IDM_SHOW_TEXT_LATIN1 command message handler 
-void CTagListView::OnShowTextLatin1()
+void TagListView::OnShowTextLatin1()
 {
 	POSITION pos = GetFirstSelectedItemPosition();
 	if (pos == NULL) {
@@ -234,11 +302,11 @@ void CTagListView::OnShowTextLatin1()
 		return;
 	}
 
-	CTextViewer::CreateViewer(m_strFilePath, item.lParam, CTextViewer::latin1);
+	CTextViewer::CreateViewer(item.lParam, CTextViewer::latin1);
 }
 
 // IDM_SHOW_TEXT_UTF16 command message handler 
-void CTagListView::OnShowTextUtf16()
+void TagListView::OnShowTextUtf16()
 {
 	POSITION pos = GetFirstSelectedItemPosition();
 	if (pos == NULL) {
@@ -253,11 +321,11 @@ void CTagListView::OnShowTextUtf16()
 		return;
 	}
 
-	CTextViewer::CreateViewer(m_strFilePath, item.lParam, CTextViewer::utf16);
+	CTextViewer::CreateViewer(item.lParam, CTextViewer::utf16);
 }
 
 // IDM_SHOW_TEXT_UTF8 command message handler 
-void CTagListView::OnShowTextUtf8()
+void TagListView::OnShowTextUtf8()
 {
 	POSITION pos = GetFirstSelectedItemPosition();
 	if (pos == NULL) {
@@ -272,11 +340,11 @@ void CTagListView::OnShowTextUtf8()
 		return;
 	}
 
-	CTextViewer::CreateViewer(m_strFilePath, item.lParam, CTextViewer::utf8);
+	CTextViewer::CreateViewer(item.lParam, CTextViewer::utf8);
 }
 
 // IDM_SHOW_TEXT_JIS command message handler 
-void CTagListView::OnShowTextJis()
+void TagListView::OnShowTextJis()
 {
 	POSITION pos = GetFirstSelectedItemPosition();
 	if (pos == NULL) {
@@ -291,30 +359,11 @@ void CTagListView::OnShowTextJis()
 		return;
 	}
 
-	CTextViewer::CreateViewer(m_strFilePath, item.lParam, CTextViewer::jis);
-}
-
-// IDM_SHOW_IMAGE command message handler 
-void CTagListView::OnShowImage()
-{
-	POSITION pos = GetFirstSelectedItemPosition();
-	if (pos == NULL) {
-		return;
-	}
-
-	LVITEM item = { 0 };
-	item.mask = LVIF_PARAM;
-	item.iItem = GetNextSelectedItem(pos);
-	GetItem(&item);
-	if (!item.lParam) {
-		return;
-	}
-
-	CImageViewer::CreateViewer(m_strFilePath, item.lParam);
+	CTextViewer::CreateViewer(item.lParam, CTextViewer::jis);
 }
 
 // IDM_SAVE_DUMP command message handler 
-void CTagListView::OnSaveDump()
+void TagListView::OnSaveDump()
 {
 	POSITION pos = GetFirstSelectedItemPosition();
 	if (pos == NULL) {
@@ -329,11 +378,11 @@ void CTagListView::OnSaveDump()
 		return;
 	}
 
-	dump(m_strFilePath, item.lParam);
+	dump(item.lParam);
 }
 
 // IDM_ANALYZE command message handler 
-void CTagListView::OnAnalyze()
+void TagListView::OnAnalyze()
 {
 	POSITION pos = GetFirstSelectedItemPosition();
 	if (pos == NULL) {
@@ -348,12 +397,14 @@ void CTagListView::OnAnalyze()
 		return;
 	}
 
-	analyze(m_strFilePath, item.lParam);
+	analyze(item.lParam);
 }
 
 // ID_SELECT_ALL command message handler 
-void CTagListView::OnSelectAll()
+void TagListView::OnSelectAll()
 {
+	CWaitCursor wait;
+
 	int counts = GetItemCount();
 	for (int i = 0; i < counts; i++)
 	{
@@ -362,24 +413,24 @@ void CTagListView::OnSelectAll()
 }
 
 // ID_EDIT_COPY command message handler 
-void CTagListView::OnEditCopy()
+void TagListView::OnEditCopy()
 {
 	OnCopyToClipboardTab();
 }
 
 // ID_EDIT_COPY update command UI 
-void CTagListView::OnUpdateEditCopy(CCmdUI *pCmdUI)
+void TagListView::OnUpdateEditCopy(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(GetFirstSelectedItemPosition() != NULL);
 }
 
 // ID_EDIT_SELECT_ALL update command UI 
-void CTagListView::OnUpdateEditSelectAll(CCmdUI *pCmdUI)
+void TagListView::OnUpdateEditSelectAll(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(GetItemCount() != 0);
 }
 
-void CTagListView::OnUpdateCommand(CCmdUI* pCmdUI, UINT id)
+void TagListView::OnUpdateCommand(CCmdUI* pCmdUI, UINT id)
 {
 	UINT selected_count = GetSelectedCount();
 
@@ -410,7 +461,7 @@ void CTagListView::OnUpdateCommand(CCmdUI* pCmdUI, UINT id)
 }
 
 
-void CTagListView::OpenPopup(POINT& pos)
+void TagListView::OpenPopup(POINT& pos)
 {
 	CMenu menu;
 	menu.CreatePopupMenu();
@@ -424,8 +475,6 @@ void CTagListView::OpenPopup(POINT& pos)
 	menu.AppendMenu(MF_STRING, IDM_SHOW_TEXT_UTF16, _T("Show Text (UTF-16)"));
 	menu.AppendMenu(MF_STRING, IDM_SHOW_TEXT_JIS, _T("Show Text (JIS)"));
 	menu.AppendMenu(MF_SEPARATOR);
-	menu.AppendMenu(MF_STRING, IDM_SHOW_IMAGE, _T("Show Image"));
-	menu.AppendMenu(MF_SEPARATOR);
 	menu.AppendMenu(MF_STRING, IDM_SAVE_DUMP, _T("Save Dump As..."));
 	menu.AppendMenu(MF_STRING, IDM_ANALYZE, _T("Analyze"));
 
@@ -433,7 +482,7 @@ void CTagListView::OpenPopup(POINT& pos)
 }
 
 
-void CTagListView::OnEditFind()
+void TagListView::OnEditFind()
 {
 	if (m_pFindDlg != nullptr) {
 		m_pFindDlg->SetFocus();
@@ -446,17 +495,17 @@ void CTagListView::OnEditFind()
 }
 
 
-void CTagListView::OnUpdateEditFind(CCmdUI *pCmdUI)
+void TagListView::OnUpdateEditFind(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(GetItemCount() != 0);
 }
 
 // WM_FINDREPLACE registered message handler 
-LRESULT CTagListView::OnFindReplace(WPARAM wParam, LPARAM lParam)
+LRESULT TagListView::OnFindReplace(WPARAM wParam, LPARAM lParam)
 {
 	UNREFERENCED_PARAMETER(wParam);
 
-	CFindReplaceDialog *pDlg = CFindReplaceDialog::GetNotifier(lParam);
+	CFindReplaceDialog* pDlg = CFindReplaceDialog::GetNotifier(lParam);
 	if (pDlg == nullptr) {
 		// オブジェクト取得失敗 
 		return 0;
@@ -542,4 +591,18 @@ LRESULT CTagListView::OnFindReplace(WPARAM wParam, LPARAM lParam)
 	::AfxMessageBox(strMessage, MB_ICONINFORMATION);
 
 	return 0;
+}
+
+
+void TagListView::OnLvnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+
+	if (pNMLV->lParam)
+	{
+		agaliaItem* p = reinterpret_cast<agaliaItem*>(pNMLV->lParam);
+		p->Release();
+	}
+
+	*pResult = 0;
 }

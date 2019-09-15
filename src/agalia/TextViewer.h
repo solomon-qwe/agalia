@@ -21,7 +21,7 @@ public:
 		jis
 	} type_t;
 
-	static void CreateViewer(LPCTSTR pszFilePath, LPARAM lParam, type_t type);
+	static void CreateViewer(LPARAM lParam, type_t type);
 
 public:
 	std::wstring path;

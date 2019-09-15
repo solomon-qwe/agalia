@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.h"
 #include "util.h"
 
 // refer. https://support.microsoft.com/ja-jp/help/242577/ 

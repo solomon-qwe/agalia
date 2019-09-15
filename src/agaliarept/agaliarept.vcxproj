@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,35 +19,36 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{3DD31263-A5C9-41D5-9E58-3BBB6B8BEFDA}</ProjectGuid>
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{741AFF56-3282-4EAE-8464-B27BF983911D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>agaliarept</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -69,57 +70,59 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;AGALIAREPT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <ExceptionHandling>Async</ExceptionHandling>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-    </Link>
-    <PostBuildEvent>
-      <Command>xcopy *.xml $(OutDir) /D /Y</Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;AGALIAREPT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <ExceptionHandling>Async</ExceptionHandling>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;AGALIAREPT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy *.xml $(OutDir) /D /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;AGALIAREPT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent>
       <Command>xcopy *.xml $(OutDir) /D /Y</Command>
@@ -127,19 +130,22 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;AGALIAREPT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <ExceptionHandling>Async</ExceptionHandling>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;AGALIAREPT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent>
       <Command>xcopy *.xml $(OutDir) /D /Y</Command>
@@ -147,19 +153,22 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;AGALIAREPT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <ExceptionHandling>Async</ExceptionHandling>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;AGALIAREPT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent>
       <Command>xcopy *.xml $(OutDir) /D /Y</Command>
@@ -168,54 +177,170 @@
   <ItemGroup>
     <ClInclude Include="..\inc\agaliarept.h" />
     <ClInclude Include="..\inc\agalia_version.h" />
-    <ClInclude Include="..\inc\handle_wrapper.h" />
+    <ClInclude Include="agaliaCmdLineParamImpl.h" />
+    <ClInclude Include="agaliaImageBase.h" />
+    <ClInclude Include="agaliareptImpl.h" />
+    <ClInclude Include="agaliaStream.h" />
+    <ClInclude Include="container_ASF.h" />
+    <ClInclude Include="analyze_ASF_item_Base.h" />
+    <ClInclude Include="analyze_ASF_item_HeaderObject.h" />
+    <ClInclude Include="analyze_ASF_util.h" />
+    <ClInclude Include="analyze_BMP_item_ColorIndex.h" />
+    <ClInclude Include="container_BMP.h" />
+    <ClInclude Include="analyze_BMP_item_Base.h" />
+    <ClInclude Include="analyze_BMP_item_BITMAPCORE.h" />
+    <ClInclude Include="analyze_BMP_item_BITMAPFILE.h" />
+    <ClInclude Include="analyze_BMP_item_BITMAPV5.h" />
+    <ClInclude Include="analyze_BMP_item_ColorIndexParent.h" />
+    <ClInclude Include="analyze_BMP_item_ColorMask.h" />
+    <ClInclude Include="analyze_BMP_item_EmbeddedProfile.h" />
+    <ClInclude Include="analyze_BMP_item_LinkedProfile.h" />
+    <ClInclude Include="analyze_BMP_item_RGBQUAD.h" />
+    <ClInclude Include="analyze_BMP_item_RGBQUADParent.h" />
+    <ClInclude Include="analyze_ISO_item_FileTypeBox.h" />
+    <ClInclude Include="container_DCM_Impl.h" />
+    <ClInclude Include="analyze_DCM_item_Base.h" />
+    <ClInclude Include="analyze_DCM_item_elem.h" />
+    <ClInclude Include="analyze_DCM_item_preamble.h" />
+    <ClInclude Include="analyze_DCM_util.h" />
+    <ClInclude Include="container_ISO.h" />
+    <ClInclude Include="analyze_ISO_item_Box.h" />
+    <ClInclude Include="analyze_ISO_util.h" />
+    <ClInclude Include="analyze_JPEG_item_APP.h" />
+    <ClInclude Include="analyze_JPEG_item_Base.h" />
+    <ClInclude Include="analyze_JPEG_item_COM.h" />
+    <ClInclude Include="analyze_JPEG_item_DAC.h" />
+    <ClInclude Include="analyze_JPEG_item_DHT.h" />
+    <ClInclude Include="analyze_JPEG_item_DQT.h" />
+    <ClInclude Include="analyze_JPEG_item_DRI.h" />
+    <ClInclude Include="analyze_JPEG_item_Exif.h" />
+    <ClInclude Include="analyze_JPEG_item_extdat.h" />
+    <ClInclude Include="analyze_JPEG_item_JFIF.h" />
+    <ClInclude Include="analyze_JPEG_item_Marker.h" />
+    <ClInclude Include="analyze_JPEG_item_SOF.h" />
+    <ClInclude Include="analyze_JPEG_item_SOI.h" />
+    <ClInclude Include="analyze_JPEG_item_SOS.h" />
+    <ClInclude Include="analyze_JPEG_util.h" />
+    <ClInclude Include="container_M2P.h" />
+    <ClInclude Include="analyze_M2P_item_Base.h" />
+    <ClInclude Include="analyze_M2P_item_PESPacket.h" />
+    <ClInclude Include="analyze_M2P_item_ProgramEnd.h" />
+    <ClInclude Include="analyze_M2P_item_ProgramStream.h" />
+    <ClInclude Include="analyze_M2P_item_ProgramStreamPack.h" />
+    <ClInclude Include="analyze_M2P_item_ProgramStreamPackHeader.h" />
+    <ClInclude Include="analyze_M2P_item_ProgramStreamSystemHeader.h" />
+    <ClInclude Include="analyze_M2P_util.h" />
+    <ClInclude Include="analyze_RIFF_item_avih.h" />
+    <ClInclude Include="analyze_RIFF_item_Base.h" />
+    <ClInclude Include="container_RIFF.h" />
+    <ClInclude Include="container_DCM.h" />
+    <ClInclude Include="container_JPEG.h" />
+    <ClInclude Include="analyze_RIFF_item_idx1.h" />
+    <ClInclude Include="analyze_RIFF_item_LIST.h" />
+    <ClInclude Include="analyze_RIFF_item_strf_auds.h" />
+    <ClInclude Include="analyze_RIFF_item_strf_vids.h" />
+    <ClInclude Include="analyze_RIFF_item_strh.h" />
+    <ClInclude Include="analyze_RIFF_item_text.h" />
+    <ClInclude Include="container_TIFF.h" />
+    <ClInclude Include="analyze_TIFF_item_Base.h" />
+    <ClInclude Include="analyze_TIFF_item_Entry.h" />
+    <ClInclude Include="analyze_TIFF_item_Header.h" />
+    <ClInclude Include="analyze_TIFF_item_Header8.h" />
+    <ClInclude Include="analyze_TIFF_item_IFD.h" />
+    <ClInclude Include="analyze_TIFF_util.h" />
     <ClInclude Include="asf_def.h" />
-    <ClInclude Include="callback.h" />
+    <ClInclude Include="byteswap.h" />
     <ClInclude Include="dcm_common.h" />
-    <ClInclude Include="dcm_DicomDataElement.h" />
-    <ClInclude Include="image_file.h" />
+    <ClInclude Include="framework.h" />
     <ClInclude Include="jpeg_def.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
     <ClInclude Include="tiff_common.h" />
-    <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="agaliaCmdLineParamImpl.cpp" />
+    <ClCompile Include="agaliaImageBase.cpp" />
     <ClCompile Include="agaliarept.cpp" />
-    <ClCompile Include="asf_analyze.cpp" />
-    <ClCompile Include="bmp_analyze.cpp" />
-    <ClCompile Include="callback.cpp" />
-    <ClCompile Include="config.cpp" />
-    <ClCompile Include="dcm_analyze.cpp" />
-    <ClCompile Include="dcm_DicomDataElement.cpp" />
-    <ClCompile Include="dcm_dictionary.cpp" />
-    <ClCompile Include="dllmain.cpp">
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </PrecompiledHeader>
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</CompileAsManaged>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="iso_analyze.cpp" />
-    <ClCompile Include="jpeg_analyze.cpp" />
-    <ClCompile Include="m2p_analyze.cpp" />
-    <ClCompile Include="riff_analyze.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    <ClCompile Include="agaliaStream.cpp" />
+    <ClCompile Include="agaliaString.cpp" />
+    <ClCompile Include="container_ASF.cpp" />
+    <ClCompile Include="analyze_ASF_item_Base.cpp" />
+    <ClCompile Include="analyze_ASF_item_HeaderObject.cpp" />
+    <ClCompile Include="analyze_ASF_util.cpp" />
+    <ClCompile Include="analyze_BMP_item_ColorIndex.cpp" />
+    <ClCompile Include="container_BMP.cpp" />
+    <ClCompile Include="analyze_BMP_item_Base.cpp" />
+    <ClCompile Include="analyze_BMP_item_BITMAPCORE.cpp" />
+    <ClCompile Include="analyze_BMP_item_BITMAPFILE.cpp" />
+    <ClCompile Include="analyze_BMP_item_BITMAPV5.cpp" />
+    <ClCompile Include="analyze_BMP_item_ColorIndexParent.cpp" />
+    <ClCompile Include="analyze_BMP_item_ColorMask.cpp" />
+    <ClCompile Include="analyze_BMP_item_EmbeddedProfile.cpp" />
+    <ClCompile Include="analyze_BMP_item_LinkedProfile.cpp" />
+    <ClCompile Include="analyze_BMP_item_RGBQUAD.cpp" />
+    <ClCompile Include="analyze_BMP_item_RGBQUADParent.cpp" />
+    <ClCompile Include="analyze_ISO_item_FileTypeBox.cpp" />
+    <ClCompile Include="container_DCM_Impl.cpp" />
+    <ClCompile Include="analyze_DCM_item_Base.cpp" />
+    <ClCompile Include="analyze_DCM_item_elem.cpp" />
+    <ClCompile Include="analyze_DCM_item_preamble.cpp" />
+    <ClCompile Include="analyze_DCM_util.cpp" />
+    <ClCompile Include="container_ISO.cpp" />
+    <ClCompile Include="analyze_ISO_item_Box.cpp" />
+    <ClCompile Include="analyze_ISO_util.cpp" />
+    <ClCompile Include="analyze_JPEG_item_APP.cpp" />
+    <ClCompile Include="analyze_JPEG_item_Base.cpp" />
+    <ClCompile Include="analyze_JPEG_item_COM.cpp" />
+    <ClCompile Include="analyze_JPEG_item_DAC.cpp" />
+    <ClCompile Include="analyze_JPEG_item_DHT.cpp" />
+    <ClCompile Include="analyze_JPEG_item_DQT.cpp" />
+    <ClCompile Include="analyze_JPEG_item_DRI.cpp" />
+    <ClCompile Include="analyze_JPEG_item_Exif.cpp" />
+    <ClCompile Include="analyze_JPEG_item_extdat.cpp" />
+    <ClCompile Include="analyze_JPEG_item_JFIF.cpp" />
+    <ClCompile Include="analyze_JPEG_item_Marker.cpp" />
+    <ClCompile Include="analyze_JPEG_item_SOF.cpp" />
+    <ClCompile Include="analyze_JPEG_item_SOI.cpp" />
+    <ClCompile Include="analyze_JPEG_item_SOS.cpp" />
+    <ClCompile Include="analyze_JPEG_util.cpp" />
+    <ClCompile Include="container_M2P.cpp" />
+    <ClCompile Include="analyze_M2P_item_Base.cpp" />
+    <ClCompile Include="analyze_M2P_item_PESPacket.cpp" />
+    <ClCompile Include="analyze_M2P_item_ProgramEnd.cpp" />
+    <ClCompile Include="analyze_M2P_item_ProgramStream.cpp" />
+    <ClCompile Include="analyze_M2P_item_ProgramStreamPack.cpp" />
+    <ClCompile Include="analyze_M2P_item_ProgramStreamPackHeader.cpp" />
+    <ClCompile Include="analyze_M2P_item_ProgramStreamSystemHeader.cpp" />
+    <ClCompile Include="analyze_RIFF_item_avih.cpp" />
+    <ClCompile Include="analyze_RIFF_item_Base.cpp" />
+    <ClCompile Include="container_DCM.cpp" />
+    <ClCompile Include="container_JPEG.cpp" />
+    <ClCompile Include="container_RIFF.cpp" />
+    <ClCompile Include="analyze_RIFF_item_idx1.cpp" />
+    <ClCompile Include="analyze_RIFF_item_LIST.cpp" />
+    <ClCompile Include="analyze_RIFF_item_strf_auds.cpp" />
+    <ClCompile Include="analyze_RIFF_item_strf_vids.cpp" />
+    <ClCompile Include="analyze_RIFF_item_strh.cpp" />
+    <ClCompile Include="analyze_RIFF_item_text.cpp" />
+    <ClCompile Include="container_TIFF.cpp" />
+    <ClCompile Include="analyze_TIFF_item_Base.cpp" />
+    <ClCompile Include="analyze_TIFF_item_Entry.cpp" />
+    <ClCompile Include="analyze_TIFF_item_Header.cpp" />
+    <ClCompile Include="analyze_TIFF_item_Header8.cpp" />
+    <ClCompile Include="analyze_TIFF_item_IFD.cpp" />
+    <ClCompile Include="analyze_TIFF_util.cpp" />
+    <ClCompile Include="dictionary_dcm.cpp" />
+    <ClCompile Include="dictionary_tiff.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="tiff_analyze.cpp" />
-    <ClCompile Include="tiff_dictionary.cpp" />
+    <ClCompile Include="stream.cpp" />
+    <ClCompile Include="stringcnv.cpp" />
+    <ClCompile Include="thumbnail.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="agaliarept.rc" />

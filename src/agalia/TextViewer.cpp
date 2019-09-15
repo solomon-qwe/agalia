@@ -1,13 +1,16 @@
 // TextViewer.cpp : implementation file
 //
 
-#include "stdafx.h"
+#include "pch.h"
 #include "agalia.h"
 #include "TextViewer.h"
+
 #include "util.h"
 
 #include "../inc/agaliarept.h"
-#include "../inc/handle_wrapper.h"
+#include "handle_wrapper.h"
+
+
 
 wchar_t* get_string(const wchar_t* path, uint64_t offset, uint32_t size, CTextViewer::type_t type, bool replace_terminator)
 {
@@ -30,10 +33,10 @@ wchar_t* get_string(const wchar_t* path, uint64_t offset, uint32_t size, CTextVi
 		::AfxGetMainWnd()->MessageBox(_T("File Mapping Error."), nullptr, MB_ICONWARNING);
 		return nullptr;
 	}
-	uint8_t* src = reinterpret_cast<uint8_t*>(pFile) + offset;
+	char* src = reinterpret_cast<char*>(pFile) + offset;
 
 	wchar_t* buf = nullptr;
-	int leng = 0;
+	rsize_t leng = 0;
 	switch (type)
 	{
 	case CTextViewer::utf16:
@@ -53,27 +56,27 @@ wchar_t* get_string(const wchar_t* path, uint64_t offset, uint32_t size, CTextVi
 			codepage = CP_ACP;
 			break;
 		case CTextViewer::latin1:
-			codepage = 1252;
+			codepage = agalia::CP_LATIN1;
 			break;
 		case CTextViewer::utf8:
 			codepage = CP_UTF8;
 			break;
 		case CTextViewer::jis:
-			codepage = 50221;
+			codepage = agalia::CP_JIS;
 			break;
 		}
 		leng = ::MultiByteToWideChar(codepage, 0, (char*)src, size, nullptr, 0);
 		buf = (wchar_t*)calloc(leng + 1, sizeof(wchar_t));
 		if (buf)
 		{
-			::MultiByteToWideChar(codepage, 0, (char*)src, size, buf, leng);
+			::MultiByteToWideChar(codepage, 0, (char*)src, size, buf, (int)leng);
 		}
 	}
 
 	if (buf)
 	{
 		if (replace_terminator) {
-			for (int i = 0; i < (leng + 1)-1; i++) {
+			for (rsize_t i = 0; i < (leng + 1) - 1; i++) {
 				if (buf[i] == L'\0') {
 					buf[i] = L' ';
 				}
@@ -85,6 +88,8 @@ wchar_t* get_string(const wchar_t* path, uint64_t offset, uint32_t size, CTextVi
 
 	return buf;
 }
+
+
 
 void create_edit(CEdit& edit, CWnd* parent, bool wrap)
 {
@@ -157,20 +162,30 @@ END_MESSAGE_MAP()
 
 // CTextViewer message handlers
 
-void CTextViewer::CreateViewer(LPCTSTR pszFilePath, LPARAM lParam, type_t type)
+void CTextViewer::CreateViewer(LPARAM lParam, type_t type)
 {
-	agalia::list_item_param* param = reinterpret_cast<agalia::list_item_param*>(lParam);
-	if (param->size > 0xFFFFFFFF) {
-		return;
-	}
-	uint64_t offset = param->offset;
-	uint32_t size = static_cast<uint32_t>(param->size);
+	auto param = reinterpret_cast<agaliaItem*>(lParam);
 
+	uint64_t offset = 0;
+	param->getValueAreaOffset(&offset);
+
+	uint64_t raw_size = 0;
+	param->getValueAreaSize(&raw_size);
+	uint32_t size = 0;
+	auto hr = UInt64ToUInt32(raw_size, &size);
+	if (FAILED(hr)) return;
+
+	const agaliaContainer* image = nullptr;
+	hr = param->getAsocImage(&image);
+	if (FAILED(hr)) return;
+	agaliaStringPtr path;
+	hr = image->getFilePath(&path);
+	if (FAILED(hr)) return;
 
 	TCHAR sz[1024] = {};
-	_stprintf_s(sz, _T("%s %I64u-%u"), ::PathFindFileName(pszFilePath), offset, size);
+	_stprintf_s(sz, _T("%s %I64u-%u"), ::PathFindFileName(path), offset, size);
 
-	wchar_t* buf = get_string(pszFilePath, offset, size, type, false);
+	wchar_t* buf = get_string(path, offset, size, type, false);
 	if (buf == nullptr)
 	{
 		return;
@@ -185,7 +200,7 @@ void CTextViewer::CreateViewer(LPCTSTR pszFilePath, LPARAM lParam, type_t type)
 		rcParent.top + (rcParent.Height() - rcWindow.Height()) / 2);
 
 	CTextViewer* pViewer = new CTextViewer;
-	pViewer->path = pszFilePath;
+	pViewer->path = path;
 	pViewer->offset = offset;
 	pViewer->size = size;
 	pViewer->type = type;
@@ -263,7 +278,7 @@ void CTextViewer::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 }
 
 
-void CTextViewer::OnUpdateEditCopy(CCmdUI *pCmdUI)
+void CTextViewer::OnUpdateEditCopy(CCmdUI* pCmdUI)
 {
 	int nStartChar = 0;
 	int nEndChar = 0;
@@ -272,12 +287,12 @@ void CTextViewer::OnUpdateEditCopy(CCmdUI *pCmdUI)
 	pCmdUI->Enable(nStartChar != nEndChar);
 }
 
-void CTextViewer::OnUpdateWrap(CCmdUI *pCmdUI)
+void CTextViewer::OnUpdateWrap(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(!(m_child.GetStyle() & ES_AUTOHSCROLL));
 }
 
-void CTextViewer::OnUpdateReplaceTerminator(CCmdUI *pCmdUI)
+void CTextViewer::OnUpdateReplaceTerminator(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(replace_terminator);
 }

@@ -4,24 +4,22 @@
 #pragma once
 
 #ifndef __AFXWIN_H__
-	#error "include 'stdafx.h' before including this file for PCH"
+	#error "include 'pch.h' before including this file for PCH"
 #endif
 
 #include "resource.h"       // main symbols
 
-class CAgaliaController;
 
 // CAgaliaApp:
 // See agalia.cpp for the implementation of this class
 //
 
-class CAgaliaApp : public CWinApp
+//class CAgaliaApp : public CWinApp
+class CAgaliaApp : public CWinAppEx
 {
 public:
-	CAgaliaApp();
+	CAgaliaApp() noexcept;
 
-public:
-	CAgaliaController* pController;
 
 // Overrides
 public:

@@ -1,13 +1,23 @@
-setlocal
-if not exist log mkdir log
+SETLOCAL
+IF NOT EXIST log MKDIR log
 
-for /f "tokens=1,2,*" %%A in ('reg query "HKLM\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7" /v "15.0"') do if "%%A"=="15.0" set vs_path=%%C
+SET devenv="%VSINSTALLDIR%Common7\IDE\devenv.com"
 
-set devenv="%vs_path%Common7\IDE\devenv.com"
+%devenv% agalia.sln /Clean "Release|x64"
+%devenv% agalia.sln /Clean "Release|x86"
+%devenv% agalia.sln /Clean "Debug|x64"
+%devenv% agalia.sln /Clean "Debug|x86"
 
-%devenv% agalia.sln /Rebuild "Release|x64" /Out log\build_x64_Release.log
-%devenv% agalia.sln /Rebuild "Release|x86" /Out log\build_x86_Release.log
-%devenv% agalia.sln /Rebuild "Debug|x64" /Out log\build_x64_Debug.log
-%devenv% agalia.sln /Rebuild "Debug|x86" /Out log\build_x86_Debug.log
+DEL /Q log\*
 
-endlocal
+%devenv% agalia.sln /Build "Release|x64" /Out log\build_x64_Release.log
+%devenv% agalia.sln /Build "Release|x86" /Out log\build_x86_Release.log
+%devenv% agalia.sln /Build "Debug|x64" /Out log\build_x64_Debug.log
+%devenv% agalia.sln /Build "Debug|x86" /Out log\build_x86_Debug.log
+
+%devenv% agalia.sln /Build "Release|x64" /Out log\build_x64_Release.log /project setup.x64
+%devenv% agalia.sln /Build "Release|x86" /Out log\build_x86_Release.log /project setup.x86
+%devenv% agalia.sln /Build "Debug|x64" /Out log\build_x64_Debug.log /project setup.x64
+%devenv% agalia.sln /Build "Debug|x86" /Out log\build_x86_Debug.log /project setup.x86
+
+ENDLOCAL

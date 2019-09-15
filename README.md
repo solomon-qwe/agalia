@@ -1,4 +1,4 @@
-# 静止画・動画解析ファイルツール agalia
+# 静止画・動画ファイル解析ツール agalia
 
 ## サポートフォーマット
 
@@ -8,12 +8,12 @@
 * DICOM
 * ISO base media format
   * .mp4, .mov, etc.
-* JPEG (Exif JPEG含む)
-* RIFF (Resource Interchange File Format)
-  * .avi, .wav, etc.
-* TIFF (Exif TIFF、BigTIFF含む)
+* JPEG (Exif JPEG 含む)
 * MPEG-2 program stream
   * .mpg, .m2v, .vob, etc.
+* RIFF (Resource Interchange File Format)
+  * .avi, .wav, webp, etc.
+* TIFF (Exif TIFF、BigTIFF、DNG 含む)
 
 ## 基本的な使い方
 
@@ -27,11 +27,6 @@
 ### MJPEG の AVI ファイルに含まれる JPEG データの解析
 1. agalia.exe に AVI ファイルをドロップ
 1. movi の 00dc を探して、data が FF,D8 で始まっているはずなので、それを右クリックして Analyze
-
-### MJPEG の AVI ファイルに含まれる JPEG データの表示
-1. agalia.exe に AVI ファイルをドロップ
-1. movi の 00dc を探して、data が FF,D8 で始まっているはずなので、それを右クリックして Show Image
-（GDI+で表示できるJPEGデータでないと表示されない）
 
 ### Exif JPEG に含まれる Exif データの解析
 1. agalia.exe に JPEG ファイルをドロップ
@@ -47,8 +42,13 @@
 1. Excelでシート全選択して表示形式を文字列にしてからペースト
 
 ### 解析結果をExcelに貼り付ける方法（２）
-1. コマンドラインで agalia hoge.dcm > a.txt
+1. コマンドラインで agalia hoge.dcm /out:a.txt
 1. Excelでa.txtを開き、テキストファイルウィザードでタブ区切り、すべての列のデータ形式を文字列にして[完了]
+
+### ファイルフォーマットを指定して開く方法
+1. agalia.exe で[File]-[Open...]でファイルオープンダイアログを開く
+1. 右下の[Format]でフォーマットを選択してファイルを開く
+
 
 ## 参考文献
 
@@ -67,7 +67,7 @@
 
 ### TIFF
 
-* [TIFF 6.0 Specification](https://web.archive.org/web/20161101052612/http://partners.adobe.com/public/developer/tiff/index.html#spec)
+* [TIFF 6.0 Specification](https://www.adobe.io/open/standards/TIFF.html)
   * TIFF 6.0 Specification
   * Adobe PageMaker® 6.0 TIFF Technical Notes
   * Adobe Photoshop® TIFF Technical Notes
@@ -109,12 +109,12 @@
 
 ## テストデータ
 
-* [TIFF (ITU-T T.24)](ftp://ftp3.itu.int/t/testsignal/GenImage/T024/)
-* [JPEG (ITU-T T.83)](ftp://ftp3.itu.int/t/testsignal/SpeImage/T083v1_0/)
+* [TIFF (ITU-T T.24)](https://www.itu.int/wftp3/Public/t/testsignal/GenImage/T024/)
+* [JPEG (ITU-T T.83)](https://www.itu.int/wftp3/Public/t/testsignal/SpeImage/T083v1_0/)
 * [BigTIFF example files](http://www.awaresystems.be/imaging/tiff/bigtiff.html#samples)
 * [QuickTime：サンプルファイル](https://support.apple.com/ja-jp/HT201549)
-* [DICOM (NEMA DICOM CD 1997)](ftp://dicom.offis.uni-oldenburg.de/pub/dicom/images/)
-* [DICOM (NEMA WG12)](ftp://medical.nema.org/medical/dicom/datasets/wg12/)
+* DICOM (NEMA DICOM CD 1997) (ftp://dicom.offis.uni-oldenburg.de/pub/dicom/images/)
+* DICOM (NEMA WG12) (ftp://medical.nema.org/medical/dicom/datasets/wg12/)
 * [DICOM (OsiriX)](http://www.osirix-viewer.com/resources/dicom-image-library/)
 * [DICOM画像ファイル (JIRA)](http://www.jira-net.or.jp/dicom/dicom_data_01_02.html)
 * [DICOM画像ファイル2012](http://www.jira-net.or.jp/dicom/dicom_data_01_03.html)

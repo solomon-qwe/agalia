@@ -3,8 +3,6 @@
 #include <iostream>
 #include <unordered_map>
 
-#include "../inc/agaliarept.h"
-
 struct dcm_dic_elem
 {
 	std::string vr;

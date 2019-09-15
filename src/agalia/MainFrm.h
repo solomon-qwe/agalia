@@ -4,20 +4,37 @@
 
 #pragma once
 #include "TagListView.h"
+#include "GraphicView.h"
+#include "PropView.h"
+#include <stdint.h>
+
+#include "controller.h"
+class agaliaItem;
 
 class CMainFrame : public CFrameWnd
 {
 	
 public:
-	CMainFrame();
+	CMainFrame() noexcept;
 protected: 
 	DECLARE_DYNAMIC(CMainFrame)
 
 // Attributes
 public:
+	controller ctrl;
+	uint32_t thumbnail_area_size = 0;
 
 // Operations
 public:
+	void ResetContents(const wchar_t* path, uint64_t offset, uint64_t size, int format);
+
+protected:
+	void DeleteAllContents(void);
+	void ResetGraphicView(void);
+	void ResetHierarchyView(void);
+	void ResetFlatView(void);
+	void UpdateTextViewPane(const agaliaItem* item);
+	void UpdateListViewPane(const agaliaItem* item);
 
 // Overrides
 public:
@@ -32,7 +49,12 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	CTagListView m_wndView;
+	CWnd* m_pCurWnd = nullptr;
+	CSplitterWnd	m_wndVSplitter;
+	CSplitterWnd	m_wndHSplitter;
+	TagListView		m_wndTagListView;
+	GraphicView		m_wndGraphicView;
+	PropView		m_wndPropView;
 
 // Generated message map functions
 protected:
@@ -40,11 +62,20 @@ protected:
 	afx_msg void OnSetFocus(CWnd *pOldWnd);
 	DECLARE_MESSAGE_MAP()
 
+protected:
+	int ResetViewLayout();
+	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 public:
-	afx_msg void OnClose();
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	afx_msg void OnEditOptions();
+	virtual void RecalcLayout(BOOL bNotify = TRUE);
+	afx_msg void OnDestroy();
+	afx_msg void OnDropFiles(HDROP hDropInfo);
+	afx_msg void OnExitSizeMove();
 	afx_msg void OnFileOpen();
+	afx_msg void OnEditOptions();
+	afx_msg void OnViewProperty();
+	afx_msg void OnViewRange(UINT id);
+protected:
+	afx_msg LRESULT OnApp(WPARAM wParam, LPARAM lParam);
 };
 
 

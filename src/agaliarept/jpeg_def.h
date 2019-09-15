@@ -2,7 +2,7 @@
 
 #include <stdint.h>	// for uint**_t 
 
-namespace agalia_jpeg
+namespace analyze_JPEG
 {
 	enum JPEG_Marker
 	{
@@ -52,12 +52,12 @@ namespace agalia_jpeg
 		APP7 = 0xFFE7,	// Reserved for application segments 
 		APP8 = 0xFFE8,	// Reserved for application segments 
 		APP9 = 0xFFE9,	// Reserved for application segments 
-		APPA = 0xFFEA,	// Reserved for application segments 
-		APPB = 0xFFEB,	// Reserved for application segments 
-		APPC = 0xFFEC,	// Reserved for application segments 
-		APPD = 0xFFED,	// Reserved for application segments 
-		APPE = 0xFFEE,	// Reserved for application segments 
-		APPF = 0xFFEF,	// Reserved for application segments 
+		APP10 = 0xFFEA,	// Reserved for application segments 
+		APP11 = 0xFFEB,	// Reserved for application segments 
+		APP12 = 0xFFEC,	// Reserved for application segments 
+		APP13 = 0xFFED,	// Reserved for application segments 
+		APP14 = 0xFFEE,	// Reserved for application segments 
+		APP15 = 0xFFEF,	// Reserved for application segments 
 		JPG0 = 0xFFF0,	// Reserved for JPEG extensions 
 		JPG1 = 0xFFF1,	// Reserved for JPEG extensions 
 		JPG2 = 0xFFF2,	// Reserved for JPEG extensions 
@@ -68,10 +68,10 @@ namespace agalia_jpeg
 		JPG7 = 0xFFF7,	// Reserved for JPEG extensions 
 		JPG8 = 0xFFF8,	// Reserved for JPEG extensions 
 		JPG9 = 0xFFF9,	// Reserved for JPEG extensions 
-		JPGA = 0xFFFA,	// Reserved for JPEG extensions 
-		JPGB = 0xFFFB,	// Reserved for JPEG extensions 
-		JPGC = 0xFFFC,	// Reserved for JPEG extensions 
-		JPGD = 0xFFFD,	// Reserved for JPEG extensions 
+		JPG10 = 0xFFFA,	// Reserved for JPEG extensions 
+		JPG11 = 0xFFFB,	// Reserved for JPEG extensions 
+		JPG12 = 0xFFFC,	// Reserved for JPEG extensions 
+		JPG13 = 0xFFFD,	// Reserved for JPEG extensions 
 		COM = 0xFFFE,	// Comment 
 		TEM = 0xFF01,	// For temporary private use in arithmetic coding 
 		RES_Start = 0xFF02,	// RES X'FF02' through X'FFBF' Reserved 
@@ -89,13 +89,9 @@ namespace agalia_jpeg
 		uint16_t length;
 	};
 
-	struct JPEGSEGMENT_APP0 : public JPEGSEGMENT_APP
+	struct JPEGSEGMENT_APP0_JFIF : public JPEGSEGMENT_APP
 	{
-		unsigned char identifier[5];
-	};
-
-	struct JPEGSEGMENT_APP0_JFIF : public JPEGSEGMENT_APP0
-	{
+		uint8_t identifier[5];
 		uint8_t major_version;
 		uint8_t minor_version;
 		uint8_t units;
@@ -106,9 +102,14 @@ namespace agalia_jpeg
 		//	(RGB)n
 	};
 
-	struct JPEGSEGMENT_APP1 : public JPEGSEGMENT_APP
+	struct JPEGSEGMENT_APPX : public JPEGSEGMENT_APP
 	{
-		unsigned char identifier[6];
+		uint8_t identifier[1];
+	};
+
+	struct JPEGSEGMENT_DQT : public JPEGSEGMENT
+	{
+		uint16_t Lq;
 	};
 
 	struct JPEGSEGMENT_DQT_BODY
@@ -119,11 +120,6 @@ namespace agalia_jpeg
 			uint8_t Q8[64];
 			uint16_t Q16[64];
 		};
-	};
-
-	struct JPEGSEGMENT_DQT : public JPEGSEGMENT
-	{
-		uint16_t Lq;
 	};
 
 	struct JPEGSEGMENT_SOF : public JPEGSEGMENT
@@ -141,6 +137,11 @@ namespace agalia_jpeg
 		} comp[1];
 	};
 
+	struct JPEGSEGMENT_DHT : public JPEGSEGMENT
+	{
+		uint16_t Lh;
+	};
+
 	struct JPEGSEGMENT_DHT_BODY
 	{
 		uint8_t Th : 4;
@@ -149,16 +150,11 @@ namespace agalia_jpeg
 		uint8_t V[1];
 	};
 
-	struct JPEGSEGMENT_DHT : public JPEGSEGMENT
-	{
-		uint16_t Lh;
-	};
-
 	struct JPEGSEGMENT_DAC : public JPEGSEGMENT
 	{
 		uint16_t La;
 		struct {
-			uint8_t Th : 4;
+			uint8_t Tb : 4;
 			uint8_t Tc : 4;
 			uint8_t Cs;
 		} comp[1];
@@ -175,7 +171,7 @@ namespace agalia_jpeg
 		} comp[1];
 	};
 
-	struct JPEGSEGMENT_SOS_Sffix
+	struct JPEGSEGMENT_SOS_Suffix
 	{
 		uint8_t Ss;
 		uint8_t Se;

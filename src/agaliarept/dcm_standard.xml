@@ -1,49 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dic><!-- refer DICOM PS3.6 2016d -->
-<elem tag="(0002,0000)" vr="UL" enu="File Meta Information Group Length" />
-<elem tag="(0002,0001)" vr="OB" enu="File Meta Information Version" />
-<elem tag="(0002,0002)" vr="UI" enu="Media Storage SOP Class UID" />
-<elem tag="(0002,0003)" vr="UI" enu="Media Storage SOP Instance UID" />
-<elem tag="(0002,0010)" vr="UI" enu="Transfer Syntax UID" />
-<elem tag="(0002,0012)" vr="UI" enu="Implementation Class UID" />
-<elem tag="(0002,0013)" vr="SH" enu="Implementation Version Name" />
-<elem tag="(0002,0016)" vr="AE" enu="Source Application Entity Title" />
+<elem tag="(0002,0000)" vr="UL" enu="File Meta Information Group Length" jpn="グループ長" />
+<elem tag="(0002,0001)" vr="OB" enu="File Meta Information Version" jpn="ファイルメタ情報版" />
+<elem tag="(0002,0002)" vr="UI" enu="Media Storage SOP Class UID" jpn="媒体保存ＳＯＰクラスＵＩＤ" />
+<elem tag="(0002,0003)" vr="UI" enu="Media Storage SOP Instance UID" jpn="媒体保存ＳＯＰインスタンスＵＩＤ" />
+<elem tag="(0002,0010)" vr="UI" enu="Transfer Syntax UID" jpn="転送構文ＵＩＤ" />
+<elem tag="(0002,0012)" vr="UI" enu="Implementation Class UID" jpn="実装クラスＵＩＤ" />
+<elem tag="(0002,0013)" vr="SH" enu="Implementation Version Name" jpn="実装版名" />
+<elem tag="(0002,0016)" vr="AE" enu="Source Application Entity Title" jpn="送信元応用エンティティ名称" />
 <elem tag="(0002,0017)" vr="AE" enu="Sending Application Entity Title" />
 <elem tag="(0002,0018)" vr="AE" enu="Receiving Application Entity Title" />
-<elem tag="(0002,0100)" vr="UI" enu="Private Information Creator UID" />
-<elem tag="(0002,0102)" vr="OB" enu="Private Information" />
-<elem tag="(0004,1130)" vr="CS" enu="File-set ID" />
-<elem tag="(0004,1141)" vr="CS" enu="File-set Descriptor File ID" />
-<elem tag="(0004,1142)" vr="CS" enu="Specific Character Set of File-set Descriptor File" />
-<elem tag="(0004,1200)" vr="UL" enu="Offset of the First Directory Record of the Root Directory Entity" />
-<elem tag="(0004,1202)" vr="UL" enu="Offset of the Last Directory Record of the Root Directory Entity" />
-<elem tag="(0004,1212)" vr="US" enu="File-set Consistency Flag" />
-<elem tag="(0004,1220)" vr="SQ" enu="Directory Record Sequence" />
-<elem tag="(0004,1400)" vr="UL" enu="Offset of the Next Directory Record" />
-<elem tag="(0004,1410)" vr="US" enu="Record In-use Flag" />
-<elem tag="(0004,1420)" vr="UL" enu="Offset of Referenced Lower-Level Directory Entity" />
-<elem tag="(0004,1430)" vr="CS" enu="Directory Record Type" />
-<elem tag="(0004,1432)" vr="UI" enu="Private Record UID" />
-<elem tag="(0004,1500)" vr="CS" enu="Referenced File ID" />
-<elem tag="(0004,1504)" vr="UL" enu="MRDR Directory Record Offset" />
-<elem tag="(0004,1510)" vr="UI" enu="Referenced SOP Class UID in File" />
-<elem tag="(0004,1511)" vr="UI" enu="Referenced SOP Instance UID in File" />
-<elem tag="(0004,1512)" vr="UI" enu="Referenced Transfer Syntax UID in File" />
-<elem tag="(0004,151A)" vr="UI" enu="Referenced Related General SOP Class UID in File" />
-<elem tag="(0004,1600)" vr="UL" enu="Number of References" />
+<elem tag="(0002,0100)" vr="UI" enu="Private Information Creator UID" jpn="私的情報作成者ＵＩＤ" />
+<elem tag="(0002,0102)" vr="OB" enu="Private Information" jpn="私的情報" />
+<elem tag="(0004,0000)" vr="UL" enu="Group Length" />
+<elem tag="(0004,1130)" vr="CS" enu="File-set ID" jpn="ファイル集合ＩＤ" />
+<elem tag="(0004,1141)" vr="CS" enu="File-set Descriptor File ID" jpn="ファイル集合記述子ファイルＩＤ" />
+<elem tag="(0004,1142)" vr="CS" enu="Specific Character Set of File-set Descriptor File" jpn="ファイル集合記述子ファイルの特定文字集合" />
+<elem tag="(0004,1200)" vr="UL" enu="Offset of the First Directory Record of the Root Directory Entity" jpn="ルートディレクトリエンティティの最初のディレクトリレコードのオフセット" />
+<elem tag="(0004,1202)" vr="UL" enu="Offset of the Last Directory Record of the Root Directory Entity" jpn="ルートディレクトリエンティティの最後のディレクトリレコードのオフセット" />
+<elem tag="(0004,1212)" vr="US" enu="File-set Consistency Flag" jpn="ファイル集合一貫性フラグ" />
+<elem tag="(0004,1220)" vr="SQ" enu="Directory Record Sequence" jpn="ディレクトリレコードシーケンス" />
+<elem tag="(0004,1400)" vr="UL" enu="Offset of the Next Directory Record" jpn="次のディレクトリレコードのオフセット" />
+<elem tag="(0004,1410)" vr="US" enu="Record In-use Flag" jpn="レコード使用中フラグ" />
+<elem tag="(0004,1420)" vr="UL" enu="Offset of Referenced Lower-Level Directory Entity" jpn="参照下位ディレクトリエンティティのオフセット" />
+<elem tag="(0004,1430)" vr="CS" enu="Directory Record Type" jpn="ディレクトリレコードタイプ" />
+<elem tag="(0004,1432)" vr="UI" enu="Private Record UID" jpn="私的レコードＵＩＤ" />
+<elem tag="(0004,1500)" vr="CS" enu="Referenced File ID" jpn="参照ファイルＩＤ" />
+<elem tag="(0004,1504)" vr="UL" enu="MRDR Directory Record Offset" jpn="ＭＲＤＲディレクトリレコードのオフセット" />
+<elem tag="(0004,1510)" vr="UI" enu="Referenced SOP Class UID in File" jpn="ファイル中の参照ＳＯＰクラスＵＩＤ" />
+<elem tag="(0004,1511)" vr="UI" enu="Referenced SOP Instance UID in File" jpn="ファイル中の参照ＳＯＰインスタンスＵＩＤ" />
+<elem tag="(0004,1512)" vr="UI" enu="Referenced Transfer Syntax UID in File" jpn="ファイル中の参照転送構文" />
+<elem tag="(0004,151A)" vr="UI" enu="Referenced Related General SOP Class UID in File" jpn="ファイル中の参照関連一般SOP クラス" />
+<elem tag="(0004,1600)" vr="UL" enu="Number of References" jpn="参照の数" />
+<elem tag="(0008,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0008,0001)" vr="UL" enu="Length to End" />
 <elem tag="(0008,0005)" vr="CS" enu="Specific Character Set" jpn="特定文字集合" />
-<elem tag="(0008,0006)" vr="SQ" enu="Language Code Sequence" />
+<elem tag="(0008,0006)" vr="SQ" enu="Language Code Sequence" jpn="言語コードシーケンス" />
 <elem tag="(0008,0008)" vr="CS" enu="Image Type" jpn="画像タイプ" />
 <elem tag="(0008,0010)" vr="SH" enu="Recognition Code" />
-<elem tag="(0008,0012)" vr="DA" enu="Instance Creation Date" />
-<elem tag="(0008,0013)" vr="TM" enu="Instance Creation Time" />
-<elem tag="(0008,0014)" vr="UI" enu="Instance Creator UID" />
+<elem tag="(0008,0012)" vr="DA" enu="Instance Creation Date" jpn="インスタンス作成日" />
+<elem tag="(0008,0013)" vr="TM" enu="Instance Creation Time" jpn="インスタンス作成時刻" />
+<elem tag="(0008,0014)" vr="UI" enu="Instance Creator UID" jpn="インスタンス作成者UID" />
 <elem tag="(0008,0015)" vr="DT" enu="Instance Coercion DateTime" />
 <elem tag="(0008,0016)" vr="UI" enu="SOP Class UID" jpn="SOPクラスUID" />
 <elem tag="(0008,0018)" vr="UI" enu="SOP Instance UID" jpn="SOPインスタンスUID" />
-<elem tag="(0008,001A)" vr="UI" enu="Related General SOP Class UID" />
-<elem tag="(0008,001B)" vr="UI" enu="Original Specialized SOP Class UID" />
+<elem tag="(0008,001A)" vr="UI" enu="Related General SOP Class UID" jpn="関連一般SOP クラスUID" />
+<elem tag="(0008,001B)" vr="UI" enu="Original Specialized SOP Class UID" jpn="オリジナル特殊化SOP クラスUID" />
 <elem tag="(0008,0020)" vr="DA" enu="Study Date" jpn="検査日付" />
 <elem tag="(0008,0021)" vr="DA" enu="Series Date" jpn="シリーズ日付" />
 <elem tag="(0008,0022)" vr="DA" enu="Acquisition Date" jpn="収集日付" />
@@ -240,6 +242,7 @@
 <elem tag="(0008,9458)" vr="SQ" enu="Frame Display Sequence" />
 <elem tag="(0008,9459)" vr="FL" enu="Recommended Display Frame Rate in Float" />
 <elem tag="(0008,9460)" vr="CS" enu="Skip Frame Range Flag" />
+<elem tag="(0010,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0010,0010)" vr="PN" enu="Patient's Name" jpn="患者の名前" />
 <elem tag="(0010,0020)" vr="LO" enu="Patient ID" jpn="患者ID" />
 <elem tag="(0010,0021)" vr="LO" enu="Issuer of Patient ID" />
@@ -312,6 +315,7 @@
 <elem tag="(0010,2299)" vr="LO" enu="Responsible Organization" />
 <elem tag="(0010,4000)" vr="LT" enu="Patient Comments" />
 <elem tag="(0010,9431)" vr="FL" enu="Examined Body Thickness" />
+<elem tag="(0012,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0012,0010)" vr="LO" enu="Clinical Trial Sponsor Name" />
 <elem tag="(0012,0020)" vr="LO" enu="Clinical Trial Protocol ID" />
 <elem tag="(0012,0021)" vr="LO" enu="Clinical Trial Protocol Name" />
@@ -334,6 +338,7 @@
 <elem tag="(0012,0085)" vr="CS" enu="Consent for Distribution Flag" />
 <elem tag="(0012,0086)" vr="DA" enu="Ethics Committee Approval Effectiveness Start Date" />
 <elem tag="(0012,0087)" vr="DA" enu="Ethics Committee Approval Effectiveness End Date" />
+<elem tag="(0014,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0014,0023)" vr="ST" enu="CAD File Format" />
 <elem tag="(0014,0024)" vr="ST" enu="Component Reference System" />
 <elem tag="(0014,0025)" vr="ST" enu="Component Manufacturing Procedure" />
@@ -526,6 +531,7 @@
 <elem tag="(0014,511D)" vr="DS" enu="Wedge Chamfer Height" />
 <elem tag="(0014,511E)" vr="CS" enu="Wedge Curve" />
 <elem tag="(0014,511F)" vr="DS" enu="Radius Along the Wedge" />
+<elem tag="(0018,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0018,0010)" vr="LO" enu="Contrast/Bolus Agent" />
 <elem tag="(0018,0012)" vr="SQ" enu="Contrast/Bolus Agent Sequence" />
 <elem tag="(0018,0013)" vr="FL" enu="Contrast/Bolus T1 Relaxivity" />
@@ -1331,6 +1337,7 @@
 <elem tag="(0018,A001)" vr="SQ" enu="Contributing Equipment Sequence" />
 <elem tag="(0018,A002)" vr="DT" enu="Contribution DateTime" />
 <elem tag="(0018,A003)" vr="ST" enu="Contribution Description" />
+<elem tag="(0020,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0020,000D)" vr="UI" enu="Study Instance UID" jpn="検査インスタンスUID" />
 <elem tag="(0020,000E)" vr="UI" enu="Series Instance UID" jpn="シリーズインスタンスUID" />
 <elem tag="(0020,0010)" vr="SH" enu="Study ID" jpn="検査ID" />
@@ -1453,6 +1460,7 @@
 <elem tag="(0020,9518)" vr="US" enu="Acquisition Index" />
 <elem tag="(0020,9529)" vr="SQ" enu="Contributing SOP Instances Reference Sequence" />
 <elem tag="(0020,9536)" vr="US" enu="Reconstruction Index" />
+<elem tag="(0022,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0022,0001)" vr="US" enu="Light Path Filter Pass-Through Wavelength" />
 <elem tag="(0022,0002)" vr="US" enu="Light Path Filter Pass Band" />
 <elem tag="(0022,0003)" vr="US" enu="Image Path Filter Pass-Through Wavelength" />
@@ -1597,6 +1605,7 @@
 <elem tag="(0022,1529)" vr="FL" enu="Y Coordinates Center Pixel View Angle" />
 <elem tag="(0022,1530)" vr="UL" enu="Number of Map Points" />
 <elem tag="(0022,1531)" vr="OF" enu="Two Dimensional to Three Dimensional Map Data" />
+<elem tag="(0024,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0024,0010)" vr="FL" enu="Visual Field Horizontal Extent" />
 <elem tag="(0024,0011)" vr="FL" enu="Visual Field Vertical Extent" />
 <elem tag="(0024,0012)" vr="CS" enu="Visual Field Shape" />
@@ -1698,6 +1707,7 @@
 <elem tag="(0024,0338)" vr="CS" enu="Index Normals Flag" />
 <elem tag="(0024,0341)" vr="FL" enu="Index Probability" />
 <elem tag="(0024,0344)" vr="SQ" enu="Index Probability Sequence" />
+<elem tag="(0028,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0028,0002)" vr="US" enu="Samples per Pixel" jpn="画素あたりサンプル" />
 <elem tag="(0028,0003)" vr="US" enu="Samples per Pixel Used" />
 <elem tag="(0028,0004)" vr="CS" enu="Photometric Interpretation" jpn="光度測定解釈" />
@@ -1942,6 +1952,7 @@
 <elem tag="(0028,9507)" vr="US" enu="LUT Frame Range" />
 <elem tag="(0028,9520)" vr="DS" enu="Image to Equipment Mapping Matrix" />
 <elem tag="(0028,9537)" vr="CS" enu="Equipment Coordinate System Identification" />
+<elem tag="(0032,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0032,000A)" vr="CS" enu="Study Status ID" />
 <elem tag="(0032,000C)" vr="CS" enu="Study Priority ID" />
 <elem tag="(0032,0012)" vr="LO" enu="Study ID Issuer" />
@@ -1969,6 +1980,7 @@
 <elem tag="(0032,1064)" vr="SQ" enu="Requested Procedure Code Sequence" />
 <elem tag="(0032,1070)" vr="LO" enu="Requested Contrast Agent" />
 <elem tag="(0032,4000)" vr="LT" enu="Study Comments" />
+<elem tag="(0038,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0038,0004)" vr="SQ" enu="Referenced Patient Alias Sequence" />
 <elem tag="(0038,0008)" vr="CS" enu="Visit Status ID" />
 <elem tag="(0038,0010)" vr="LO" enu="Admission ID" />
@@ -1999,6 +2011,7 @@
 <elem tag="(0038,0500)" vr="LO" enu="Patient State" />
 <elem tag="(0038,0502)" vr="SQ" enu="Patient Clinical Trial Participation Sequence" />
 <elem tag="(0038,4000)" vr="LT" enu="Visit Comments" />
+<elem tag="(003A,0000)" vr="UL" enu="Group Length" />
 <elem tag="(003A,0004)" vr="CS" enu="Waveform Originality" />
 <elem tag="(003A,0005)" vr="US" enu="Number of Waveform Channels" />
 <elem tag="(003A,0010)" vr="UL" enu="Number of Waveform Samples" />
@@ -2037,6 +2050,7 @@
 <elem tag="(003A,0300)" vr="SQ" enu="Multiplexed Audio Channels Description Code Sequence" />
 <elem tag="(003A,0301)" vr="IS" enu="Channel Identification Code" />
 <elem tag="(003A,0302)" vr="CS" enu="Channel Mode" />
+<elem tag="(0040,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0040,0001)" vr="AE" enu="Scheduled Station AE Title" />
 <elem tag="(0040,0002)" vr="DA" enu="Scheduled Procedure Step Start Date" />
 <elem tag="(0040,0003)" vr="TM" enu="Scheduled Procedure Step Start Time" />
@@ -2353,11 +2367,13 @@
 <elem tag="(0040,E025)" vr="SQ" enu="WADO-RS Retrieval Sequence" />
 <elem tag="(0040,E030)" vr="UI" enu="Repository Unique ID" />
 <elem tag="(0040,E031)" vr="UI" enu="Home Community ID" />
+<elem tag="(0042,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0042,0010)" vr="ST" enu="Document Title" />
 <elem tag="(0042,0011)" vr="OB" enu="Encapsulated Document" />
 <elem tag="(0042,0012)" vr="LO" enu="MIME Type of Encapsulated Document" />
 <elem tag="(0042,0013)" vr="SQ" enu="Source Instance Sequence" />
 <elem tag="(0042,0014)" vr="LO" enu="List of MIME Types" />
+<elem tag="(0044,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0044,0001)" vr="ST" enu="Product Package Identifier" />
 <elem tag="(0044,0002)" vr="CS" enu="Substance Administration Approval" />
 <elem tag="(0044,0003)" vr="LT" enu="Approval Status Further Description" />
@@ -2372,6 +2388,7 @@
 <elem tag="(0044,0012)" vr="LO" enu="Substance Administration Device ID" />
 <elem tag="(0044,0013)" vr="SQ" enu="Product Parameter Sequence" />
 <elem tag="(0044,0019)" vr="SQ" enu="Substance Administration Parameter Sequence" />
+<elem tag="(0046,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0046,0012)" vr="LO" enu="Lens Description" />
 <elem tag="(0046,0014)" vr="SQ" enu="Right Lens Sequence" />
 <elem tag="(0046,0015)" vr="SQ" enu="Left Lens Sequence" />
@@ -2451,6 +2468,7 @@
 <elem tag="(0046,0251)" vr="FL" enu="Refractive Power" />
 <elem tag="(0046,0252)" vr="FL" enu="Relative Elevation" />
 <elem tag="(0046,0253)" vr="FL" enu="Corneal Wavefront" />
+<elem tag="(0048,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0048,0001)" vr="FL" enu="Imaged Volume Width" />
 <elem tag="(0048,0002)" vr="FL" enu="Imaged Volume Height" />
 <elem tag="(0048,0003)" vr="FL" enu="Imaged Volume Depth" />
@@ -2482,6 +2500,7 @@
 <elem tag="(0048,021E)" vr="SL" enu="Column Position In Total Image Pixel Matrix" />
 <elem tag="(0048,021F)" vr="SL" enu="Row Position In Total Image Pixel Matrix" />
 <elem tag="(0048,0301)" vr="CS" enu="Pixel Origin Interpretation" />
+<elem tag="(0050,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0050,0004)" vr="CS" enu="Calibration Image" />
 <elem tag="(0050,0010)" vr="SQ" enu="Device Sequence" />
 <elem tag="(0050,0012)" vr="SQ" enu="Container Component Type Code Sequence" />
@@ -2498,6 +2517,7 @@
 <elem tag="(0050,001D)" vr="FD" enu="Container Component Diameter" />
 <elem tag="(0050,001E)" vr="LO" enu="Container Component Description" />
 <elem tag="(0050,0020)" vr="LO" enu="Device Description" />
+<elem tag="(0052,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0052,0001)" vr="FL" enu="Contrast/Bolus Ingredient Percent by Volume" />
 <elem tag="(0052,0002)" vr="FD" enu="OCT Focal Distance" />
 <elem tag="(0052,0003)" vr="FD" enu="Beam Spot Size" />
@@ -2524,6 +2544,7 @@
 <elem tag="(0052,0038)" vr="US" enu="Number of Padded A-lines" />
 <elem tag="(0052,0039)" vr="CS" enu="Interpolation Type" />
 <elem tag="(0052,003A)" vr="CS" enu="Refractive Index Applied" />
+<elem tag="(0054,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0054,0010)" vr="US" enu="Energy Window Vector" />
 <elem tag="(0054,0011)" vr="US" enu="Number of Energy Windows" />
 <elem tag="(0054,0012)" vr="SQ" enu="Energy Window Information Sequence" />
@@ -2605,6 +2626,7 @@
 <elem tag="(0054,1330)" vr="US" enu="Image Index" />
 <elem tag="(0054,1400)" vr="CS" enu="Counts Included" />
 <elem tag="(0054,1401)" vr="CS" enu="Dead Time Correction Flag" />
+<elem tag="(0060,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0060,3000)" vr="SQ" enu="Histogram Sequence" />
 <elem tag="(0060,3002)" vr="US" enu="Histogram Number of Bins" />
 <elem tag="(0060,3004)" vr="US" enu="Histogram First Bin Value" />
@@ -2612,6 +2634,7 @@
 <elem tag="(0060,3008)" vr="US" enu="Histogram Bin Width" />
 <elem tag="(0060,3010)" vr="LO" enu="Histogram Explanation" />
 <elem tag="(0060,3020)" vr="UL" enu="Histogram Data" />
+<elem tag="(0062,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0062,0001)" vr="CS" enu="Segmentation Type" />
 <elem tag="(0062,0002)" vr="SQ" enu="Segment Sequence" />
 <elem tag="(0062,0003)" vr="SQ" enu="Segmented Property Category Code Sequence" />
@@ -2631,6 +2654,7 @@
 <elem tag="(0062,0012)" vr="SQ" enu="Used Segments Sequence" />
 <elem tag="(0062,0020)" vr="UT" enu="Tracking ID" />
 <elem tag="(0062,0021)" vr="UI" enu="Tracking UID" />
+<elem tag="(0064,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0064,0002)" vr="SQ" enu="Deformable Registration Sequence" />
 <elem tag="(0064,0003)" vr="UI" enu="Source Frame of Reference UID" />
 <elem tag="(0064,0005)" vr="SQ" enu="Deformable Registration Grid Sequence" />
@@ -2639,6 +2663,7 @@
 <elem tag="(0064,0009)" vr="OF" enu="Vector Grid Data" />
 <elem tag="(0064,000F)" vr="SQ" enu="Pre Deformation Matrix Registration Sequence" />
 <elem tag="(0064,0010)" vr="SQ" enu="Post Deformation Matrix Registration Sequence" />
+<elem tag="(0066,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0066,0001)" vr="UL" enu="Number of Surfaces" />
 <elem tag="(0066,0002)" vr="SQ" enu="Surface Sequence" />
 <elem tag="(0066,0003)" vr="UL" enu="Surface Number" />
@@ -2706,6 +2731,7 @@
 <elem tag="(0066,0132)" vr="SQ" enu="Measurement Values Sequence" />
 <elem tag="(0066,0133)" vr="SQ" enu="Diffusion Acquisition Code Sequence" />
 <elem tag="(0066,0134)" vr="SQ" enu="Diffusion Model Code Sequence" />
+<elem tag="(0068,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0068,6210)" vr="LO" enu="Implant Size" />
 <elem tag="(0068,6221)" vr="LO" enu="Implant Template Version" />
 <elem tag="(0068,6222)" vr="SQ" enu="Replaced Implant Template Sequence" />
@@ -2776,6 +2802,7 @@
 <elem tag="(0068,65F0)" vr="FD" enu="2D Plane Intersection" />
 <elem tag="(0068,6610)" vr="FD" enu="3D Plane Origin" />
 <elem tag="(0068,6620)" vr="FD" enu="3D Plane Normal" />
+<elem tag="(0070,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0070,0001)" vr="SQ" enu="Graphic Annotation Sequence" />
 <elem tag="(0070,0002)" vr="CS" enu="Graphic Layer" />
 <elem tag="(0070,0003)" vr="CS" enu="Bounding Box Annotation Units" />
@@ -2930,6 +2957,7 @@
 <elem tag="(0070,1A03)" vr="FD" enu="Recommended Animation Rate" />
 <elem tag="(0070,1A04)" vr="SQ" enu="Animation Curve Sequence" />
 <elem tag="(0070,1A05)" vr="FD" enu="Animation Step Size" />
+<elem tag="(0072,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0072,0002)" vr="SH" enu="Hanging Protocol Name" />
 <elem tag="(0072,0004)" vr="LO" enu="Hanging Protocol Description" />
 <elem tag="(0072,0006)" vr="CS" enu="Hanging Protocol Level" />
@@ -3051,6 +3079,7 @@
 <elem tag="(0072,0716)" vr="CS" enu="Show Acquisition Techniques Flag" />
 <elem tag="(0072,0717)" vr="CS" enu="Display Set Horizontal Justification" />
 <elem tag="(0072,0718)" vr="CS" enu="Display Set Vertical Justification" />
+<elem tag="(0074,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0074,0120)" vr="FD" enu="Continuation Start Meterset" />
 <elem tag="(0074,0121)" vr="FD" enu="Continuation End Meterset" />
 <elem tag="(0074,1000)" vr="CS" enu="Procedure Step State" />
@@ -3124,6 +3153,7 @@
 <elem tag="(0074,140C)" vr="IS" enu="Channel Delivery Order Index" />
 <elem tag="(0074,140D)" vr="SQ" enu="Channel Delivery Continuation Sequence" />
 <elem tag="(0074,140E)" vr="SQ" enu="Omitted Application Setup Sequence" />
+<elem tag="(0076,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0076,0001)" vr="LO" enu="Implant Assembly Template Name" />
 <elem tag="(0076,0003)" vr="LO" enu="Implant Assembly Template Issuer" />
 <elem tag="(0076,0006)" vr="LO" enu="Implant Assembly Template Version" />
@@ -3147,6 +3177,7 @@
 <elem tag="(0076,00A0)" vr="US" enu="Component 2 Referenced ID" />
 <elem tag="(0076,00B0)" vr="US" enu="Component 2 Referenced Mating Feature Set ID" />
 <elem tag="(0076,00C0)" vr="US" enu="Component 2 Referenced Mating Feature ID" />
+<elem tag="(0078,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0078,0001)" vr="LO" enu="Implant Template Group Name" />
 <elem tag="(0078,0010)" vr="ST" enu="Implant Template Group Description" />
 <elem tag="(0078,0020)" vr="LO" enu="Implant Template Group Issuer" />
@@ -3165,6 +3196,7 @@
 <elem tag="(0078,00B4)" vr="SQ" enu="Implant Template Group Variation Dimension Rank Sequence" />
 <elem tag="(0078,00B6)" vr="US" enu="Referenced Implant Template Group Member ID" />
 <elem tag="(0078,00B8)" vr="US" enu="Implant Template Group Variation Dimension Rank" />
+<elem tag="(0080,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0080,0001)" vr="SQ" enu="Surface Scan Acquisition Type Code Sequence" />
 <elem tag="(0080,0002)" vr="SQ" enu="Surface Scan Mode Code Sequence" />
 <elem tag="(0080,0003)" vr="SQ" enu="Registration Method Code Sequence" />
@@ -3178,6 +3210,7 @@
 <elem tag="(0080,0011)" vr="OF" enu="V Value Data" />
 <elem tag="(0080,0012)" vr="SQ" enu="Referenced Texture Sequence" />
 <elem tag="(0080,0013)" vr="SQ" enu="Referenced Surface Data Sequence" />
+<elem tag="(0082,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0082,0001)" vr="CS" enu="Assessment Summary" />
 <elem tag="(0082,0003)" vr="UT" enu="Assessment Summary Description" />
 <elem tag="(0082,0004)" vr="SQ" enu="Assessed SOP Instance Sequence" />
@@ -3202,6 +3235,7 @@
 <elem tag="(0082,0036)" vr="CS" enu="Constraint Violation Significance" />
 <elem tag="(0082,0037)" vr="UT" enu="Constraint Violation Condition" />
 <elem tag="(0082,0038)" vr="CS" enu="Modifiable Constraint Flag" />
+<elem tag="(0088,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0088,0130)" vr="SH" enu="Storage Media File-set ID" />
 <elem tag="(0088,0140)" vr="UI" enu="Storage Media File-set UID" />
 <elem tag="(0088,0200)" vr="SQ" enu="Icon Image Sequence" />
@@ -3209,10 +3243,12 @@
 <elem tag="(0088,0906)" vr="ST" enu="Topic Subject" />
 <elem tag="(0088,0910)" vr="LO" enu="Topic Author" />
 <elem tag="(0088,0912)" vr="LO" enu="Topic Keywords" />
+<elem tag="(0100,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0100,0410)" vr="CS" enu="SOP Instance Status" />
 <elem tag="(0100,0420)" vr="DT" enu="SOP Authorization DateTime" />
 <elem tag="(0100,0424)" vr="LT" enu="SOP Authorization Comment" />
 <elem tag="(0100,0426)" vr="LO" enu="Authorization Equipment Certification Number" />
+<elem tag="(0400,0000)" vr="UL" enu="Group Length" />
 <elem tag="(0400,0005)" vr="US" enu="MAC ID Number" />
 <elem tag="(0400,0010)" vr="UI" enu="MAC Calculation Transfer Syntax UID" />
 <elem tag="(0400,0015)" vr="CS" enu="MAC Algorithm" />
@@ -3238,13 +3274,16 @@
 <elem tag="(0400,0563)" vr="LO" enu="Modifying System" />
 <elem tag="(0400,0564)" vr="LO" enu="Source of Previous Values" />
 <elem tag="(0400,0565)" vr="CS" enu="Reason for the Attribute Modification" />
+<elem tag="(1000,0000)" vr="UL" enu="Group Length" />
 <elem tag="(1000,xxx0)" vr="US" enu="Escape Triplet" />
 <elem tag="(1000,xxx1)" vr="US" enu="Run Length Triplet" />
 <elem tag="(1000,xxx2)" vr="US" enu="Huffman Table Size" />
 <elem tag="(1000,xxx3)" vr="US" enu="Huffman Table Triplet" />
 <elem tag="(1000,xxx4)" vr="US" enu="Shift Table Size" />
 <elem tag="(1000,xxx5)" vr="US" enu="Shift Table Triplet" />
+<elem tag="(1010,0000)" vr="UL" enu="Group Length" />
 <elem tag="(1010,xxxx)" vr="US" enu="Zonal Map" />
+<elem tag="(2000,0000)" vr="UL" enu="Group Length" />
 <elem tag="(2000,0010)" vr="IS" enu="Number of Copies" />
 <elem tag="(2000,001E)" vr="SQ" enu="Printer Configuration Sequence" />
 <elem tag="(2000,0020)" vr="CS" enu="Print Priority" />
@@ -3266,6 +3305,7 @@
 <elem tag="(2000,00A8)" vr="SQ" enu="Supported Image Display Formats Sequence" />
 <elem tag="(2000,0500)" vr="SQ" enu="Referenced Film Box Sequence" />
 <elem tag="(2000,0510)" vr="SQ" enu="Referenced Stored Print Sequence" />
+<elem tag="(2010,0000)" vr="UL" enu="Group Length" />
 <elem tag="(2010,0010)" vr="ST" enu="Image Display Format" />
 <elem tag="(2010,0030)" vr="CS" enu="Annotation Display Format ID" />
 <elem tag="(2010,0040)" vr="CS" enu="Film Orientation" />
@@ -3292,6 +3332,7 @@
 <elem tag="(2010,0500)" vr="SQ" enu="Referenced Film Session Sequence" />
 <elem tag="(2010,0510)" vr="SQ" enu="Referenced Image Box Sequence" />
 <elem tag="(2010,0520)" vr="SQ" enu="Referenced Basic Annotation Box Sequence" />
+<elem tag="(2020,0000)" vr="UL" enu="Group Length" />
 <elem tag="(2020,0010)" vr="US" enu="Image Box Position" />
 <elem tag="(2020,0020)" vr="CS" enu="Polarity" />
 <elem tag="(2020,0030)" vr="DS" enu="Requested Image Size" />
@@ -3303,8 +3344,10 @@
 <elem tag="(2020,0111)" vr="SQ" enu="Basic Color Image Sequence" />
 <elem tag="(2020,0130)" vr="SQ" enu="Referenced Image Overlay Box Sequence" />
 <elem tag="(2020,0140)" vr="SQ" enu="Referenced VOI LUT Box Sequence" />
+<elem tag="(2030,0000)" vr="UL" enu="Group Length" />
 <elem tag="(2030,0010)" vr="US" enu="Annotation Position" />
 <elem tag="(2030,0020)" vr="LO" enu="Text String" />
+<elem tag="(2040,0000)" vr="UL" enu="Group Length" />
 <elem tag="(2040,0010)" vr="SQ" enu="Referenced Overlay Plane Sequence" />
 <elem tag="(2040,0011)" vr="US" enu="Referenced Overlay Plane Groups" />
 <elem tag="(2040,0020)" vr="SQ" enu="Overlay Pixel Data Sequence" />
@@ -3317,9 +3360,11 @@
 <elem tag="(2040,0090)" vr="CS" enu="Overlay Mode" />
 <elem tag="(2040,0100)" vr="CS" enu="Threshold Density" />
 <elem tag="(2040,0500)" vr="SQ" enu="Referenced Image Box Sequence (Retired)" />
+<elem tag="(2050,0000)" vr="UL" enu="Group Length" />
 <elem tag="(2050,0010)" vr="SQ" enu="Presentation LUT Sequence" />
 <elem tag="(2050,0020)" vr="CS" enu="Presentation LUT Shape" jpn="提示ＬＵＴ形状" />
 <elem tag="(2050,0500)" vr="SQ" enu="Referenced Presentation LUT Sequence" />
+<elem tag="(2100,0000)" vr="UL" enu="Group Length" />
 <elem tag="(2100,0010)" vr="SH" enu="Print Job ID" />
 <elem tag="(2100,0020)" vr="CS" enu="Execution Status" />
 <elem tag="(2100,0030)" vr="CS" enu="Execution Status Info" />
@@ -3330,13 +3375,16 @@
 <elem tag="(2100,0160)" vr="SH" enu="Owner ID" />
 <elem tag="(2100,0170)" vr="IS" enu="Number of Films" />
 <elem tag="(2100,0500)" vr="SQ" enu="Referenced Print Job Sequence (Pull Stored Print)" />
+<elem tag="(2110,0000)" vr="UL" enu="Group Length" />
 <elem tag="(2110,0010)" vr="CS" enu="Printer Status" />
 <elem tag="(2110,0020)" vr="CS" enu="Printer Status Info" />
 <elem tag="(2110,0030)" vr="LO" enu="Printer Name" />
 <elem tag="(2110,0099)" vr="SH" enu="Print Queue ID" />
+<elem tag="(2120,0000)" vr="UL" enu="Group Length" />
 <elem tag="(2120,0010)" vr="CS" enu="Queue Status" />
 <elem tag="(2120,0050)" vr="SQ" enu="Print Job Description Sequence" />
 <elem tag="(2120,0070)" vr="SQ" enu="Referenced Print Job Sequence" />
+<elem tag="(2130,0000)" vr="UL" enu="Group Length" />
 <elem tag="(2130,0010)" vr="SQ" enu="Print Management Capabilities Sequence" />
 <elem tag="(2130,0015)" vr="SQ" enu="Printer Characteristics Sequence" />
 <elem tag="(2130,0030)" vr="SQ" enu="Film Box Content Sequence" />
@@ -3346,6 +3394,7 @@
 <elem tag="(2130,0080)" vr="SQ" enu="Presentation LUT Content Sequence" />
 <elem tag="(2130,00A0)" vr="SQ" enu="Proposed Study Sequence" />
 <elem tag="(2130,00C0)" vr="SQ" enu="Original Image Sequence" />
+<elem tag="(2200,0000)" vr="UL" enu="Group Length" />
 <elem tag="(2200,0001)" vr="CS" enu="Label Using Information Extracted From Instances" />
 <elem tag="(2200,0002)" vr="UT" enu="Label Text" />
 <elem tag="(2200,0003)" vr="CS" enu="Label Style Selection" />
@@ -3362,6 +3411,7 @@
 <elem tag="(2200,000E)" vr="AT" enu="Failure Attributes" />
 <elem tag="(2200,000F)" vr="CS" enu="Allow Lossy Compression" />
 <elem tag="(2200,0020)" vr="CS" enu="Request Priority" />
+<elem tag="(3002,0000)" vr="UL" enu="Group Length" />
 <elem tag="(3002,0002)" vr="SH" enu="RT Image Label" />
 <elem tag="(3002,0003)" vr="LO" enu="RT Image Name" />
 <elem tag="(3002,0004)" vr="ST" enu="RT Image Description" />
@@ -3387,6 +3437,7 @@
 <elem tag="(3002,0050)" vr="SQ" enu="Primary Fluence Mode Sequence" />
 <elem tag="(3002,0051)" vr="CS" enu="Fluence Mode" />
 <elem tag="(3002,0052)" vr="SH" enu="Fluence Mode ID" />
+<elem tag="(3004,0000)" vr="UL" enu="Group Length" />
 <elem tag="(3004,0001)" vr="CS" enu="DVH Type" />
 <elem tag="(3004,0002)" vr="CS" enu="Dose Units" />
 <elem tag="(3004,0004)" vr="CS" enu="Dose Type" />
@@ -3411,6 +3462,7 @@
 <elem tag="(3004,0070)" vr="DS" enu="DVH Minimum Dose" />
 <elem tag="(3004,0072)" vr="DS" enu="DVH Maximum Dose" />
 <elem tag="(3004,0074)" vr="DS" enu="DVH Mean Dose" />
+<elem tag="(3006,0000)" vr="UL" enu="Group Length" />
 <elem tag="(3006,0002)" vr="SH" enu="Structure Set Label" />
 <elem tag="(3006,0004)" vr="LO" enu="Structure Set Name" />
 <elem tag="(3006,0006)" vr="ST" enu="Structure Set Description" />
@@ -3462,6 +3514,7 @@
 <elem tag="(3006,00C4)" vr="CS" enu="Frame of Reference Transformation Type" />
 <elem tag="(3006,00C6)" vr="DS" enu="Frame of Reference Transformation Matrix" />
 <elem tag="(3006,00C8)" vr="LO" enu="Frame of Reference Transformation Comment" />
+<elem tag="(3008,0000)" vr="UL" enu="Group Length" />
 <elem tag="(3008,0010)" vr="SQ" enu="Measured Dose Reference Sequence" />
 <elem tag="(3008,0012)" vr="ST" enu="Measured Dose Description" />
 <elem tag="(3008,0014)" vr="CS" enu="Measured Dose Type" />
@@ -3556,6 +3609,7 @@
 <elem tag="(3008,0240)" vr="SQ" enu="Fraction Status Summary Sequence" />
 <elem tag="(3008,0250)" vr="DA" enu="Treatment Date" />
 <elem tag="(3008,0251)" vr="TM" enu="Treatment Time" />
+<elem tag="(300A,0000)" vr="UL" enu="Group Length" />
 <elem tag="(300A,0002)" vr="SH" enu="RT Plan Label" />
 <elem tag="(300A,0003)" vr="LO" enu="RT Plan Name" />
 <elem tag="(300A,0004)" vr="ST" enu="RT Plan Description" />
@@ -3948,6 +4002,7 @@
 <elem tag="(300A,0510)" vr="FL" enu="Delivered Nominal Range Modulated Region Depths" />
 <elem tag="(300A,0511)" vr="CS" enu="Delivered Reference Dose Definition" />
 <elem tag="(300A,0512)" vr="CS" enu="Reference Dose Definition" />
+<elem tag="(300C,0000)" vr="UL" enu="Group Length" />
 <elem tag="(300C,0002)" vr="SQ" enu="Referenced RT Plan Sequence" />
 <elem tag="(300C,0004)" vr="SQ" enu="Referenced Beam Sequence" />
 <elem tag="(300C,0006)" vr="IS" enu="Referenced Beam Number" />
@@ -3982,12 +4037,15 @@
 <elem tag="(300C,0111)" vr="SQ" enu="Omitted Beam Task Sequence" />
 <elem tag="(300C,0112)" vr="CS" enu="Reason for Omission" />
 <elem tag="(300C,0113)" vr="LO" enu="Reason for Omission Description" />
+<elem tag="(300E,0000)" vr="UL" enu="Group Length" />
 <elem tag="(300E,0002)" vr="CS" enu="Approval Status" />
 <elem tag="(300E,0004)" vr="DA" enu="Review Date" />
 <elem tag="(300E,0005)" vr="TM" enu="Review Time" />
 <elem tag="(300E,0008)" vr="PN" enu="Reviewer Name" />
+<elem tag="(4000,0000)" vr="UL" enu="Group Length" />
 <elem tag="(4000,0010)" vr="LT" enu="Arbitrary" />
 <elem tag="(4000,4000)" vr="LT" enu="Text Comments" />
+<elem tag="(4008,0000)" vr="UL" enu="Group Length" />
 <elem tag="(4008,0040)" vr="SH" enu="Results ID" />
 <elem tag="(4008,0042)" vr="LO" enu="Results ID Issuer" />
 <elem tag="(4008,0050)" vr="SQ" enu="Referenced Interpretation Sequence" />
@@ -4016,6 +4074,7 @@
 <elem tag="(4008,0212)" vr="CS" enu="Interpretation Status ID" />
 <elem tag="(4008,0300)" vr="ST" enu="Impressions" />
 <elem tag="(4008,4000)" vr="ST" enu="Results Comments" />
+<elem tag="(4010,0000)" vr="UL" enu="Group Length" />
 <elem tag="(4010,0001)" vr="CS" enu="Low Energy Detectors" />
 <elem tag="(4010,0002)" vr="CS" enu="High Energy Detectors" />
 <elem tag="(4010,0004)" vr="SQ" enu="Detector Geometry Sequence" />
@@ -4102,7 +4161,9 @@
 <elem tag="(4010,107C)" vr="CS" enu="Inspection Selection Criteria" />
 <elem tag="(4010,107D)" vr="SQ" enu="Secondary Inspection Method Sequence" />
 <elem tag="(4010,107E)" vr="DS" enu="PRCS to RCS Orientation" />
+<elem tag="(4FFE,0000)" vr="UL" enu="Group Length" />
 <elem tag="(4FFE,0001)" vr="SQ" enu="MAC Parameters Sequence" />
+<elem tag="(50xx,0000)" vr="UL" enu="Group Length" />
 <elem tag="(50xx,0005)" vr="US" enu="Curve Dimensions" />
 <elem tag="(50xx,0010)" vr="US" enu="Number of Points" />
 <elem tag="(50xx,0020)" vr="CS" enu="Type of Data" />
@@ -4129,8 +4190,10 @@
 <elem tag="(50xx,2600)" vr="SQ" enu="Curve Referenced Overlay Sequence" />
 <elem tag="(50xx,2610)" vr="US" enu="Curve Referenced Overlay Group" />
 <elem tag="(50xx,3000)" vr="OB" enu="Curve Data" />
+<elem tag="(5200,0000)" vr="UL" enu="Group Length" />
 <elem tag="(5200,9229)" vr="SQ" enu="Shared Functional Groups Sequence" jpn="共有機能グループシーケンス" />
 <elem tag="(5200,9230)" vr="SQ" enu="Per-frame Functional Groups Sequence" jpn="フレーム別機能グループシーケンス" />
+<elem tag="(5400,0000)" vr="UL" enu="Group Length" />
 <elem tag="(5400,0100)" vr="SQ" enu="Waveform Sequence" />
 <elem tag="(5400,0110)" vr="OB" enu="Channel Minimum Value" />
 <elem tag="(5400,0112)" vr="OB" enu="Channel Maximum Value" />
@@ -4138,6 +4201,7 @@
 <elem tag="(5400,1006)" vr="CS" enu="Waveform Sample Interpretation" />
 <elem tag="(5400,100A)" vr="OB" enu="Waveform Padding Value" />
 <elem tag="(5400,1010)" vr="OB" enu="Waveform Data" />
+<elem tag="(5600,0000)" vr="UL" enu="Group Length" />
 <elem tag="(5600,0010)" vr="OF" enu="First Order Phase Correction Angle" />
 <elem tag="(5600,0020)" vr="OF" enu="Spectroscopy Data" />
 <elem tag="(60xx,0010)" vr="US" enu="Overlay Rows" />

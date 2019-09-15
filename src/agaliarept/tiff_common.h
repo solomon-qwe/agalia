@@ -1,10 +1,12 @@
-#pragma once
+ï»¿#pragma once
 
 #include <stdint.h>
+#include <stdlib.h>
+#include "byteswap.h"
 
-namespace agalia_tiff
+namespace analyze_TIFF
 {
-	// ƒoƒCƒg[ƒI[ƒ_[’²®—p ŠÖ”ƒIƒuƒWƒFƒNƒgiorder ‚ª 'II' ‚Ìƒf[ƒ^‚Ì“Ç‚İ‚İj 
+	// ãƒã‚¤ãƒˆãƒ¼ã‚ªãƒ¼ãƒ€ãƒ¼èª¿æ•´ç”¨ é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆorder ãŒ 'II' ã®ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿ï¼‰ 
 	class byte_coodinate_II
 	{
 	public:
@@ -17,27 +19,31 @@ namespace agalia_tiff
 		uint16_t operator ()(uint16_t v) const { return v; }
 		uint32_t operator ()(uint32_t v) const { return v; }
 		uint64_t operator ()(uint64_t v) const { return v; }
+		float operator ()(float v) const { return v; }
+		double operator()(double v) const { return v; }
 	};
 
-	// ƒoƒCƒg[ƒI[ƒ_[’²® ŠÖ”ƒIƒuƒWƒFƒNƒgiorder ‚ª 'MM' ‚Ìƒf[ƒ^‚Ì“Ç‚İ‚İj 
+	// ãƒã‚¤ãƒˆãƒ¼ã‚ªãƒ¼ãƒ€ãƒ¼èª¿æ•´ é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆorder ãŒ 'MM' ã®ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿ï¼‰ 
 	class byte_coodinate_MM
 	{
 	public:
 		uint16_t get_order(void) const { return 'MM'; }
-		int8_t  operator ()(int8_t v) const { return v; }
-		int16_t operator ()(int16_t v) const { return _byteswap_ushort(v); }
-		int32_t operator ()(int32_t v) const { return _byteswap_ulong(v); }
-		int64_t operator ()(int64_t v) const { return _byteswap_uint64(v); }
-		uint8_t  operator ()(uint8_t v) const { return v; }
-		uint16_t operator ()(uint16_t v) const { return _byteswap_ushort(v); }
-		uint32_t operator ()(uint32_t v) const { return _byteswap_ulong(v); }
-		uint64_t operator ()(uint64_t v) const { return _byteswap_uint64(v); }
+		int8_t  operator ()(int8_t v) const { return agalia_byteswap(v); }
+		int16_t operator ()(int16_t v) const { return agalia_byteswap(v); }
+		int32_t operator ()(int32_t v) const { return agalia_byteswap(v); }
+		int64_t operator ()(int64_t v) const { return agalia_byteswap(v); }
+		uint8_t  operator ()(uint8_t v) const { return agalia_byteswap(v); }
+		uint16_t operator ()(uint16_t v) const { return agalia_byteswap(v); }
+		uint32_t operator ()(uint32_t v) const { return agalia_byteswap(v); }
+		uint64_t operator ()(uint64_t v) const { return agalia_byteswap(v); }
+		float operator ()(float v) const { uint32_t t = operator()(*reinterpret_cast<uint32_t*>(&v)); return *reinterpret_cast<float*>(&t); }
+		double operator ()(double v) const { uint64_t t = operator()(*reinterpret_cast<uint64_t*>(&v)); return *reinterpret_cast<double*>(&t); }
 	};
 
 	template <typename type> type get_tiff_value(uint16_t order, type v) { return order == 'MM' ? byte_coodinate_MM()(v) : v; }
 
 	// 
-	// TIFF\‘¢‘Ì
+	// TIFFæ§‹é€ ä½“
 	// ref. TIFF6.pdf, etc. 
 	// 
 #pragma pack(push, 2)
@@ -64,7 +70,8 @@ namespace agalia_tiff
 	struct TIFFIFD
 	{
 		uint16_t count;
-		TIFFIFDENTRY entry[1];
+		using entry_type = TIFFIFDENTRY;
+		entry_type entry[1];
 		using next_offset_type = uint32_t;
 	};
 
@@ -72,15 +79,15 @@ namespace agalia_tiff
 	{
 		uint16_t order;
 		uint16_t version;
-		uint16_t offset;
+		uint16_t offset_size;
 		uint16_t reserved;
-		uint64_t offset8;
+		uint64_t offset;
 
 		decltype(order) get_order(void) const { return order; }
 		decltype(version) get_version(void) const { return get_tiff_value(get_order(), version); }
-		decltype(offset) get_offset(void) const { return get_tiff_value(get_order(), offset); }
+		decltype(offset_size) get_offset_size(void) const { return get_tiff_value(get_order(), offset_size); }
 		decltype(reserved) get_reserved(void) const { return get_tiff_value(get_order(), reserved); }
-		decltype(offset8) get_offset8(void) const { return get_tiff_value(get_order(), offset8); }
+		decltype(offset) get_offset(void) const { return get_tiff_value(get_order(), offset); }
 	};
 
 	struct TIFFIFDENTRY8
@@ -94,7 +101,8 @@ namespace agalia_tiff
 	struct TIFFIFD8
 	{
 		uint64_t count;
-		TIFFIFDENTRY8 entry[1];
+		using entry_type = TIFFIFDENTRY8;
+		entry_type entry[1];
 		using next_offset_type = uint64_t;
 	};
 
@@ -118,7 +126,20 @@ namespace agalia_tiff
 
 #pragma pack(pop)
 
-	enum TIFFTYPE
+	typedef uint8_t TIFFBYTE;
+	typedef uint8_t TIFFASCII;
+	typedef uint16_t TIFFSHORT;
+	typedef uint32_t TIFFLONG;
+	typedef int8_t TIFFSBYTE;
+	typedef uint8_t TIFFUNDEFINED;
+	typedef int16_t TIFFSSHORT;
+	typedef int32_t TIFFSLONG;
+	typedef float TIFFFLOAT;
+	typedef double TIFFDOUBLE;
+	typedef uint64_t TIFFLONG8;
+	typedef int64_t TIFFSLONG8;
+
+	enum TIFFTYPEID
 	{
 		TYPE_BYTE = 1,
 		TYPE_ASCII,
@@ -137,118 +158,16 @@ namespace agalia_tiff
 		TYPE_SLONG8,
 		TYPE_IFD8
 	};
-
-	// 
-	// TIFF\‘¢‘Ì ƒ‰ƒbƒp[ 
-	// 
-
-	// IFD Entry ‚Ìƒ‰ƒbƒp[ 
-	template <class T, class F>
-	class ifd_entry_templ : private T
-	{
-	public:
-		decltype(tag) get_tag(void) const { return F()(tag); }
-		decltype(type) get_type(void) const { return F()(type); }
-		decltype(count) get_count(void) const { return F()(count); }
-		decltype(offset) get_offset(void) const { return F()(offset); }
-
-		const T& get_raw_obj(void) const { return *this; }
-	};
-	// ƒ‰ƒbƒp[‚ğ“Áê‰» 
-	template <class F> class ifd_entry_4 : public ifd_entry_templ<TIFFIFDENTRY, F> {};
-	template <class F> class ifd_entry_8 : public ifd_entry_templ<TIFFIFDENTRY8, F> {};
-
-	// IFD ‚Ìƒ‰ƒbƒp[ 
-	template<class T, class l_entry_wrapper, class F>
-	class ifd_templ : protected T
-	{
-	public:
-		using entry_wrapper = l_entry_wrapper;	// IFD Entry ‚Ìƒ‰ƒbƒp[‚ÌŒ^î•ñ‚ğŒÄ‚Ño‚µ‘¤‚©‚ç‚àQÆ‚Å‚«‚é‚æ‚¤‚É‚·‚é 
-		typedef typename T::next_offset_type next_offset_type;	// Šî’êƒNƒ‰ƒX‚ÌƒGƒCƒŠƒAƒX‚ğQÆ‚Å‚«‚é‚æ‚¤‚É‚·‚é 
-
-		// IFD ‚ÉŠÜ‚Ü‚ê‚é Entry ‚Ì”‚ğ•Ô‚· 
-		decltype(count) get_count(void) const { return F()(count); }
-
-		// w’è‚³‚ê‚½—v‘f”Ô†‚Ì Entry ‚ğAƒ‰ƒbƒp[•t‚«‚Å•Ô‚· 
-		const entry_wrapper& get_entry(size_t index) const { return *reinterpret_cast<const entry_wrapper*>(&entry[index]); }
-
-		// IFD ‚ÌI’[‚ÌƒAƒhƒŒƒXAƒTƒCƒY‚ğ•Ô‚· 
-		const next_offset_type* get_next_offset_ptr() const { return reinterpret_cast<const next_offset_type*>(reinterpret_cast<const char*>(this) + sizeof(count) + sizeof(entry[0]) * get_count()); }
-		unsigned int get_next_offset_size(void) const { return sizeof(next_offset_type); }
-	};
-	// ƒ‰ƒbƒp[‚ğ“Áê‰» 
-	template <class F> class ifd_4 : public ifd_templ<TIFFIFD, ifd_entry_4<F>, F> {};
-	template <class F> class ifd_8 : public ifd_templ<TIFFIFD8, ifd_entry_8<F>, F> {};
-
-	// IFD Entry ‚©‚ç’l‚ğæ“¾‚·‚éŠÖ”ƒIƒuƒWƒFƒNƒg 
-	template <typename T, class F> class get_ifd_entry_value
-	{
-	public:
-		// w’è‚³‚ê‚½Œ^‚ÉƒLƒƒƒXƒg‚µ‚ÄAw’è‚³‚ê‚½—v‘f”Ô†‚Ì’l‚ğæ“¾‚µAŠÖ”ƒIƒuƒWƒFƒNƒg‚ÅƒoƒCƒgƒI[ƒ_[‚ğ’²® 
-		T operator ()(const void* p, size_t i) const
-		{
-			return F()(reinterpret_cast<const T*>(p)[i]);
-		}
-	};
-
-	// IFD Entry ‚©‚ç’l‚ğæ“¾‚·‚éiFLOATŒ^‚Ì“Áê‰»j 
-	template <class F> class get_ifd_entry_value<float, F>
-	{
-	public:
-		float operator ()(const void* p, size_t i) const
-		{
-			uint32_t val = F()(reinterpret_cast<const uint32_t*>(p)[i]);
-			return *reinterpret_cast<float*>(&val);
-		}
-	};
-
-	// IFD Entry ‚©‚ç’l‚ğæ“¾‚·‚éiDOUBLEŒ^‚Ì“Áê‰»j 
-	template <class F> class get_ifd_entry_value<double, F>
-	{
-	public:
-		double operator ()(const void* p, size_t i) const
-		{
-			uint64_t val = F()(reinterpret_cast<const uint64_t*>(p)[i]);
-			return *reinterpret_cast<double*>(&val);
-		}
-	};
-
-	// IFD Entry ‚©‚ç’l‚ğæ“¾‚·‚éiRATIONALŒ^‚Ì“Áê‰»j 
-	template <class F> class get_ifd_entry_value<TIFFRATIONAL, F>
-	{
-	public:
-		TIFFRATIONAL operator ()(const void* p, size_t i) const
-		{
-			get_ifd_entry_value<TIFFRATIONAL::type, F> g;
-			return TIFFRATIONAL(g(p, i), g(p, i + 1));
-		}
-	};
-
-	// IFD Entry ‚©‚ç’l‚ğæ“¾‚·‚éiSRATIONALŒ^‚Ì“Áê‰»j 
-	template <class F> class get_ifd_entry_value<TIFFSRATIONAL, F>
-	{
-	public:
-		TIFFSRATIONAL operator ()(const void* p, size_t i) const
-		{
-			get_ifd_entry_value<TIFFSRATIONAL::type, F> g;
-			return TIFFSRATIONAL(g(p, i), g(p, i + 1));
-		}
-	};
 }
 
-// ‚»‚Ì‘¼ 
+//// ãã®ä»– 
 
 #include <iostream>
 #include <unordered_map>
 
-struct tif_dic_elem
-{
-	uint16_t parent;
-	std::wstring name;
-};
 
-extern std::unordered_map<std::wstring, tif_dic_elem>* g_tif_dic;
-typedef std::unordered_map<std::wstring, tif_dic_elem>::iterator tif_dic_iterator;
+extern std::unordered_map<std::wstring, std::wstring>* g_tif_dic;
+typedef std::unordered_map<std::wstring, std::wstring>::iterator tif_dic_iterator;
 
 void init_tif_dictionary(_In_opt_ const wchar_t* lang);
 void clear_tif_dictionary(void);

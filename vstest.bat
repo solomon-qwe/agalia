@@ -1,13 +1,11 @@
-setlocal
-if not exist log mkdir log
+SETLOCAL
+IF NOT EXIST log MKDIR log
 
-for /f "tokens=1,2,*" %%A in ('reg query "HKLM\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7" /v "15.0"') do if "%%A"=="15.0" set vs_path=%%C
+SET testproc="%VSINSTALLDIR%Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
 
-set testproc="%vs_path%Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
+%testproc% x64\Release\unit_test.dll /Diag:log\ut_x64_Release.log /Logger:"trx;LogFileName=..\log\ut_x64_Release.trx" /Platform:x64
+%testproc% x86\Release\unit_test.dll /Diag:log\ut_x86_Release.log /Logger:"trx;LogFileName=..\log\ut_x86_Release.trx" /Platform:x86
+%testproc% x64\Debug\unit_test.dll   /Diag:log\ut_x64_Debug.log   /Logger:"trx;LogFileName=..\log\ut_x64_Debug.trx"   /Platform:x64
+%testproc% x86\Debug\unit_test.dll   /Diag:log\ut_x86_Debug.log   /Logger:"trx;LogFileName=..\log\ut_x86_Debug.trx"   /Platform:x86
 
-%testproc% x64\Release\unit_test.dll /Diag:log\ut_x64_Release.log /Platform:x64
-%testproc% x86\Release\unit_test.dll /Diag:log\ut_x86_Release.log /Platform:x86
-%testproc% x64\Debug\unit_test.dll /Diag:log\ut_x64_Debug.log /Platform:x64
-%testproc% x86\Debug\unit_test.dll /Diag:log\ut_x86_Debug.log /Platform:x86
-
-endlocal
+ENDLOCAL

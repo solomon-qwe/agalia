@@ -68,7 +68,7 @@ public:
 
 	void Next(void)
 	{
-		Append(_T("\n"));
+		Append(_T("\r\n"));
 		isFirstItem = true;
 	}
 
@@ -144,7 +144,7 @@ public:
 
 	void Next(void)
 	{
-		Append(_T("\n"));
+		Append(_T("\r\n"));
 		isFirstItem = true;
 	}
 

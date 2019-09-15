@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,30 +19,30 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{631CE6D5-A9F0-44ED-AE8C-DA96EA29601A}</ProjectGuid>
-    <Keyword>MakeFileProj</Keyword>
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{67B161B2-A53F-40D1-AA75-1803801C47F3}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -68,8 +68,8 @@
     <NMakeCleanCommandLine>del $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>ECHO F | XCOPY /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <NMakeBuildCommandLine>ECHO F | XCOPY /D /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeBuildCommandLine>
@@ -86,8 +86,8 @@
     <NMakeCleanCommandLine>del $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>ECHO F | XCOPY /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <NMakeBuildCommandLine>ECHO F | XCOPY /D /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeBuildCommandLine>
@@ -100,6 +100,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
+  <ItemGroup>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

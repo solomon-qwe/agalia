@@ -1,30 +1,31 @@
 #pragma once
 
 
-// COpenFileDialog
+// OpenFileDialog
 
-class COpenFileDialog : public CFileDialog
+class OpenFileDialog : public CFileDialog
 {
-	DECLARE_DYNAMIC(COpenFileDialog)
+	DECLARE_DYNAMIC(OpenFileDialog)
 
 public:
-	COpenFileDialog(BOOL bOpenFileDialog, // TRUE for FileOpen, FALSE for FileSaveAs
-		LPCTSTR lpszDefExt = NULL,
-		LPCTSTR lpszFileName = NULL,
+	OpenFileDialog(BOOL bOpenFileDialog, // TRUE for FileOpen, FALSE for FileSaveAs
+		LPCTSTR lpszDefExt = nullptr,
+		LPCTSTR lpszFileName = nullptr,
 		DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
-		LPCTSTR lpszFilter = NULL,
-		CWnd* pParentWnd = NULL);
-	virtual ~COpenFileDialog();
+		LPCTSTR lpszFilter = nullptr,
+		CWnd* pParentWnd = nullptr);
+	virtual ~OpenFileDialog();
 
 public:
 	CString strOffset;
 	CString strSize;
+	int nFormat = 0;
 
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
-	virtual BOOL OnFileNameOK();
 	virtual INT_PTR DoModal();
+	virtual BOOL OnFileNameOK();
 };
 
 

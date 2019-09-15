@@ -7,7 +7,7 @@
     </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
@@ -15,96 +15,483 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\agaliarept.h">
+    <ClInclude Include="byteswap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dcm_DicomDataElement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dcm_common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="callback.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tiff_common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="image_file.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="asf_def.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\handle_wrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util.h">
+    <ClInclude Include="agaliareptImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="jpeg_def.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tiff_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dcm_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_LIST.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_avih.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_strh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_strf_vids.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_strf_auds.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_idx1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_SOF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_DHT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_DAC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_SOS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_DQT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_DRI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_COM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_APP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_Exif.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_Marker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_JFIF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_SOI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_extdat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_item_Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_item_Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_item_IFD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_item_Entry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_item_Header8.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="agaliaImageBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="agaliaCmdLineParamImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_BITMAPFILE.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_BITMAPCORE.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_BITMAPV5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_EmbeddedProfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_ColorIndexParent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_ColorIndex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_RGBQUAD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_RGBQUADParent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_ColorMask.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_LinkedProfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_ProgramStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_ProgramStreamPack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_ProgramStreamPackHeader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_ProgramStreamSystemHeader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_PESPacket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_ProgramEnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="asf_def.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ASF_item_HeaderObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ASF_item_Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ASF_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ISO_item_Box.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ISO_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ISO_item_FileTypeBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="agaliaStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\inc\agalia_version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\agaliarept.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_DCM_item_Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_DCM_item_elem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_DCM_item_preamble.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_DCM_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container_ASF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container_BMP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container_DCM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container_ISO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container_JPEG.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container_M2P.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container_RIFF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container_TIFF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container_DCM_Impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="agaliarept.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dllmain.cpp">
+    <ClCompile Include="dictionary_tiff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dcm_DicomDataElement.cpp">
+    <ClCompile Include="dictionary_dcm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dcm_dictionary.cpp">
+    <ClCompile Include="analyze_RIFF_item_Base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dcm_analyze.cpp">
+    <ClCompile Include="analyze_RIFF_item_LIST.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tiff_analyze.cpp">
+    <ClCompile Include="analyze_RIFF_item_avih.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tiff_dictionary.cpp">
+    <ClCompile Include="analyze_RIFF_item_strh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="jpeg_analyze.cpp">
+    <ClCompile Include="analyze_RIFF_item_strf_vids.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="riff_analyze.cpp">
+    <ClCompile Include="analyze_RIFF_item_strf_auds.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="iso_analyze.cpp">
+    <ClCompile Include="analyze_RIFF_item_idx1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="asf_analyze.cpp">
+    <ClCompile Include="analyze_RIFF_item_text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="callback.cpp">
+    <ClCompile Include="analyze_JPEG_item_Base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="config.cpp">
+    <ClCompile Include="analyze_JPEG_item_SOF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bmp_analyze.cpp">
+    <ClCompile Include="analyze_JPEG_item_DHT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="m2p_analyze.cpp">
+    <ClCompile Include="analyze_JPEG_item_DAC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_SOS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_DQT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_DRI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_COM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_APP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_Exif.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_Marker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_JFIF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_SOI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_extdat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_item_Header.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_item_Base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_item_IFD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_item_Entry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_item_Header8.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="agaliaImageBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="agaliaString.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="agaliaCmdLineParamImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="thumbnail.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stringcnv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_BITMAPFILE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_Base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_BITMAPCORE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_BITMAPV5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_EmbeddedProfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_ColorIndexParent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_ColorIndex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_RGBQUAD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_RGBQUADParent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_ColorMask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_LinkedProfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_ProgramStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_Base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_ProgramStreamPack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_ProgramStreamPackHeader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_ProgramStreamSystemHeader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_PESPacket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_ProgramEnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ASF_item_HeaderObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ASF_item_Base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ASF_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ISO_item_Box.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ISO_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ISO_item_FileTypeBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="agaliaStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_DCM_item_Base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_DCM_item_elem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_DCM_item_preamble.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_DCM_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="container_ASF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="container_BMP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="container_DCM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="container_ISO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="container_JPEG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="container_M2P.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="container_RIFF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="container_TIFF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="container_DCM_Impl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

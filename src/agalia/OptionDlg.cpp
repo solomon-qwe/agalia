@@ -1,76 +1,230 @@
 // OptionDlg.cpp : implementation file
 //
 
-#include "stdafx.h"
+#include "pch.h"
 #include "agalia.h"
 #include "OptionDlg.h"
 #include "afxdialogex.h"
 
+#include <vector>
+#include <string>
+#include "../inc/agaliarept.h"
 
-// COptionDlg dialog
+struct myitemset {
+	std::wstring name;
+	std::wstring desc;
+	std::vector<std::wstring> options;
+};
 
-IMPLEMENT_DYNAMIC(COptionDlg, CDialog)
 
-COptionDlg::COptionDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(IDD_OPTION, pParent)
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+
+
+
+void add_prop(CMFCPropertyGridProperty* propGroup, const myitemset& set, size_t default)
+{
+	auto prop = new CMFCPropertyGridProperty(set.name.c_str(), set.options[default].c_str(), set.desc.c_str());
+	for (auto op : set.options) {
+		prop->AddOption(op.c_str());
+	}
+	prop->AllowEdit(FALSE);
+	propGroup->AddSubItem(prop);
+}
+
+
+
+
+// OptionDlg dialog
+
+IMPLEMENT_DYNAMIC(OptionDlg, CDialogEx)
+
+OptionDlg::OptionDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_OPTION, pParent)
 {
 
 }
 
-COptionDlg::~COptionDlg()
+OptionDlg::~OptionDlg()
 {
 }
 
-void COptionDlg::DoDataExchange(CDataExchange* pDX)
+void OptionDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_COMBO_PREF_LANG, m_cmb_pref_lang);
-	DDX_Control(pDX, IDC_EDIT_LIMIT_LENGTH, m_edt_limit_length);
-	DDX_Control(pDX, IDC_CHECK_VR, m_chk_vr);
-	DDX_Control(pDX, IDC_SPIN_LIMIT_LENGTH, m_spin_limit_length);
+	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_MFCPROPERTYGRID, grid);
 }
 
 
-BEGIN_MESSAGE_MAP(COptionDlg, CDialog)
+BEGIN_MESSAGE_MAP(OptionDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// COptionDlg message handlers
+// OptionDlg message handlers
 
-
-BOOL COptionDlg::OnInitDialog()
+BOOL OptionDlg::OnInitDialog()
 {
-	CDialog::OnInitDialog();
+	CDialogEx::OnInitDialog();
 
-	m_cmb_pref_lang.AddString(L"English");
-	m_cmb_pref_lang.AddString(L"Japanese");
+	CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_ObsidianBlack);
+	CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOffice2007));
+	grid.SetFont(GetFont());
+	grid.SetLeftColumnWidth(200);
 
-	m_edt_limit_length.SetLimitText(5);
-	m_spin_limit_length.SetRange32(1, 99999);
+	{
+		auto propGroup = new CMFCPropertyGridProperty(L"Startup");
+		grid.AddProperty(propGroup);
 
-	CString strLang = ::AfxGetApp()->GetProfileStringW(L"", L"PreferredLanguage", L"English");
-	m_cmb_pref_lang.SelectString(0, strLang);
+		{
+			myitemset item;
+			item.name = L"View";
+			item.desc = L"";
+			item.options.push_back(L"Flat");
+			item.options.push_back(L"Hierarchy");
+			item.options.push_back(L"Graphic");
+			int default = startup_view;
 
-	UINT uLimitLeng = ::AfxGetApp()->GetProfileIntW(L"", L"ByteStreamLimitLength", 128);
-	m_spin_limit_length.SetPos32(uLimitLeng);
+			add_prop(propGroup, item, default);
+			set.insert(std::pair<std::wstring, myitemset>(item.name, item));
+		}
 
-	UINT uVR_Preferrentially = ::AfxGetApp()->GetProfileIntW(L"", L"VR_Preferrentially", 0);
-	m_chk_vr.SetCheck(uVR_Preferrentially);
+		{
+			myitemset item;
+			item.name = L"Properties";
+			item.desc = L"";
+			item.options.push_back(L"Hidden");
+			item.options.push_back(L"Show");
+			int default = startup_properties_show;
+
+			add_prop(propGroup, item, default);
+			set.insert(std::pair<std::wstring, myitemset>(item.name, item));
+		}
+	}
+
+	{
+		auto propGroup = new CMFCPropertyGridProperty(L"Dictionary");
+		grid.AddProperty(propGroup);
+
+		{
+			myitemset item;
+			item.name = L"Language";
+			item.desc = L"primary language";
+			item.options.push_back(L"English");
+			item.options.push_back(L"Japanese");
+			int default = dictionary_lang;
+
+			add_prop(propGroup, item, default);
+			set.insert(std::pair<std::wstring, myitemset>(item.name, item));
+		}
+	}
+
+	{
+		auto propGroup = new CMFCPropertyGridProperty(L"DICOM");
+		grid.AddProperty(propGroup);
+
+		{
+			myitemset item;
+			item.name = L"Force dictonary VR";
+			item.desc = L"";
+			item.options.push_back(L"Disable");
+			item.options.push_back(L"Enable");
+			int default = dicom_force_dictionary_vr;
+
+			add_prop(propGroup, item, default);
+			set.insert(std::pair<std::wstring, myitemset>(item.name, item));
+		}
+	}
+
+	{
+		auto propGroup = new CMFCPropertyGridProperty(L"Graphic");
+		grid.AddProperty(propGroup);
+
+		{
+			myitemset item;
+			item.name = L"Monitor Color Profile";
+			item.desc = L"";
+			item.options.push_back(L"Disable");
+			item.options.push_back(L"sRGB");
+			item.options.push_back(L"System");
+			int default = monitor_color_profile;
+
+			add_prop(propGroup, item, default);
+			set.insert(std::pair<std::wstring, myitemset>(item.name, item));
+		}
+
+		{
+			myitemset item;
+			item.name = L"Rendering";
+			item.desc = L"";
+			item.options.push_back(L"GDI");
+			item.options.push_back(L"Direct2D");
+			int default = rendering_engine;
+
+			add_prop(propGroup, item, default);
+			set.insert(std::pair<std::wstring, myitemset>(item.name, item));
+		}
+	}
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 
-void COptionDlg::OnOK()
+
+void OptionDlg::OnOK()
 {
-	CString strLang, strLimitLength;
-	m_cmb_pref_lang.GetWindowTextW(strLang);
-	m_spin_limit_length.GetWindowTextW(strLimitLength);
+	int groups = grid.GetPropertyCount();
+	for (int i = 0; i < groups; i++)
+	{
+		auto group = grid.GetProperty(i);
 
-	::AfxGetApp()->WriteProfileStringW(L"", L"PreferredLanguage", strLang);
-	::AfxGetApp()->WriteProfileInt(L"", L"ByteStreamLimitLength", m_spin_limit_length.GetPos32());
-	::AfxGetApp()->WriteProfileInt(L"", L"VR_Preferrentially", m_chk_vr.GetCheck());
+		int props = group->GetSubItemsCount();
+		for (int j = 0; j < props; j++)
+		{
+			auto prop = group->GetSubItem(j);
+			CString name = prop->GetName();
+			const COleVariant& v = prop->GetValue();
+			CString val = v.bstrVal;
 
-	CDialog::OnOK();
+			int index = 0;
+			auto item = set.find(name.GetString());
+			if (item != set.end())
+			{
+				auto x = item->second.options;
+				auto e = std::find(x.begin(), x.end(), val.GetString());
+				if (e != x.end())
+				{
+					index = int(std::distance(x.begin(), e));
+				}
+			}
+
+			if (name == L"View")
+			{
+				startup_view = index;
+			}
+			else if (name == L"Properties")
+			{
+				startup_properties_show = index;
+			}
+			else if (name == L"Language")
+			{
+				dictionary_lang = index;
+			}
+			else if (name == L"Force dictonary VR")
+			{
+				dicom_force_dictionary_vr = index;
+			}
+			else if (name == L"Monitor Color Profile")
+			{
+				monitor_color_profile = index;
+			}
+			else if (name == L"Rendering")
+			{
+				rendering_engine = index;
+			}
+		}
+	}
+
+	CDialogEx::OnOK();
 }
