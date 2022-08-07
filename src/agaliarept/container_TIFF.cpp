@@ -217,17 +217,17 @@ bool container_TIFF::IsSupported(IStream* stream)
 _agaliaContainerBase* container_TIFF::CreateInstance(const wchar_t* path, IStream* stream)
 {
 	if (FAILED(stream->Seek(uint64_to_li(0), STREAM_SEEK_SET, nullptr)))
-		return false;
+		return nullptr;
 
 	ULONG cbRead = 0;
 
 	char exif_id[6] = {};
 	auto hr = stream->Read(&exif_id, sizeof(exif_id), &cbRead);
 	if (hr != S_OK || cbRead != sizeof(exif_id))
-		return false;
+		return nullptr;
 
 	if (FAILED(stream->Seek(uint64_to_li(0), STREAM_SEEK_SET, nullptr)))
-		return false;
+		return nullptr;
 
 	auto p = new container_TIFF(path, stream);
 	p->is_exif = (memcmp(exif_id, "Exif\0\0", 6) == 0) ? true : false;
