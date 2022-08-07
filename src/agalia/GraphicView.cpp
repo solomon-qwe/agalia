@@ -74,7 +74,6 @@ void GraphicView::reset_content(agaliaContainer* image)
 
 	v->attach(GetSafeHwnd());
 	v->reset_content(image, colorManagementMode);
-	render();
 
 	if (::IsWindow(GetSafeHwnd()) && IsWindowVisible())
 		Invalidate(FALSE);
