@@ -5,6 +5,9 @@
 #include "analyze_JPEG_item_JFIF.h"
 #include "analyze_JPEG_item_Exif.h"
 #include "analyze_JPEG_item_extdat.h"
+#include "analyze_JPEG_item_ICC.h"
+
+#include "container_ICC.h"
 
 #include "jpeg_def.h"
 #include "byteswap.h"
@@ -43,15 +46,45 @@ HRESULT create_iccprofile(const container_JPEG* image, const item_APP* item, aga
 	if (FAILED(hr)) return hr;
 	if (bufsize <= offsetof(JPEGSEGMENT_APPX, identifier)) return E_FAIL;
 
-	const char name[] = "ICC_PROFILE";
-	if (app_identify(name, _countof(name), buf, bufsize))
+#pragma pack(push, 1)
+	struct ICCInfo
 	{
-		agaliaItem* newitem = new item_extdat(image, item->getOffset(), item->getSize(), item_Base::icc_profile);
-		*child = newitem;
-		return S_OK;
-	}
+		uint8_t SequenceNumber;
+		uint8_t TotalNumber;
+	};
+#pragma pack(pop)
 
-	return E_FAIL;
+	const char name[] = "ICC_PROFILE";
+	if (!app_identify(name, _countof(name), buf, bufsize))
+		return E_FAIL;
+
+	auto info = reinterpret_cast<ICCInfo*>(buf.m_pData->identifier + _countof(name));
+	if (info->SequenceNumber != 1)
+		return E_FAIL;
+
+	agaliaStringPtr file_path;
+	hr = image->getFilePath(&file_path);
+	if (FAILED(hr)) return hr;
+
+	uint64_t offset = 0, size = 0;
+	hr = item->getValueAreaOffset(&offset);
+	if (FAILED(hr)) return hr;
+	hr = item->getValueAreaSize(&size);
+	if (FAILED(hr)) return hr;
+
+	uint64_t sigsize = _countof(name) + sizeof(ICCInfo);
+	offset += sigsize;
+	size -= sigsize;
+
+	agaliaContainer* container;
+	hr = getAgaliaImage(&container, file_path, offset, size);
+	if (FAILED(hr)) return hr;
+
+	auto newitem = new item_ICC(image, offset, size, item_Base::icc_profile);
+	newitem->container = container;
+	*child = newitem;
+
+	return S_OK;
 }
 
 

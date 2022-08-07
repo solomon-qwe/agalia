@@ -208,6 +208,14 @@ void CMainFrame::ResetContents(const wchar_t* path, uint64_t offset, uint64_t si
 			nItem++;
 		}
 
+		if (SUCCEEDED(ctrl.image->getPropertyValue(agaliaContainer::ICCProfile, &str)))
+		{
+			m_wndPropView.m_listCtrl.InsertItem(nItem, L"ICC Profile");
+			m_wndPropView.m_listCtrl.SetItemText(nItem, 1, str);
+			str.detach()->Release();
+			nItem++;
+		}
+
 		if (nItem != 0)
 		{
 			m_wndPropView.m_listCtrl.SetColumnWidth(0, LVSCW_AUTOSIZE_USEHEADER);

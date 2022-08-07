@@ -285,6 +285,24 @@
     <ClInclude Include="analyze_PNG_item_iCCP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="container_ICC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ICC_item_Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ICC_item_Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ICC_item_TagTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ICC_item_Element.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_ICC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -546,6 +564,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="analyze_PNG_item_iCCP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="container_ICC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ICC_item_Header.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ICC_item_Base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ICC_item_TagTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ICC_item_Element.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_ICC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

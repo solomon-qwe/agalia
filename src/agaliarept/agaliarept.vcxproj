@@ -181,8 +181,13 @@
     <ClInclude Include="agaliaImageBase.h" />
     <ClInclude Include="agaliareptImpl.h" />
     <ClInclude Include="agaliaStream.h" />
+    <ClInclude Include="analyze_ICC_item_Base.h" />
+    <ClInclude Include="analyze_ICC_item_Element.h" />
+    <ClInclude Include="analyze_ICC_item_Header.h" />
+    <ClInclude Include="analyze_ICC_item_TagTable.h" />
     <ClInclude Include="analyze_ISO_item_MovieHeaderBox.h" />
     <ClInclude Include="analyze_ISO_item_TrackHeaderBox.h" />
+    <ClInclude Include="analyze_JPEG_item_ICC.h" />
     <ClInclude Include="analyze_PNG_item_Base.h" />
     <ClInclude Include="analyze_PNG_item_eXIf.h" />
     <ClInclude Include="analyze_PNG_item_iCCP.h" />
@@ -211,6 +216,7 @@
     <ClInclude Include="analyze_DCM_item_elem.h" />
     <ClInclude Include="analyze_DCM_item_preamble.h" />
     <ClInclude Include="analyze_DCM_util.h" />
+    <ClInclude Include="container_ICC.h" />
     <ClInclude Include="container_ISO.h" />
     <ClInclude Include="analyze_ISO_item_Box.h" />
     <ClInclude Include="analyze_ISO_util.h" />
@@ -272,8 +278,13 @@
     <ClCompile Include="agaliarept.cpp" />
     <ClCompile Include="agaliaStream.cpp" />
     <ClCompile Include="agaliaString.cpp" />
+    <ClCompile Include="analyze_ICC_item_Base.cpp" />
+    <ClCompile Include="analyze_ICC_item_Element.cpp" />
+    <ClCompile Include="analyze_ICC_item_Header.cpp" />
+    <ClCompile Include="analyze_ICC_item_TagTable.cpp" />
     <ClCompile Include="analyze_ISO_item_MovieHeaderBox.cpp" />
     <ClCompile Include="analyze_ISO_item_TrackHeaderBox.cpp" />
+    <ClCompile Include="analyze_JPEG_item_ICC.cpp" />
     <ClCompile Include="analyze_PNG_item_Base.cpp" />
     <ClCompile Include="analyze_PNG_item_eXIf.cpp" />
     <ClCompile Include="analyze_PNG_item_iCCP.cpp" />
@@ -302,6 +313,7 @@
     <ClCompile Include="analyze_DCM_item_elem.cpp" />
     <ClCompile Include="analyze_DCM_item_preamble.cpp" />
     <ClCompile Include="analyze_DCM_util.cpp" />
+    <ClCompile Include="container_ICC.cpp" />
     <ClCompile Include="container_ISO.cpp" />
     <ClCompile Include="analyze_ISO_item_Box.cpp" />
     <ClCompile Include="analyze_ISO_util.cpp" />

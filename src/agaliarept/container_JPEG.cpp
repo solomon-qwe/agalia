@@ -3,6 +3,7 @@
 
 #include "analyze_JPEG_util.h"
 #include "analyze_JPEG_item_Marker.h"
+#include "analyze_JPEG_item_APP.h"
 
 #include "jpeg_def.h"
 #include "byteswap.h"
@@ -82,6 +83,81 @@ HRESULT getJPEGImageHeight(const container_JPEG* image, agaliaString** s)
 	return S_OK;
 }
 
+
+HRESULT get_iccprofile_container(const container_JPEG* image, const item_APP* item, agaliaContainer** container)
+{
+	CHeapPtr<JPEGSEGMENT_APPX> buf;
+	rsize_t bufsize = 0;
+	auto hr = ReadSegment(buf, &bufsize, image, item);
+	if (FAILED(hr)) return hr;
+	if (bufsize <= offsetof(JPEGSEGMENT_APPX, identifier)) return E_FAIL;
+
+#pragma pack(push, 1)
+	struct ICCInfo
+	{
+		uint8_t SequenceNumber;
+		uint8_t TotalNumber;
+	};
+#pragma pack(pop)
+
+	const char name[] = "ICC_PROFILE";
+	if (!app_identify(name, _countof(name), buf, bufsize))
+		return E_FAIL;
+
+	auto info = reinterpret_cast<ICCInfo*>(buf.m_pData->identifier + _countof(name));
+	if (info->SequenceNumber != 1)
+		return E_FAIL;
+
+	agaliaStringPtr file_path;
+	hr = image->getFilePath(&file_path);
+	if (FAILED(hr)) return hr;
+
+	uint64_t offset = 0, size = 0;
+	hr = item->getValueAreaOffset(&offset);
+	if (FAILED(hr)) return hr;
+	hr = item->getValueAreaSize(&size);
+	if (FAILED(hr)) return hr;
+
+	uint64_t sigsize = _countof(name) + sizeof(ICCInfo);
+	offset += sigsize;
+	size -= sigsize;
+
+	hr = getAgaliaImage(container, file_path, offset, size);
+	if (FAILED(hr)) return hr;
+
+	return S_OK;
+}
+
+
+
+HRESULT getICCProfileName(const container_JPEG* image, agaliaString** s)
+{
+	agaliaPtr<agaliaItem> item;
+	auto hr = image->getRootItem(&item);
+	if (FAILED(hr)) return hr;
+
+	while (item)
+	{
+		if (getMarker(image, item) == APP2)
+		{
+			agaliaPtr<agaliaContainer> container;
+			hr = get_iccprofile_container(image, static_cast<item_APP*>(item._p), &container);
+			if (SUCCEEDED(hr))
+			{
+				hr = container->getPropertyValue(agaliaContainer::ICCProfile, s);
+				if (SUCCEEDED(hr))
+					return S_OK;
+			}
+		}
+
+		agaliaPtr<agaliaItem> next;
+		item->getNextItem(&next);
+		item.detach()->Release();
+		item.attach(next.detach());
+	}
+
+	return E_FAIL;
+}
 
 
 // BMPFormat 
@@ -217,6 +293,10 @@ HRESULT container_JPEG::getPropertyValue(PropertyType type, agaliaString** str) 
 		break;
 
 	case CreationDateTime:
+		break;
+
+	case ICCProfile:
+		return getICCProfileName(this, str);
 		break;
 	}
 

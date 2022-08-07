@@ -110,7 +110,8 @@ public:
 		ImageWidth,
 		ImageHeight,
 		ShootingDateTime,
-		CreationDateTime
+		CreationDateTime,
+		ICCProfile
 	};
 	virtual HRESULT getPropertyValue(PropertyType type, agaliaString** str) const = 0;
 	virtual HRESULT getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const = 0;
