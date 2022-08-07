@@ -27,4 +27,6 @@ public:
 	virtual HRESULT reset_color_profile(int colorManagementMode) = 0;
 	virtual HRESULT update_for_window_size_change(void) = 0;
 	virtual HRESULT render(DWORD bkcolor) = 0;
+	virtual HRESULT offset(int x, int y) = 0;
+	virtual HRESULT set_scale(FLOAT scale) = 0;
 };

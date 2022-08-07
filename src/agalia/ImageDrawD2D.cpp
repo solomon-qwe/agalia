@@ -269,7 +269,7 @@ HRESULT UpdateForWindowSizeChange(IDXGISwapChain1** swapChain, ID2D1Bitmap1** d2
 }
 
 
-HRESULT Render(IDXGISwapChain1* swapChain, ID2D1DeviceContext* d2dContext, ID2D1Effect* displayEffect, IWICFormatConverter* wicFormatConverter, DWORD bkcolor)
+HRESULT Render(IDXGISwapChain1* swapChain, ID2D1DeviceContext* d2dContext, ID2D1Effect* displayEffect, DWORD bkcolor, const D2D1_POINT_2F& target_offset, const D2D1_RECT_F& image_rect, FLOAT scale)
 {
 	d2dContext->BeginDraw();
 
@@ -279,20 +279,13 @@ HRESULT Render(IDXGISwapChain1* swapChain, ID2D1DeviceContext* d2dContext, ID2D1
 
 	if (displayEffect)
 	{
-		// get souce image size 
-		UINT w = 0, h = 0;
-		wicFormatConverter->GetSize(&w, &h);
-		D2D1_SIZE_F image_size = D2D1::SizeF((FLOAT)w, (FLOAT)h);
-		D2D1_RECT_F image_rect = D2D1::RectF(0, 0, image_size.width, image_size.height);
+		ComPtr<ID2D1Effect> scaleEffect;
+		d2dContext->CreateEffect(CLSID_D2D1Scale, &scaleEffect);
+		scaleEffect->SetInputEffect(0, displayEffect);
+		scaleEffect->SetValue(D2D1_SCALE_PROP_CENTER_POINT, D2D1::Vector2F(0, 0));
+		scaleEffect->SetValue(D2D1_SCALE_PROP_SCALE, D2D1::Vector2F(scale, scale));
 
-		// get destination screen size 
-		D2D1_SIZE_F target_size = d2dContext->GetSize();
-		D2D1_POINT_2F target_offset = D2D1::Point2F(
-			max(0, (target_size.width - image_size.width) / 2),
-			max(0, (target_size.height - image_size.height) / 2));
-
-		// draw image to center of screen 
-		d2dContext->DrawImage(displayEffect, target_offset, image_rect);
+		d2dContext->DrawImage(scaleEffect.Get(), target_offset, image_rect);
 	}
 
 	auto hr = d2dContext->EndDraw();
@@ -402,6 +395,34 @@ HRESULT UpdateDisplayColorContext(ID2D1Effect* displayEffect, ID2D1DeviceContext
 	return S_OK;
 }
 
+HRESULT UpdateImagePosition(IWICFormatConverter* wicFormatConverter, ID2D1DeviceContext* d2dContext, D2D1_POINT_2F* offset, D2D1_RECT_F* image_rect, D2D1_POINT_2F* target_offset, FLOAT scale)
+{
+	if (!wicFormatConverter) return E_POINTER;
+	if (!d2dContext) return E_POINTER;
+		
+	// get souce image size 
+	UINT w = 0, h = 0;
+	wicFormatConverter->GetSize(&w, &h);
+	D2D1_SIZE_F image_size = { (FLOAT)w * scale, (FLOAT)h * scale };
+
+	D2D1_SIZE_F target_size = d2dContext->GetSize();
+
+	FLOAT dstW = min(image_size.width, target_size.width);
+	FLOAT dstH = min(image_size.height, target_size.height);
+	FLOAT dstX = max(0, (target_size.width - image_size.width) / 2);
+	FLOAT dstY = max(0, (target_size.height - image_size.height) / 2);
+
+	FLOAT srcX = max(0, min(-offset->x, image_size.width - dstW));
+	FLOAT srcY = max(0, min(-offset->y, image_size.height - dstH));
+
+	*image_rect = D2D1::RectF(srcX, srcY, image_size.width, image_size.height);
+	*target_offset = D2D1::Point2F(dstX, dstY);
+	offset->x = -srcX;
+	offset->y = -srcY;
+
+	return S_OK;
+}
+
 
 // ImageDrawD2D class implementation 
 
@@ -424,6 +445,12 @@ struct InternalImageDrawD2DParam
 
 	ComPtr<ID2D1Bitmap1>        d2dTarget;
 	ComPtr<IDXGISwapChain1>     swapChain;
+
+	D2D1_POINT_2F offset = {};
+	FLOAT scale = 1.f;
+
+	D2D1_POINT_2F target_offset = {};
+	D2D1_RECT_F image_rect = {};
 
 	void DeleteFactory(void)
 	{
@@ -523,6 +550,9 @@ HRESULT ImageDrawD2D::reset_content(agaliaContainer* image, int colorManagementM
 	hr = ::UpdateDisplayColorContext(_p->displayEffect.Get(), _p->d2dContext.Get(), hwnd, colorManagementMode);
 	if (FAILED(hr)) return hr;
 
+	hr = ::UpdateImagePosition(_p->wicFormatConverter.Get(), _p->d2dContext.Get(), &_p->offset, &_p->image_rect, &_p->target_offset, _p->scale);
+	if (FAILED(hr)) return hr;
+
 	return S_OK;
 }
 
@@ -548,7 +578,16 @@ HRESULT ImageDrawD2D::update_for_window_size_change(void)
 {
 	if (!_p) return E_FAIL;
 
-	return ::UpdateForWindowSizeChange(_p->swapChain.GetAddressOf(), _p->d2dTarget.GetAddressOf(), _p->d3dDevice.Get(), _p->d2dContext.Get(), hwnd);
+	auto hr = ::UpdateForWindowSizeChange(_p->swapChain.GetAddressOf(), _p->d2dTarget.GetAddressOf(), _p->d3dDevice.Get(), _p->d2dContext.Get(), hwnd);
+	if (FAILED(hr)) return hr;
+
+	if (_p->wicFormatConverter.Get() && _p->d2dContext.Get())
+	{
+		hr = ::UpdateImagePosition(_p->wicFormatConverter.Get(), _p->d2dContext.Get(), &_p->offset, &_p->image_rect, &_p->target_offset, _p->scale);
+		if (FAILED(hr)) return E_FAIL;
+	}
+
+	return hr;
 }
 
 
@@ -556,5 +595,30 @@ HRESULT ImageDrawD2D::render(DWORD bkcolor)
 {
 	if (!_p) return E_FAIL;
 
-	return ::Render(_p->swapChain.Get(), _p->d2dContext.Get(), _p->displayEffect.Get(), _p->wicFormatConverter.Get(), bkcolor);
+	return ::Render(_p->swapChain.Get(), _p->d2dContext.Get(), _p->displayEffect.Get(), bkcolor, _p->target_offset, _p->image_rect, _p->scale);
+}
+
+
+HRESULT ImageDrawD2D::offset(int x, int y)
+{
+	if (!_p) return E_FAIL;
+
+	_p->offset.x += x;
+	_p->offset.y += y;
+
+	if (_p->wicFormatConverter.Get() && _p->d2dContext.Get())
+	{
+		auto hr = ::UpdateImagePosition(_p->wicFormatConverter.Get(), _p->d2dContext.Get(), &_p->offset, &_p->image_rect, &_p->target_offset, _p->scale);
+		if (FAILED(hr)) return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+
+HRESULT ImageDrawD2D::set_scale(float scale)
+{
+	if (!_p) return E_FAIL;
+	_p->scale = scale;
+	return S_OK;
 }

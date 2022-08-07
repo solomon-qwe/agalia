@@ -2,8 +2,6 @@
 
 #include "ImageDraw.h"
 
-//#include <stdint.h>
-
 struct InternalImageDrawD2DParam;
 
 class ImageDrawD2D : public ImageDraw
@@ -19,6 +17,8 @@ public:
 	virtual HRESULT reset_color_profile(int colorManagementMode);
 	virtual HRESULT update_for_window_size_change(void);
 	virtual HRESULT render(DWORD bkcolor);
+	virtual HRESULT offset(int x, int y);
+	virtual HRESULT set_scale(FLOAT scale);
 
 protected:
 	HWND hwnd = NULL;

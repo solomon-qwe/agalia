@@ -157,8 +157,9 @@ HRESULT ImageDrawGDI::reset_content(agaliaContainer* image, int colorManagementM
 
 	if (FAILED(hr)) return hr;
 
-
 	reset_color_profile(colorManagementMode);
+
+	UpdateImagePosition();
 
 	return S_OK;
 }
@@ -229,7 +230,8 @@ HRESULT ImageDrawGDI::reset_color_profile(int colorManagementMode)
 
 HRESULT ImageDrawGDI::update_for_window_size_change(void)
 {
-	return E_NOTIMPL;
+	UpdateImagePosition();
+	return S_OK;
 }
 
 
@@ -245,46 +247,97 @@ HRESULT ImageDrawGDI::render(DWORD bkcolor)
 	DIBSECTION dib = {};
 	::GetObject(hOffscreenBmp, sizeof(dib), &dib);
 
-	// âÊñ Ç™çLÇØÇÍÇŒÉZÉìÉ^ÉäÉìÉOÅAã∑ÇØÇÍÇŒç∂è„ç¿ïWå≈íË 
-	int w = min(dib.dsBmih.biWidth, rcClient.Width());
-	int h = min(dib.dsBmih.biHeight, rcClient.Height());
-	int x = max(0, (rcClient.Width() - dib.dsBmih.biWidth) / 2);
-	int y = max(0, (rcClient.Height() - dib.dsBmih.biHeight) / 2);
-
 	// âÊëúï`âÊ 
-	::SetDIBitsToDevice(
+	::SetStretchBltMode(hDC, HALFTONE);
+	::SetBrushOrgEx(hDC, 0, 0, NULL);
+	::StretchDIBits(
 		hDC,
-		x, y, w, h,
-		0, dib.dsBmih.biHeight - h, 0, dib.dsBmih.biHeight,
+		rcDst.left, rcDst.top, rcDst.Width(), rcDst.Height(),
+		rcSrc.left, rcSrc.top, rcSrc.Width(), rcSrc.Height(),
 		dib.dsBm.bmBits, reinterpret_cast<BITMAPINFO*>(&dib.dsBmih),
-		DIB_RGB_COLORS);
+		DIB_RGB_COLORS,
+		SRCCOPY);
 
 	// îwåiï`âÊ 
 	HBRUSH br = ::CreateSolidBrush(bkcolor);
 	CRect rcFill;
 
 	rcFill = rcClient;
-	rcFill.bottom = y;
+	rcFill.bottom = rcDst.top;
 	::FillRect(hDC, &rcFill, br);	// upper 
 
 	rcFill = rcClient;
-	rcFill.top = y;
-	rcFill.right = x;
-	rcFill.bottom = y + h;
+	rcFill.top = rcDst.top;
+	rcFill.right = rcDst.left;
+	rcFill.bottom = rcDst.bottom;
 	::FillRect(hDC, &rcFill, br);	// left 
 
 	rcFill = rcClient;
-	rcFill.top = y;
-	rcFill.left = x + w;
-	rcFill.bottom = y + h;
+	rcFill.top = rcDst.top;
+	rcFill.left = rcDst.right;
+	rcFill.bottom = rcDst.bottom;
 	::FillRect(hDC, &rcFill, br);	// right 
 
 	rcFill = rcClient;
-	rcFill.top = y + h;
+	rcFill.top = rcDst.bottom;
 	::FillRect(hDC, &rcFill, br);	// lower 
 
 	::DeleteObject(br);
 	::ReleaseDC(hwnd, hDC);
 
 	return S_OK;
+}
+
+
+HRESULT ImageDrawGDI::offset(int x, int y)
+{
+	ptOffset.x += x;
+	ptOffset.y += y;
+	UpdateImagePosition();
+	return S_OK;
+}
+
+
+HRESULT ImageDrawGDI::set_scale(float scale)
+{
+	fScale = scale;
+	UpdateImagePosition();
+	return S_OK;
+}
+
+
+void ImageDrawGDI::UpdateImagePosition(void)
+{
+	if (hwnd == NULL) return;
+
+	CRect rcClient(0, 0, 0, 0);
+	::GetClientRect(hwnd, &rcClient);
+
+	DIBSECTION dib = {};
+	::GetObject(hOffscreenBmp, sizeof(dib), &dib);
+
+	double fWndW = rcClient.Width();
+	double fWndH = rcClient.Height();
+
+	double fImgW = dib.dsBmih.biWidth;
+	double fImgH = dib.dsBmih.biHeight;
+
+	double fDstW = min(fImgW * fScale, fWndW);
+	double fDstH = min(fImgH * fScale, fWndH);
+
+	double fSrcX = max(0, min(-ptOffset.x / fScale, fImgW - fWndW / fScale));
+	double fSrcY = max(0, min(-ptOffset.y / fScale, fImgH - fWndH / fScale));
+
+	ptOffset.x = -(int)(fSrcX * fScale);
+	ptOffset.y = -(int)(fSrcY * fScale);
+
+	rcDst.left   = (int)max(0, (fWndW - fImgW * fScale) / 2);
+	rcDst.top    = (int)max(0, (fWndH - fImgH * fScale) / 2);
+	rcDst.right  = rcDst.left + (int)fDstW;
+	rcDst.bottom = rcDst.top  + (int)fDstH;
+
+	rcSrc.left   = (int)fSrcX;
+	rcSrc.top    = (int)(fImgH - (fDstH / fScale + fSrcY));
+	rcSrc.right  = rcSrc.left + (int)(fDstW / fScale);
+	rcSrc.bottom = rcSrc.top  + (int)(fDstH / fScale);
 }
