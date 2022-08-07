@@ -264,6 +264,27 @@
     <ClInclude Include="analyze_ISO_item_TrackHeaderBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="container_PNG.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_item_Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_item_iTXt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_item_IHDR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_item_eXIf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_item_iCCP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -504,6 +525,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="analyze_ISO_item_TrackHeaderBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="container_PNG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_item_Base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_item_iTXt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_item_IHDR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_item_eXIf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_item_iCCP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

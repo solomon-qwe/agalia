@@ -90,6 +90,7 @@ void _agaliaItemBase::Release(void)
 #include "container_M2P.h"
 #include "container_RIFF.h"
 #include "container_TIFF.h"
+#include "container_PNG.h"
 
 // そのクラスがサポートしているフォーマットであれば、オブジェクトを生成してtrueを返す 
 template <class T>
@@ -109,7 +110,8 @@ static tf generators[] =
 	generator<analyze_JPEG::container_JPEG>,
 	generator<analyze_M2P::container_M2P>,
 	generator<analyze_RIFF::container_RIFF>,
-	generator<analyze_TIFF::container_TIFF>
+	generator<analyze_TIFF::container_TIFF>,
+	generator<analyze_PNG::container_PNG>
 };
 
 
@@ -122,7 +124,8 @@ static cn container_names[] = {
 	analyze_JPEG::container_JPEG::GetContainerName,
 	analyze_M2P::container_M2P::GetContainerName,
 	analyze_RIFF::container_RIFF::GetContainerName,
-	analyze_TIFF::container_TIFF::GetContainerName
+	analyze_TIFF::container_TIFF::GetContainerName,
+	analyze_PNG::container_PNG::GetContainerName
 };
 
 

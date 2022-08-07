@@ -183,6 +183,12 @@
     <ClInclude Include="agaliaStream.h" />
     <ClInclude Include="analyze_ISO_item_MovieHeaderBox.h" />
     <ClInclude Include="analyze_ISO_item_TrackHeaderBox.h" />
+    <ClInclude Include="analyze_PNG_item_Base.h" />
+    <ClInclude Include="analyze_PNG_item_eXIf.h" />
+    <ClInclude Include="analyze_PNG_item_iCCP.h" />
+    <ClInclude Include="analyze_PNG_item_IHDR.h" />
+    <ClInclude Include="analyze_PNG_item_iTXt.h" />
+    <ClInclude Include="analyze_PNG_util.h" />
     <ClInclude Include="container_ASF.h" />
     <ClInclude Include="analyze_ASF_item_Base.h" />
     <ClInclude Include="analyze_ASF_item_HeaderObject.h" />
@@ -234,6 +240,7 @@
     <ClInclude Include="analyze_M2P_util.h" />
     <ClInclude Include="analyze_RIFF_item_avih.h" />
     <ClInclude Include="analyze_RIFF_item_Base.h" />
+    <ClInclude Include="container_PNG.h" />
     <ClInclude Include="container_RIFF.h" />
     <ClInclude Include="container_DCM.h" />
     <ClInclude Include="container_JPEG.h" />
@@ -267,6 +274,12 @@
     <ClCompile Include="agaliaString.cpp" />
     <ClCompile Include="analyze_ISO_item_MovieHeaderBox.cpp" />
     <ClCompile Include="analyze_ISO_item_TrackHeaderBox.cpp" />
+    <ClCompile Include="analyze_PNG_item_Base.cpp" />
+    <ClCompile Include="analyze_PNG_item_eXIf.cpp" />
+    <ClCompile Include="analyze_PNG_item_iCCP.cpp" />
+    <ClCompile Include="analyze_PNG_item_IHDR.cpp" />
+    <ClCompile Include="analyze_PNG_item_iTXt.cpp" />
+    <ClCompile Include="analyze_PNG_util.cpp" />
     <ClCompile Include="container_ASF.cpp" />
     <ClCompile Include="analyze_ASF_item_Base.cpp" />
     <ClCompile Include="analyze_ASF_item_HeaderObject.cpp" />
@@ -319,6 +332,7 @@
     <ClCompile Include="analyze_RIFF_item_Base.cpp" />
     <ClCompile Include="container_DCM.cpp" />
     <ClCompile Include="container_JPEG.cpp" />
+    <ClCompile Include="container_PNG.cpp" />
     <ClCompile Include="container_RIFF.cpp" />
     <ClCompile Include="analyze_RIFF_item_idx1.cpp" />
     <ClCompile Include="analyze_RIFF_item_LIST.cpp" />

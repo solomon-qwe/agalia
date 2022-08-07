@@ -11,6 +11,7 @@
 * JPEG (Exif JPEG 含む)
 * MPEG-2 program stream
   * .mpg, .m2v, .vob, etc.
+* PNG
 * RIFF (Resource Interchange File Format)
   * .avi, .wav, webp, etc.
 * TIFF (Exif TIFF、BigTIFF、DNG 含む)
@@ -106,6 +107,11 @@
 
 * [Resource Interchange File Format Services](https://msdn.microsoft.com/en-us/library/dd798636(v=vs.85).aspx)
 * [AVI RIFF File Reference](https://msdn.microsoft.com/en-us/library/dd318189(v=vs.85).aspx)
+
+### PNG
+
+* [Portable Network Graphics (PNG) Specification (Second Edition)](https://www.w3.org/TR/PNG/)
+* [Extensions to the PNG 1.2 Specification, Version 1.5.0](http://ftp-osl.osuosl.org/pub/libpng/documents/pngext-1.5.0.html)
 
 ## テストデータ
 
