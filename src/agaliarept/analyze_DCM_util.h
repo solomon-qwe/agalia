@@ -177,8 +177,10 @@ namespace analyze_DCM
 			case 0x0002:
 			case 0xFFFE:
 				*syntax = ExplicitVR_LittleEndian;
+				break;
+			default:
+				*syntax = image->_transferSyntax;
 			}
-			*syntax = image->_transferSyntax;
 			return S_OK;
 		}
 
