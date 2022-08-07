@@ -235,6 +235,8 @@ HRESULT ImageDrawGDI::update_for_window_size_change(void)
 
 HRESULT ImageDrawGDI::render(DWORD bkcolor)
 {
+	if (hwnd == NULL) return E_FAIL;
+
 	HDC hDC = ::GetDC(hwnd);
 
 	CRect rcClient(0, 0, 0, 0);
