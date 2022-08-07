@@ -17,7 +17,7 @@ uint64_t analyze_ISO::Box::getBoxSize(const agaliaContainer* image, uint64_t off
 		hr = image->ReadData(&largesize, offset + sizeof(Box), sizeof(largesize));
 		if (FAILED(hr)) return 0;
 
-		return largesize;
+		return agalia_byteswap(largesize);
 	}
 	else if (temp.getSize() == 0)
 	{
