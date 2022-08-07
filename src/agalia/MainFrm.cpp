@@ -527,6 +527,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND_RANGE(ID_VIEW_FLAT, ID_VIEW_GRAPHIC, &CMainFrame::OnViewRange)
 	ON_COMMAND(ID_EDIT_OPTIONS, &CMainFrame::OnEditOptions)
 	ON_MESSAGE(WM_APP, &CMainFrame::OnApp)
+	ON_WM_NCCREATE()
 END_MESSAGE_MAP()
 
 
@@ -535,6 +536,13 @@ END_MESSAGE_MAP()
 
 CMainFrame::CMainFrame() noexcept
 {
+	HMODULE hModUser32 = LoadLibrary(L"User32.dll");
+	typedef DPI_AWARENESS_CONTEXT(_stdcall* SETTHREADDPIAWARENESSCONTEXTPROC)(DPI_AWARENESS_CONTEXT);
+	SETTHREADDPIAWARENESSCONTEXTPROC SetThreadDpiAwarenessContextProc;
+	SetThreadDpiAwarenessContextProc = (SETTHREADDPIAWARENESSCONTEXTPROC)GetProcAddress(hModUser32, "SetThreadDpiAwarenessContext");
+	if (SetThreadDpiAwarenessContextProc) {
+		SetThreadDpiAwarenessContextProc(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+	}
 }
 
 CMainFrame::~CMainFrame()
@@ -567,12 +575,20 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 // CMainFrame message handlers
 
-
+UINT uDPI = 0;
 // WM_CREATE message handler 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
+
+	HMODULE hModUser32 = ::LoadLibrary(L"User32.dll");
+	typedef UINT (WINAPI* GETDPIFORWINDOWPROC)(HWND);
+	GETDPIFORWINDOWPROC GetDpiForWindowProc;
+	GetDpiForWindowProc = (GETDPIFORWINDOWPROC)::GetProcAddress(hModUser32, "GetDpiForWindow");
+	if (GetDpiForWindowProc) {
+		uDPI = GetDpiForWindowProc(GetSafeHwnd());
+	}
 
 	ctrl.load_registry();
 
@@ -669,7 +685,7 @@ void CMainFrame::RecalcLayout(BOOL bNotify)
 	HMODULE user32dll = GetModuleHandle(TEXT("user32.dll"));
 	if (user32dll)
 	{
-		typedef UINT(WINAPI * GETDPIFORWINDOW_FUNC)(HWND);
+		typedef UINT(WINAPI* GETDPIFORWINDOW_FUNC)(HWND);
 		GETDPIFORWINDOW_FUNC getDpiForWindow = reinterpret_cast<GETDPIFORWINDOW_FUNC>(GetProcAddress(user32dll, "GetDpiForWindow"));
 		if (getDpiForWindow)
 		{
@@ -913,4 +929,60 @@ void CMainFrame::OnViewProperty()
 	menu->CheckMenuItem(ID_VIEW_PROPERTY, (stat & MF_CHECKED) ? MF_UNCHECKED : MF_CHECKED);
 
 	ResetViewLayout();
+}
+
+
+BOOL CMainFrame::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	HMODULE hModUser32 = LoadLibrary(L"User32.dll");
+	typedef BOOL(WINAPI* ENABLENONCLIENTDPISCALINGPROC)(HWND);
+	ENABLENONCLIENTDPISCALINGPROC EnableNonClientDpiScalingProc;
+	EnableNonClientDpiScalingProc = (ENABLENONCLIENTDPISCALINGPROC)GetProcAddress(hModUser32, "EnableNonClientDpiScaling");
+	if (EnableNonClientDpiScalingProc) {
+		EnableNonClientDpiScalingProc(GetSafeHwnd());
+	}
+
+	if (!CFrameWnd::OnNcCreate(lpCreateStruct))
+		return FALSE;
+	return TRUE;
+}
+
+
+void UpdateFont(HWND hwnd, int dpi)
+{
+	HFONT hCurFont = (HFONT)::SendMessage(hwnd, WM_GETFONT, 0, 0);
+	if (hCurFont == NULL)
+		return;
+
+	LOGFONT lf = {};
+	if (!::GetObject(hCurFont, sizeof(lf), &lf))
+		return;
+
+	lf.lfHeight = lf.lfHeight * dpi / (int)uDPI;
+	HFONT hNewFont = ::CreateFontIndirect(&lf);
+	if (hNewFont == NULL)
+		return;
+
+	::SendMessage(hwnd, WM_SETFONT, (WPARAM)hNewFont, TRUE);
+}
+
+LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
+	if (message == WM_DPICHANGED)
+	{
+		WORD dpi = HIWORD(wParam);
+		RECT* rcNew = (RECT*)lParam;
+
+		auto textView = dynamic_cast<ChildTextView*>(m_wndHSplitter.GetPane(1, 0));
+		UpdateFont(textView->GetEditCtrl(), dpi);
+		uDPI = dpi;
+
+		SetWindowPos(
+			nullptr,
+			rcNew->left, rcNew->top,
+			rcNew->right - rcNew->left, rcNew->bottom - rcNew->top,
+			SWP_NOZORDER | SWP_NOACTIVATE);
+	}
+
+	return CFrameWnd::WindowProc(message, wParam, lParam);
 }

@@ -76,6 +76,9 @@ public:
 	afx_msg void OnViewRange(UINT id);
 protected:
 	afx_msg LRESULT OnApp(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg BOOL OnNcCreate(LPCREATESTRUCT lpCreateStruct);
+	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
 
