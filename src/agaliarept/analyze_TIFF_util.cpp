@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "analyze_TIFF_util.h"
 
 using namespace analyze_TIFF;
@@ -54,27 +54,27 @@ HRESULT analyze_TIFF::format_exif_user_comment(std::wstringstream& str, const co
 
 
 
-// TIFFENTRY‚Ì’l‚ğæ“¾ 
-// T : æ“¾‚·‚é’l‚ÌŒ^ 
-// result : æ“¾‚µ‚½’l‚ğŠi”[‚·‚é•Ï”‚Ö‚Ìƒ|ƒCƒ“ƒ^ 
-// image : ‰æ‘œƒf[ƒ^ŠÇ—ƒIƒuƒWƒFƒNƒg 
-// value_offset : ’l‚ÌˆÊ’u 
-// type : ’l‚ÌŒ^ 
-// index : ’l‚Ì—v‘f”Ô† 
+// TIFFENTRYã®å€¤ã‚’å–å¾— 
+// T : å–å¾—ã™ã‚‹å€¤ã®å‹ 
+// result : å–å¾—ã—ãŸå€¤ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°ã¸ã®ãƒã‚¤ãƒ³ã‚¿ 
+// image : ç”»åƒãƒ‡ãƒ¼ã‚¿ç®¡ç†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ 
+// value_offset : å€¤ã®ä½ç½® 
+// type : å€¤ã®å‹ 
+// index : å€¤ã®è¦ç´ ç•ªå· 
 template <typename T>
 HRESULT getTiffValue(T* result, const container_TIFF* image, uint64_t value_offset, uint16_t type, rsize_t index)
 {
-	// Œ^‚ÌƒTƒCƒY‚ğæ“¾ 
+	// å‹ã®ã‚µã‚¤ã‚ºã‚’å–å¾— 
 	rsize_t typesize = 0;
 	auto hr = getTiffTypeSize(type, &typesize);
 	if (FAILED(hr)) return hr;
 
-	// ’l‚ğ“Ç‚İ‚Ş 
+	// å€¤ã‚’èª­ã¿è¾¼ã‚€ 
 	T val = 0;
 	hr = image->ReadData(&val, value_offset + static_cast<uint64_t>(typesize) * index, sizeof(val));
 	if (FAILED(hr)) return hr;
 
-	// ƒoƒCƒgƒI[ƒ_[‚ğ’²® 
+	// ãƒã‚¤ãƒˆã‚ªãƒ¼ãƒ€ãƒ¼ã‚’èª¿æ•´ 
 	*result = get_tiff_value(image->byte_order, val);
 
 	return S_OK;
@@ -82,16 +82,16 @@ HRESULT getTiffValue(T* result, const container_TIFF* image, uint64_t value_offs
 
 
 
-// ”CˆÓ‚ÌŒ^‚Ì’l‚ğ10i”‚Ì•¶š—ñ‚Æ‚µ‚Äæ“¾ 
+// ä»»æ„ã®å‹ã®å€¤ã‚’10é€²æ•°ã®æ–‡å­—åˆ—ã¨ã—ã¦å–å¾— 
 template <typename T>
 HRESULT format_tiff_value_dec(std::wstringstream& str, const container_TIFF* image, uint64_t value_offset, uint16_t type, rsize_t index)
 {
-	// ’l‚ğ“Ç‚İ‚Ş 
+	// å€¤ã‚’èª­ã¿è¾¼ã‚€ 
 	T val = 0;
 	auto hr = getTiffValue(&val, image, value_offset, type, index);
 	if (FAILED(hr)) return hr;
 
-	// ‘®‰» 
+	// æ›¸å¼åŒ– 
 	if (index != 0) str << L", ";
 	format_dec(str, val);
 
@@ -100,16 +100,16 @@ HRESULT format_tiff_value_dec(std::wstringstream& str, const container_TIFF* ima
 
 
 
-// ”CˆÓ‚ÌŒ^‚Ì’l‚ğ16i”‚Ì•¶š—ñ‚Æ‚µ‚Äæ“¾ 
+// ä»»æ„ã®å‹ã®å€¤ã‚’16é€²æ•°ã®æ–‡å­—åˆ—ã¨ã—ã¦å–å¾— 
 template <typename T>
 HRESULT format_tiff_value_hex(std::wstringstream& str, const container_TIFF* image, uint64_t value_offset, uint16_t type, rsize_t index)
 {
-	// ’l‚ğ“Ç‚İ‚Ş 
+	// å€¤ã‚’èª­ã¿è¾¼ã‚€ 
 	T val = 0;
 	auto hr = getTiffValue(&val, image, value_offset, type, index);
 	if (FAILED(hr)) return hr;
 
-	// ‘®‰» 
+	// æ›¸å¼åŒ– 
 	if (index != 0) str << L", ";
 	format_hex(str, val);
 	
@@ -118,41 +118,41 @@ HRESULT format_tiff_value_hex(std::wstringstream& str, const container_TIFF* ima
 
 
 
-// ”CˆÓ‚ÌŒ^‚Ì’l‚ğ•‚“®¬”“_”‚Ì•¶š—ñ‚Æ‚µ‚Äæ“¾ 
+// ä»»æ„ã®å‹ã®å€¤ã‚’æµ®å‹•å°æ•°ç‚¹æ•°ã®æ–‡å­—åˆ—ã¨ã—ã¦å–å¾— 
 // T : TIFFFLOAT or TIFFDOUBLE 
 template <typename T>
 HRESULT format_tiff_value_float(std::wstringstream& str, const container_TIFF* image, uint64_t value_offset, uint16_t type, rsize_t index)
 {
-	// ’l‚ğ“Ç‚İ‚Ş 
+	// å€¤ã‚’èª­ã¿è¾¼ã‚€ 
 	T val = 0;
 	auto hr = getTiffValue(&val, image, value_offset, type, index);
 	if (FAILED(hr)) return hr;
 
-	// ‘®‰» 
+	// æ›¸å¼åŒ– 
 	if (index != 0) str << L", ";
-	format_float(str, val);
+	format_scientific(str, val);
 	
 	return S_OK;
 }
 
 
 
-// •ª”Œ^‚Ì’l‚ğ•¶š—ñ‚Æ‚µ‚Äæ“¾
+// åˆ†æ•°å‹ã®å€¤ã‚’æ–‡å­—åˆ—ã¨ã—ã¦å–å¾—
 // T : TIFFRATIONAL or TIFFSRATIONAL 
 template <typename T>
 HRESULT format_tiff_value_fraction(std::wstringstream& str, const container_TIFF* image, uint64_t value_offset, uint16_t type, rsize_t index)
 {
-	// Œ^‚ÌƒTƒCƒY‚ğæ“¾ 
+	// å‹ã®ã‚µã‚¤ã‚ºã‚’å–å¾— 
 	rsize_t typesize = 0;
 	auto hr = getTiffTypeSize(type, &typesize);
 	if (FAILED(hr)) return hr;
 
-	// ’l‚ğ“Ç‚İ‚Ş 
+	// å€¤ã‚’èª­ã¿è¾¼ã‚€ 
 	T val(0, 0);
 	hr = image->ReadData(&val, value_offset + static_cast<uint64_t>(typesize) * index, sizeof(val));
 	if (FAILED(hr)) return hr;
 
-	// ‘®‰» 
+	// æ›¸å¼åŒ– 
 	if (index != 0) str << L", ";
 	format_dec(str, get_tiff_value(image->byte_order, val.fraction));
 	str << L"/";
@@ -163,20 +163,20 @@ HRESULT format_tiff_value_fraction(std::wstringstream& str, const container_TIFF
 
 
 
-// ASCII Œ^‚Ì’l‚ğ•¶š—ñ‚Æ‚µ‚Äæ“¾ 
+// ASCII å‹ã®å€¤ã‚’æ–‡å­—åˆ—ã¨ã—ã¦å–å¾— 
 HRESULT format_tiff_value_ascii(std::wstringstream& str, const container_TIFF* image, uint64_t value_offset, uint16_t type, rsize_t index)
 {
-	// Œ^‚ÌƒTƒCƒY‚ğæ“¾ 
+	// å‹ã®ã‚µã‚¤ã‚ºã‚’å–å¾— 
 	rsize_t typesize = 0;
 	auto hr = getTiffTypeSize(type, &typesize);
 	if (FAILED(hr)) return hr;
 
-	// ’l‚ğ“Ç‚İ‚Ş 
+	// å€¤ã‚’èª­ã¿è¾¼ã‚€ 
 	TIFFASCII val = 0;
 	hr = image->ReadData(&val, value_offset + static_cast<uint64_t>(typesize) * index, sizeof(val));
 	if (FAILED(hr)) return hr;
 
-	// ‘®‰» 
+	// æ›¸å¼åŒ– 
 	if (index == 0) str << L"\"";
 	if (val) {
 		wchar_t temp[8] = {};

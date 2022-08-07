@@ -181,6 +181,8 @@
     <ClInclude Include="agaliaImageBase.h" />
     <ClInclude Include="agaliareptImpl.h" />
     <ClInclude Include="agaliaStream.h" />
+    <ClInclude Include="analyze_ISO_item_MovieHeaderBox.h" />
+    <ClInclude Include="analyze_ISO_item_TrackHeaderBox.h" />
     <ClInclude Include="container_ASF.h" />
     <ClInclude Include="analyze_ASF_item_Base.h" />
     <ClInclude Include="analyze_ASF_item_HeaderObject.h" />
@@ -263,6 +265,8 @@
     <ClCompile Include="agaliarept.cpp" />
     <ClCompile Include="agaliaStream.cpp" />
     <ClCompile Include="agaliaString.cpp" />
+    <ClCompile Include="analyze_ISO_item_MovieHeaderBox.cpp" />
+    <ClCompile Include="analyze_ISO_item_TrackHeaderBox.cpp" />
     <ClCompile Include="container_ASF.cpp" />
     <ClCompile Include="analyze_ASF_item_Base.cpp" />
     <ClCompile Include="analyze_ASF_item_HeaderObject.cpp" />

@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "analyze_DCM_util.h"
 
 using namespace analyze_DCM;
@@ -27,8 +27,8 @@ HRESULT format_dicm_value_localize_string(std::wstringstream& dst, const contain
 	auto hr = image->ReadData(buf, value_offset, value_size);
 	if (FAILED(hr)) return hr;
 
-	// ’FSpecificCharacterSet ‚É•¡”w’è‚³‚ê‚Ä‚¢‚½ê‡AÅŒã‚Ìw’è‚ğ—p‚¢‚ÄˆêŠ‡•ÏŠ· 
-	// @@–{—ˆ‚ÍƒGƒXƒP[ƒvˆ—‚·‚×‚« 
+	// æ³¨ï¼šSpecificCharacterSet ã«è¤‡æ•°æŒ‡å®šã•ã‚Œã¦ã„ãŸå ´åˆã€æœ€å¾Œã®æŒ‡å®šã‚’ç”¨ã„ã¦ä¸€æ‹¬å¤‰æ› 
+	// ã€€ã€€æœ¬æ¥ã¯ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—å‡¦ç†ã™ã¹ã 
 	dst << L"\"";
 	hr = multibyte_to_widechar(buf, value_size, *codepage.rbegin(), dst);
 	dst << L"\"";
@@ -70,7 +70,7 @@ HRESULT format_dicm_value_dec(std::wstringstream& str, const container_DCM_Impl*
 		str.str(L"");
 		return S_OK;
 	}
-	rsize_t counts = min(128, raw_counts);	// ‘å‚«‚·‚¬‚éê‡‚ÍÈ—ª 
+	rsize_t counts = min(128, raw_counts);	// å¤§ãã™ãã‚‹å ´åˆã¯çœç•¥ 
 
 	CHeapPtr<T> buf;
 	if (!buf.AllocateBytes(value_size)) return E_OUTOFMEMORY;
@@ -100,7 +100,7 @@ HRESULT format_dicm_value_hex(std::wstringstream& str, const container_DCM_Impl*
 		str.str(L"");
 		return S_OK;
 	}
-	rsize_t counts = min(128, raw_counts);	// ‘å‚«‚·‚¬‚éê‡‚ÍÈ—ª 
+	rsize_t counts = min(128, raw_counts);	// å¤§ãã™ãã‚‹å ´åˆã¯çœç•¥ 
 
 	CHeapPtr<T> buf;
 	if (!buf.AllocateBytes(value_size)) return E_OUTOFMEMORY;
@@ -131,7 +131,7 @@ HRESULT format_dicm_value_float(std::wstringstream& str, const container_DCM_Imp
 		str.str(L"");
 		return S_OK;
 	}
-	rsize_t counts = min(128, raw_counts);	// ‘å‚«‚·‚¬‚éê‡‚ÍÈ—ª 
+	rsize_t counts = min(128, raw_counts);	// å¤§ãã™ãã‚‹å ´åˆã¯çœç•¥ 
 
 	CHeapPtr<T> buf;
 	if (!buf.AllocateBytes(value_size)) return E_OUTOFMEMORY;
@@ -141,7 +141,7 @@ HRESULT format_dicm_value_float(std::wstringstream& str, const container_DCM_Imp
 	if (1 < counts) { str << "["; }
 	for (rsize_t i = 0; i < counts; i++) {
 		if (i != 0) str << ", ";
-		format_float(str, buf[i]);
+		format_scientific(str, buf[i]);
 	}
 	if (counts < raw_counts) { str << ", ..."; }
 	if (1 < counts) { str << "]"; }
@@ -190,7 +190,7 @@ HRESULT analyze_DCM::format_dicm_value(std::wstringstream& dst, const container_
 	case 'SL':
 		return format_dicm_value_dec<int32_t>(dst, image, value_offset, value_size);
 	case 'SQ':
-		break; // ƒV[ƒPƒ“ƒX‚È‚Ì‚Å’l‰ğß‚µ‚È‚¢ 
+		break; // ã‚·ãƒ¼ã‚±ãƒ³ã‚¹ãªã®ã§å€¤è§£é‡ˆã—ãªã„ 
 	case 'SS':
 		return format_dicm_value_dec<int16_t>(dst, image, value_offset, value_size);
 	case 'ST':

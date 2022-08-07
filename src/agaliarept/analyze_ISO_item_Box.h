@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "agaliareptImpl.h"
 #include "byteswap.h"
@@ -59,6 +59,12 @@ namespace analyze_ISO
 		uint32_t getType(void) const { return agalia_byteswap(type); }
 		static uint64_t getBoxSize(const agaliaContainer* image, uint64_t offset, uint64_t endpos);
 		static uint64_t getDataOffset(const agaliaContainer* image, uint64_t offset);
+	};
+
+	struct FullBox
+	{
+		uint8_t version;
+		uint8_t flags[3];
 	};
 #pragma pack(pop)
 }

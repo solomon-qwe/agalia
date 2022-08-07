@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <intsafe.h>
 #include <atlbase.h>
@@ -71,7 +71,7 @@ HRESULT multibyte_to_widechar(char* srcBuf, int size, uint32_t codepage, std::ws
 
 
 
-// ’l‚ğ16i”‚Ì•¶š—ñ‚É•ÏŠ·‚µAŒ^‚ÌƒTƒCƒY‚É‡‚í‚¹‚Äƒ[ƒƒpƒfƒBƒ“ƒO‚·‚é 
+// å€¤ã‚’16é€²æ•°ã®æ–‡å­—åˆ—ã«å¤‰æ›ã—ã€å‹ã®ã‚µã‚¤ã‚ºã«åˆã‚ã›ã¦ã‚¼ãƒ­ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°ã™ã‚‹ 
 template <typename T>
 void format_hex(std::wstringstream& dst, T value, rsize_t def_w = 0)
 {
@@ -79,7 +79,7 @@ void format_hex(std::wstringstream& dst, T value, rsize_t def_w = 0)
 }
 
 
-// ’l‚ğ10i”‚Ì•¶š—ñ‚É•ÏŠ· 
+// å€¤ã‚’10é€²æ•°ã®æ–‡å­—åˆ—ã«å¤‰æ› 
 template <typename T>
 void format_dec(std::wstringstream& dst, T value)
 {
@@ -87,9 +87,17 @@ void format_dec(std::wstringstream& dst, T value)
 }
 
 
-// ’l‚ğ•‚“®¬”“_”‚Ìw”•\‹L•¶š—ñ‚É•ÏŠ· 
+// å€¤ã‚’æµ®å‹•å°æ•°ç‚¹æ•°ã®æ–‡å­—åˆ—ã«å¤‰æ› 
 template <typename T>
-void format_float(std::wstringstream& dst, T value)
+void format_fixed(std::wstringstream& dst, T value)
+{
+	dst << std::fixed << value;
+}
+
+
+// å€¤ã‚’æµ®å‹•å°æ•°ç‚¹æ•°ã®æŒ‡æ•°è¡¨è¨˜æ–‡å­—åˆ—ã«å¤‰æ› 
+template <typename T>
+void format_scientific(std::wstringstream& dst, T value)
 {
 	dst << std::scientific << std::setprecision(sizeof(T) * 2) << value;
 }
@@ -105,6 +113,21 @@ void format_asc(std::wstringstream& dst, T value)
 	}
 }
 
+inline void format_time32(std::wstringstream& dst, __time32_t value)
+{
+	wchar_t buf[64] = {};
+	if (_wctime32_s(buf, &value) == 0) {
+		dst << buf;
+	}
+}
+
+inline void format_time64(std::wstringstream& dst, __time64_t value)
+{
+	wchar_t buf[64] = {};
+	if (_wctime64_s(buf, &value) == 0) {
+		dst << buf;
+	}
+}
 
 
 

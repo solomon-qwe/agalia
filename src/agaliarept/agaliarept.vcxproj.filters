@@ -258,6 +258,12 @@
     <ClInclude Include="container_DCM_Impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="analyze_ISO_item_MovieHeaderBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ISO_item_TrackHeaderBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -492,6 +498,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="container_DCM_Impl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ISO_item_MovieHeaderBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ISO_item_TrackHeaderBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
