@@ -70,6 +70,8 @@ void PropView::OnPaint()
 		memDC.CreateCompatibleDC(&dc);
 		HGDIOBJ hOldBmp = memDC.SelectObject(m_hBitmap);
 
+		dc.SetStretchBltMode(HALFTONE);
+		dc.SetBrushOrg(0, 0);
 		dc.StretchBlt(dstImgX, dstImgY, dstImgW, dstImgH, &memDC, 0, 0, dib.dsBmih.biWidth, dib.dsBmih.biHeight, SRCCOPY);
 
 		memDC.SelectObject(hOldBmp);
