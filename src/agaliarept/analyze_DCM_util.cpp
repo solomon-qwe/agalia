@@ -212,3 +212,69 @@ HRESULT analyze_DCM::format_dicm_value(std::wstringstream& dst, const container_
 	}
 	return E_FAIL;
 }
+
+
+HRESULT analyze_DCM::findTag(const container_DCM_Impl* image, uint16_t group, uint16_t element, agaliaElement** ppElement)
+{
+	if (image == nullptr) return E_POINTER;
+	if (ppElement == nullptr) return E_POINTER;
+	if (*ppElement != nullptr) return E_INVALIDARG;
+
+	agaliaPtr<agaliaElement> item;
+	auto hr = image->getRootElement(&item);
+	if (FAILED(hr)) return hr;
+
+	agaliaPtr<agaliaElement> next;
+	while (SUCCEEDED(item->getNext(&next)))
+	{
+		item = next.detach();
+		dicom_element elem(image, item->getOffset());
+
+		uint16_t g = 0;
+		if (FAILED(elem.getGroup(&g))) return E_FAIL;
+		if (g < group) continue;
+		if (group < g) return E_FAIL;
+
+		uint16_t e = 0;
+		if (FAILED(elem.getElement(&e))) return E_FAIL;
+		if (e < element) continue;
+		if (element < e) return E_FAIL;
+
+		*ppElement = item.detach();
+		return S_OK;
+	}
+
+	return E_FAIL;
+}
+
+HRESULT analyze_DCM::findTag(const container_DCM_Impl* image, uint16_t group, uint16_t element, uint64_t* pOffset)
+{
+	if (image == nullptr) return E_POINTER;
+	if (pOffset == nullptr) return E_POINTER;
+
+	agaliaPtr<agaliaElement> item;
+	auto hr = image->getRootElement(&item);
+	if (FAILED(hr)) return hr;
+
+	agaliaPtr<agaliaElement> next;
+	while (SUCCEEDED(item->getNext(&next)))
+	{
+		item = next.detach();
+		dicom_element elem(image, item->getOffset());
+
+		uint16_t g = 0;
+		if (FAILED(elem.getGroup(&g))) return E_FAIL;
+		if (g < group) continue;
+		if (group < g) return E_FAIL;
+
+		uint16_t e = 0;
+		if (FAILED(elem.getElement(&e))) return E_FAIL;
+		if (e < element) continue;
+		if (element < e) return E_FAIL;
+
+		*pOffset = item->getOffset();
+		return S_OK;
+	}
+
+	return E_FAIL;
+}

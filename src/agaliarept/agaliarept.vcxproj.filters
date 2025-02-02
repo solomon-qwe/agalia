@@ -369,6 +369,9 @@
     <ClInclude Include="stringcnv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="decode_DCM.h">
+      <Filter>Header Files\DICOM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -649,6 +652,9 @@
     </ClCompile>
     <ClCompile Include="stream.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="decode_DCM.cpp">
+      <Filter>Source Files\DICOM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,8 +8,10 @@
 
 namespace analyze_DCM
 {
-	HRESULT format_dicm_value(std::wstringstream& dst, const container_DCM_Impl* image, uint64_t value_offset, uint32_t value_size, uint16_t vr, const std::list<int>& codepage);
+	HRESULT findTag(const container_DCM_Impl* image, uint16_t group, uint16_t element, agaliaElement** ppElement);
+	HRESULT findTag(const container_DCM_Impl* image, uint16_t group, uint16_t element, uint64_t* pOffset);
 
+	HRESULT format_dicm_value(std::wstringstream& dst, const container_DCM_Impl* image, uint64_t value_offset, uint32_t value_size, uint16_t vr, const std::list<int>& codepage);
 
 	class dicom_element
 	{
@@ -245,4 +247,56 @@ namespace analyze_DCM
 		const container_DCM_Impl* image = nullptr;
 		uint64_t data_offset = 0;
 	};
+
+	template<typename T>
+	HRESULT loadValue(const dicom_element& elem, CHeapPtr<T>& buf, size_t* bufsize = nullptr, bool addNullTermination = false)
+	{
+		if (buf != nullptr) return E_INVALIDARG;
+
+		uint64_t value_offset = 0;
+		auto hr = elem.getValueOffset(&value_offset);
+		if (FAILED(hr)) return hr;
+		value_offset += elem.data_offset;
+
+		uint32_t value_size = 0;
+		hr = elem.getValueLength(&value_size);
+		if (FAILED(hr)) return hr;
+
+		size_t alloc_size = 0;
+		hr = UInt64ToSizeT((uint64_t)value_size + sizeof(T) * (addNullTermination ? 1 : 0), &alloc_size);
+		if (FAILED(hr)) return hr;
+
+		CHeapPtr<T> temp;
+		if (!temp.AllocateBytes(alloc_size))
+			return E_OUTOFMEMORY;
+
+		if (addNullTermination)
+			temp[alloc_size - 1] = 0;
+		
+		hr = elem.image->ReadData(temp, value_offset, value_size);
+		if (FAILED(hr)) return hr;
+
+		buf.Attach(temp.Detach());
+		if (bufsize)
+			*bufsize = alloc_size;
+
+		return S_OK;
+	}
+
+
+	template<typename T>
+	HRESULT getTagValue(const container_DCM_Impl* image, uint16_t group, uint16_t element, CHeapPtr<T>& buf, size_t* bufsize = nullptr, bool addNullTermination = false)
+	{
+		if (image == nullptr) return E_POINTER;
+		if (buf != nullptr) return E_INVALIDARG;
+		
+		uint64_t tag_offset = 0;
+		auto hr = findTag(image, group, element, &tag_offset);
+		if (FAILED(hr)) return E_FAIL;
+
+		dicom_element elem(image, tag_offset);
+
+		return loadValue(elem, buf, bufsize, addNullTermination);
+	}
 }
+

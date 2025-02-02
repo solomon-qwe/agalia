@@ -1,81 +1,40 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "container_DCM_Impl.h"
 
 #include "analyze_DCM_item_Base.h"
 #include "analyze_DCM_item_preamble.h"
 #include "analyze_DCM_util.h"
-
-#include "thumbnail.h"
+#include "decode_DCM.h"
 
 using namespace analyze_DCM;
 
 
-
-// TransferSyntax ‚Ì UID ‚ğ enum ’l‚É•ÏŠ·
-TransferSyntax interpretTransferSyntax(const std::string& str)
+// TransferSyntax ã® UID ã‚’ enum å€¤ã«å¤‰æ›
+static TransferSyntax interpretTransferSyntax(const std::string& str)
 {
-	TransferSyntax ret = TransferSyntax_Unknown;
-
-	if (str == "1.2.840.10008.1.2") {
-		ret = ImplicitVR_LittleEndian;
-	}
-	else if (str == "1.2.840.10008.1.2.1") {
-		ret = ExplicitVR_LittleEndian;
-	}
-	else if (str == "1.2.840.10008.1.2.1.99") {
-		ret = DeflatedExplicitVR_LittleEndian;
-	}
-	else if (str == "1.2.840.10008.1.2.2") {
-		ret = ExplicitVR_BigEndian;
-	}
-	return ret;
+	if (str == "1.2.840.10008.1.2")
+		return ImplicitVR_LittleEndian;
+	else if (str == "1.2.840.10008.1.2.1")
+		return ExplicitVR_LittleEndian;
+	else if (str == "1.2.840.10008.1.2.1.99")
+		return DeflatedExplicitVR_LittleEndian;
+	else if (str == "1.2.840.10008.1.2.2")
+		return ExplicitVR_BigEndian;
+	else
+		return TransferSyntax_Unknown;
 }
 
 
-
-TransferSyntax search_transfer_syntax(const container_DCM_Impl* image)
+static TransferSyntax search_transfer_syntax(const container_DCM_Impl* image)
 {
 	TransferSyntax ret = TransferSyntax_Unknown;
 
-	agaliaPtr<agaliaElement> item;
-	auto hr = image->getRootElement(&item);
+	CHeapPtr<char> buf;
+	auto hr = getTagValue(image, 0x0002, 0x0010, buf, nullptr, true);
 	if (FAILED(hr)) return ret;
 
-	agaliaPtr<agaliaElement> next;
-	while (SUCCEEDED(item->getNext(&next)))
-	{
-		item = next.detach();
-		dicom_element elem(image, item->getOffset());
-
-		uint16_t group = 0;
-		uint16_t element = 0;
-		if (FAILED(elem.getGroup(&group))) return ret;
-		if (FAILED(elem.getElement(&element))) return ret;
-
-		// ’Ê‚è‰ß‚¬‚Ä‚¢‚½‚çƒ‹[ƒv’†’f 
-		if (0x0002 < group) return ret;
-		if (0x0010 < element) return ret;
-
-		if (group == 0x0002 && element == 0x0010)
-		{
-			uint32_t value_size = 0;
-			uint64_t value_offset = 0;
-			if (FAILED(elem.getValueLength(&value_size))) break;
-			if (FAILED(elem.getValueOffset(&value_offset))) break;
-
-			CHeapPtr<char> buf;
-			if (!buf.AllocateBytes(size_t(value_size) + 1)) break;
-			buf[value_size] = '\0';
-			if (FAILED(image->ReadData(buf, item->getOffset() + value_offset, value_size))) break;
-
-			// Å‰‚ÉŒ©‚Â‚©‚Á‚½ (0002,0010) ƒ^ƒO‚©‚ç“]‘—\•¶‚ğæ“¾ 
-			return interpretTransferSyntax(buf.m_pData);
-		}
-	}
-
-	return ret;
+	return interpretTransferSyntax(buf.m_pData);
 }
-
 
 
 // container_DCM_Impl class 
@@ -197,13 +156,26 @@ HRESULT container_DCM_Impl::getPropertyValue(PropertyType type, agaliaString** s
 	{
 		return GetContainerName(str);
 	}
+	else if (type == ImageWidth)
+	{
+		agaliaPtr<agaliaElement> item;
+		auto hr = findTag(this, 0x0028, 0x0011, &item);
+		if (FAILED(hr)) return E_FAIL;
+		return item->getPropValue(_agaliaItemDICOMElement::prop_value, str);
+	}
+	else if (type == ImageHeight)
+	{
+		agaliaPtr<agaliaElement> item;
+		auto hr = findTag(this, 0x0028, 0x0010, &item);
+		if (FAILED(hr)) return E_FAIL;
+		return item->getPropValue(_agaliaItemDICOMElement::prop_value, str);
+	}
+
 	return E_FAIL;
 }
 
 
 HRESULT container_DCM_Impl::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
 {
-	// todo
-	phBitmap; maxW; maxH;
-	return E_NOTIMPL;
+	return loadDCMImage(this, file_path->_p, maxW, maxH, phBitmap);
 }

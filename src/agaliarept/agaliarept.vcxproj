@@ -266,6 +266,7 @@
     <ClInclude Include="asf_def.h" />
     <ClInclude Include="byteswap.h" />
     <ClInclude Include="dcm_common.h" />
+    <ClInclude Include="decode_DCM.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="jpeg_def.h" />
     <ClInclude Include="pch.h" />
@@ -361,6 +362,7 @@
     <ClCompile Include="analyze_TIFF_item_Header8.cpp" />
     <ClCompile Include="analyze_TIFF_item_IFD.cpp" />
     <ClCompile Include="analyze_TIFF_util.cpp" />
+    <ClCompile Include="decode_DCM.cpp" />
     <ClCompile Include="dictionary_dcm.cpp" />
     <ClCompile Include="dictionary_tiff.cpp" />
     <ClCompile Include="dllmain.cpp" />
