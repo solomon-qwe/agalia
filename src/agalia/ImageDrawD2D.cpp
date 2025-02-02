@@ -47,6 +47,37 @@ HRESULT CreateDeviceIndependentResources_DXFactory(ID2D1Factory1** d2dFactory, I
 	return S_OK;
 }
 
+HRESULT CreateDeviceIndependentResources_HBITMAP(IWICImagingFactory2* wicFactory, IWICFormatConverter** wicFormatConverter, IWICColorContext** wicColorContext, HBITMAP hBitmap)
+{
+	ComPtr<IWICBitmap> wicBitmap;
+	auto hr = wicFactory->CreateBitmapFromHBITMAP(hBitmap, nullptr, WICBitmapIgnoreAlpha, &wicBitmap);
+	if (FAILED(hr)) return hr;
+
+	hr = wicFactory->CreateColorContext(wicColorContext);
+	if (FAILED(hr)) return hr;
+
+	// use default color space if color profile is empty 
+	const unsigned int ExifColorSpaceSRGB = 1;
+	hr = (*wicColorContext)->InitializeFromExifColorSpace(ExifColorSpaceSRGB);
+	if (FAILED(hr)) return hr;
+
+	hr = wicFactory->CreateFormatConverter(wicFormatConverter);
+	if (FAILED(hr)) return hr;
+
+	hr = (*wicFormatConverter)->Initialize(
+		wicBitmap.Get(),
+		GUID_WICPixelFormat32bppPBGRA,
+		WICBitmapDitherTypeNone,
+		nullptr,
+		0.0f,
+		WICBitmapPaletteTypeCustom
+	);
+	if (FAILED(hr)) return hr;
+
+	return S_OK;
+}
+
+
 
 HRESULT CreateDeviceIndependentResources_Image(IWICImagingFactory2* wicFactory, IWICFormatConverter** wicFormatConverter, IWICColorContext** wicColorContext, IStream* stream)
 {
@@ -542,7 +573,19 @@ HRESULT ImageDrawD2D::reset_content(agaliaContainer* image, int colorManagementM
 	if (stream == nullptr) return S_OK;
 
 	hr = ::CreateDeviceIndependentResources_Image(_p->wicFactory.Get(), _p->wicFormatConverter.GetAddressOf(), _p->wicColorContext.GetAddressOf(), stream);
-	if (FAILED(hr)) return hr;
+	if (FAILED(hr))
+	{
+		if (!image) return hr;
+
+		HBITMAP hBitmap = NULL;
+		hr = image->getThumbnailImage(&hBitmap, 0, 0);
+		if (FAILED(hr)) return hr;
+
+		hr = ::CreateDeviceIndependentResources_HBITMAP(_p->wicFactory.Get(), _p->wicFormatConverter.GetAddressOf(), _p->wicColorContext.GetAddressOf(), hBitmap);
+		if (FAILED(hr)) return hr;
+
+		::DeleteObject(hBitmap);
+	}
 
 	hr = ::CreateDeviceResources_Image(_p->displayEffect.GetAddressOf(), _p->sourceEffect.GetAddressOf(), _p->d2dContext.Get(), _p->wicFormatConverter.Get(), _p->wicColorContext.Get(), colorManagementMode);
 	if (FAILED(hr)) return hr;

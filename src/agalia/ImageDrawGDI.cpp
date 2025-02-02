@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ImageDrawGDI.h"
 
 #include "../inc/agaliarept.h"
@@ -114,15 +114,15 @@ HRESULT ImageDrawGDI::reset_content(agaliaContainer* image, int colorManagementM
 	if (image_buf) {
 		image_buf.Free();
 	}
-	
+
 	agaliaPtr<agaliaHeap> profile;
 	if (colorManagementMode != color_management_disable) {
 		image->getColorProfile(&profile);
 	}
 
-	rsize_t bufsize = sizeof(BITMAPV5HEADER) + (profile ? profile->GetSize() : 0);
-	if (!source_bmpInfo.AllocateBytes(bufsize)) return E_OUTOFMEMORY;
-	memset(source_bmpInfo.m_pData, 0, bufsize);
+	rsize_t bmpInfoSize = sizeof(BITMAPV5HEADER) + (profile ? profile->GetSize() : 0);
+	if (!source_bmpInfo.AllocateBytes(bmpInfoSize)) return E_OUTOFMEMORY;
+	memset(source_bmpInfo.m_pData, 0, bmpInfoSize);
 
 	source_bmpInfo->bV5Size = sizeof(BITMAPV5HEADER);
 	source_bmpInfo->bV5Width = 0;
@@ -155,11 +155,51 @@ HRESULT ImageDrawGDI::reset_content(agaliaContainer* image, int colorManagementM
 
 	GdiplusShutdown(gdiplusToken);
 
-	if (FAILED(hr)) return hr;
+	if (FAILED(hr))
+	{
+		HBITMAP hBitmap = NULL;
+		if (SUCCEEDED(image->getThumbnailImage(&hBitmap, 0, 0)))
+		{
+			DIBSECTION dib = {};
+			if (::GetObject(hBitmap, sizeof(DIBSECTION), &dib) == sizeof(DIBSECTION))
+			{
+				if (dib.dsBmih.biCompression == BI_BITFIELDS)
+				{
+					source_bmpInfo->bV5Compression = BI_BITFIELDS;
+					source_bmpInfo->bV5RedMask = dib.dsBitfields[0];
+					source_bmpInfo->bV5GreenMask = dib.dsBitfields[1];
+					source_bmpInfo->bV5BlueMask = dib.dsBitfields[2];
+
+					source_bmpInfo->bV5Width = dib.dsBmih.biWidth;
+					source_bmpInfo->bV5Height = dib.dsBmih.biHeight;
+
+					rsize_t bufsize = 4 * dib.dsBmih.biWidth * abs(dib.dsBmih.biHeight);
+					image_buf.AllocateBytes(bufsize);
+					memcpy(image_buf.m_pData, dib.dsBm.bmBits, bufsize);
+					hr = S_OK;
+				}
+				else
+				{
+					memcpy(source_bmpInfo, &dib.dsBmih, dib.dsBmih.biSize);
+					rsize_t bufsize = dib.dsBmih.biBitCount / 8 * dib.dsBmih.biWidth * abs(dib.dsBmih.biHeight);
+					image_buf.AllocateBytes(bufsize);
+					memcpy(image_buf.m_pData, dib.dsBm.bmBits, bufsize);
+					hr = S_OK;
+				}
+			}
+			::DeleteObject(hBitmap);
+		}
+	}
 
 	reset_color_profile(colorManagementMode);
 
 	UpdateImagePosition();
+
+	if (FAILED(hr))
+	{
+		::RedrawWindow(hwnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
+		return hr;
+	}
 
 	return S_OK;
 }
@@ -170,7 +210,7 @@ HRESULT ImageDrawGDI::reset_color_profile(int colorManagementMode)
 	if (!source_bmpInfo)
 		return E_FAIL;
 
-	// ƒEƒBƒ“ƒhƒEƒfƒoƒCƒXƒRƒ“ƒeƒLƒXƒg‚Ì‰Šú‰»‚µ‚ÄA‚»‚ê‚ğŒ³‚Éƒƒ‚ƒŠƒfƒoƒCƒXqƒeƒLƒXƒg‚ğì¬ 
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ‡ãƒã‚¤ã‚¹ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®åˆæœŸåŒ–ã—ã¦ã€ãã‚Œã‚’å…ƒã«ãƒ¡ãƒ¢ãƒªãƒ‡ãƒã‚¤ã‚¹å­ãƒ†ã‚­ã‚¹ãƒˆã‚’ä½œæˆ 
 	HDC hdc = ::GetDC(hwnd);
 	if (colorManagementMode != color_management_disable) {
 		::SetICMMode(hdc, ICM_ON);
@@ -191,15 +231,14 @@ HRESULT ImageDrawGDI::reset_color_profile(int colorManagementMode)
 		::SetICMMode(hdc, ICM_OFF);
 	}
 
-	// ƒIƒtƒXƒNƒŠ[ƒ“—pƒrƒbƒgƒ}ƒbƒv‚ğì¬ 
-	BITMAPINFOHEADER bmpInfoHeader = {};
-	memcpy(&bmpInfoHeader, source_bmpInfo.m_pData, sizeof(BITMAPINFOHEADER));
-	bmpInfoHeader.biSize = sizeof(BITMAPINFOHEADER);
+	// ã‚ªãƒ•ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ç”¨ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’ä½œæˆ 
+	BITMAPV5HEADER bmpInfoHeader = {};
+	memcpy(&bmpInfoHeader, source_bmpInfo.m_pData, sizeof(BITMAPV5HEADER));
 	void* pBits = nullptr;
 	HBITMAP hBitmap = ::CreateDIBSection(hMemDC, reinterpret_cast<BITMAPINFO*>(&bmpInfoHeader), DIB_RGB_COLORS, &pBits, NULL, 0);
 	if (hBitmap)
 	{
-		// ƒIƒtƒXƒNƒŠ[ƒ“ƒrƒbƒgƒ}ƒbƒv‚ÉŒ´‰æ‘œ‚ğF•ÏŠ·‚µ‚Ä“]‘— 
+		// ã‚ªãƒ•ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã«åŸç”»åƒã‚’è‰²å¤‰æ›ã—ã¦è»¢é€ 
 		HGDIOBJ hOldBmp = ::SelectObject(hMemDC, hBitmap);
 		if (colorManagementMode != color_management_disable) {
 			::SetICMMode(hMemDC, ICM_ON);
@@ -247,18 +286,18 @@ HRESULT ImageDrawGDI::render(DWORD bkcolor)
 	DIBSECTION dib = {};
 	::GetObject(hOffscreenBmp, sizeof(dib), &dib);
 
-	// ‰æ‘œ•`‰æ 
+	// ç”»åƒæç”» 
 	::SetStretchBltMode(hDC, HALFTONE);
 	::SetBrushOrgEx(hDC, 0, 0, NULL);
 	::StretchDIBits(
 		hDC,
 		rcDst.left, rcDst.top, rcDst.Width(), rcDst.Height(),
 		rcSrc.left, rcSrc.top, rcSrc.Width(), rcSrc.Height(),
-		dib.dsBm.bmBits, reinterpret_cast<BITMAPINFO*>(&dib.dsBmih),
+		dib.dsBm.bmBits, reinterpret_cast<BITMAPINFO*>(source_bmpInfo.m_pData),
 		DIB_RGB_COLORS,
 		SRCCOPY);
 
-	// ”wŒi•`‰æ 
+	// èƒŒæ™¯æç”» 
 	HBRUSH br = ::CreateSolidBrush(bkcolor);
 	CRect rcFill;
 
