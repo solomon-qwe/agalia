@@ -7,7 +7,7 @@ using namespace analyze_M2P;
 
 
 item_ProgramStream::item_ProgramStream(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:M2P_item_Base(image, offset, size)
 {
 }
 
@@ -19,7 +19,7 @@ item_ProgramStream::~item_ProgramStream()
 
 
 
-HRESULT item_ProgramStream::getItemName(agaliaString** str) const
+HRESULT item_ProgramStream::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"MPEG2_program_stream");
@@ -28,7 +28,7 @@ HRESULT item_ProgramStream::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_ProgramStream::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_ProgramStream::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 	if (child == nullptr) return E_POINTER;
@@ -44,7 +44,7 @@ HRESULT item_ProgramStream::getChildItem(uint32_t sibling, agaliaItem** child) c
 
 
 
-HRESULT item_ProgramStream::getNextItem(agaliaItem** next) const
+HRESULT item_ProgramStream::getNext(agaliaElement** next) const
 {
 	UNREFERENCED_PARAMETER(next);
 	return E_NOTIMPL;

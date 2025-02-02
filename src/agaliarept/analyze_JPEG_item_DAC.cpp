@@ -74,9 +74,9 @@ HRESULT item_DAC::getAdditionalInfoValue(uint32_t row, agaliaString** str) const
 
 
 
-HRESULT item_DAC::getItemPropCount(uint32_t* count) const
+HRESULT item_DAC::getPropCount(uint32_t* count) const
 {
-	auto hr = __super::getItemPropCount(count);
+	auto hr = __super::getPropCount(count);
 	if (FAILED(hr)) return hr;
 
 	JPEGSEGMENT_DAC dac = {};
@@ -92,9 +92,9 @@ HRESULT item_DAC::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_DAC::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_DAC::getPropName(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropName(index, str);
+	auto hr = __super::getPropName(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	const wchar_t* name = nullptr;
@@ -117,9 +117,9 @@ HRESULT item_DAC::getItemPropName(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_DAC::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_DAC::getPropValue(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropValue(index, str);
+	auto hr = __super::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	CHeapPtr<JPEGSEGMENT_DAC> dac;

@@ -9,7 +9,7 @@ using namespace analyze_BMP;
 
 
 item_BITMAPFILE::item_BITMAPFILE(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:BMP_item_Base(image, offset, size)
 {
 }
 
@@ -21,7 +21,7 @@ item_BITMAPFILE::~item_BITMAPFILE()
 
 
 
-HRESULT item_BITMAPFILE::getItemName(agaliaString** str) const
+HRESULT item_BITMAPFILE::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"BITMAPFILEHEADER");
@@ -30,7 +30,7 @@ HRESULT item_BITMAPFILE::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_BITMAPFILE::getItemPropCount(uint32_t* count) const
+HRESULT item_BITMAPFILE::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
@@ -39,7 +39,7 @@ HRESULT item_BITMAPFILE::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_BITMAPFILE::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_BITMAPFILE::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -52,7 +52,7 @@ HRESULT item_BITMAPFILE::getItemPropName(uint32_t index, agaliaString** str) con
 	case prop_bfReserved2: name = L"bfReserved2"; break;
 	case prop_bfOffBits: name = L"bfOffBits"; break;
 	default:
-		return __super::getItemPropName(index, str);
+		return __super::getPropName(index, str);
 	};
 
 	*str = agaliaString::create(name);
@@ -61,7 +61,7 @@ HRESULT item_BITMAPFILE::getItemPropName(uint32_t index, agaliaString** str) con
 
 
 
-HRESULT item_BITMAPFILE::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_BITMAPFILE::getPropValue(uint32_t index, agaliaString** str) const
 {
 	BITMAPFILEHEADER bfh = {};
 	std::wstringstream temp;
@@ -99,7 +99,7 @@ HRESULT item_BITMAPFILE::getItemPropValue(uint32_t index, agaliaString** str) co
 	}
 	else
 	{
-		return __super::getItemPropValue(index, str);
+		return __super::getPropValue(index, str);
 	}
 
 	*str = agaliaString::create(temp.str().c_str());
@@ -108,7 +108,7 @@ HRESULT item_BITMAPFILE::getItemPropValue(uint32_t index, agaliaString** str) co
 
 
 
-HRESULT item_BITMAPFILE::getNextItem(agaliaItem** next) const
+HRESULT item_BITMAPFILE::getNext(agaliaElement** next) const
 {
 	if (next == nullptr) return E_POINTER;
 
@@ -152,7 +152,7 @@ HRESULT item_BITMAPFILE::getColumnValue(uint32_t column, agaliaString** str) con
 	}
 	else if (column == column_structure)
 	{
-		return getItemName(str);
+		return getName(str);
 	}
 	else if (column == column_value)
 	{

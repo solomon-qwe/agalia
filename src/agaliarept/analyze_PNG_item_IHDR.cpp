@@ -7,7 +7,7 @@
 using namespace analyze_PNG;
 
 item_IHDR::item_IHDR(const container_PNG* image, uint64_t offset, uint64_t size, uint64_t endpos)
-	: item_Base(image, offset, size, endpos)
+	: PNG_item_Base(image, offset, size, endpos)
 {
 }
 
@@ -15,14 +15,14 @@ item_IHDR::~item_IHDR()
 {
 }
 
-HRESULT item_IHDR::getItemPropCount(uint32_t* count) const
+HRESULT item_IHDR::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_IHDR::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_IHDR::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -37,14 +37,14 @@ HRESULT item_IHDR::getItemPropName(uint32_t index, agaliaString** str) const
 	case prop_filter_method: name = L"Filter method"; break;
 	case prop_interlace_method: name = L"Interlace method"; break;
 	default:
-		return __super::getItemPropName(index, str);
+		return __super::getPropName(index, str);
 	}
 
 	*str = agaliaString::create(name);
 	return S_OK;
 }
 
-HRESULT item_IHDR::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_IHDR::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -209,7 +209,7 @@ HRESULT item_IHDR::getItemPropValue(uint32_t index, agaliaString** str) const
 	}
 	else
 	{
-		return __super::getItemPropValue(index, str);
+		return __super::getPropValue(index, str);
 	}
 
 	return E_FAIL;

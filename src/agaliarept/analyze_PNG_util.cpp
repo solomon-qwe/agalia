@@ -9,7 +9,7 @@
 
 using namespace analyze_PNG;
 
-agaliaItem* analyze_PNG::createItem(const container_PNG* image, uint64_t offset, uint64_t endpos)
+agaliaElement* analyze_PNG::createItem(const container_PNG* image, uint64_t offset, uint64_t endpos)
 {
 	Chunk chunk = {};
 	auto hr = image->ReadData(&chunk, offset, offsetof(Chunk, ChunkData));
@@ -31,5 +31,5 @@ agaliaItem* analyze_PNG::createItem(const container_PNG* image, uint64_t offset,
 	case 'eXIf':
 		return new item_eXIf(image, offset, chunk_size, endpos);
 	}
-	return new item_Base(image, offset, chunk_size, endpos);
+	return new PNG_item_Base(image, offset, chunk_size, endpos);
 }

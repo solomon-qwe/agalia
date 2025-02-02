@@ -141,9 +141,9 @@ HRESULT item_DHT::getAdditionalInfoValue(uint32_t row, agaliaString** str) const
 
 
 
-HRESULT item_DHT::getItemPropCount(uint32_t* count) const
+HRESULT item_DHT::getPropCount(uint32_t* count) const
 {
-	auto hr = __super::getItemPropCount(count);
+	auto hr = __super::getPropCount(count);
 	if (FAILED(hr)) return hr;
 
 	CHeapPtr<uint8_t> buf;
@@ -173,9 +173,9 @@ HRESULT item_DHT::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_DHT::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_DHT::getPropName(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropName(index, str);
+	auto hr = __super::getPropName(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	agaliaStringPtr s;
@@ -246,9 +246,9 @@ HRESULT item_DHT::getItemPropName(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_DHT::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_DHT::getPropValue(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropValue(index, str);
+	auto hr = __super::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	CHeapPtr<uint8_t> buf;

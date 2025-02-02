@@ -5,16 +5,16 @@
 
 namespace analyze_BMP
 {
-	class item_RGBQUADParent : public item_Base
+	class item_RGBQUADParent : public BMP_item_Base
 	{
 	public:
 		item_RGBQUADParent(const agaliaContainer* image, uint64_t offset, uint64_t size);
 		virtual ~item_RGBQUADParent();
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
 
-		virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const override;
-		virtual HRESULT getNextItem(agaliaItem** next) const override;
+		virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const override;
+		virtual HRESULT getNext(agaliaElement** next) const override;
 
 		LONG scans = 0;
 		LONG bytes_of_line = 0;

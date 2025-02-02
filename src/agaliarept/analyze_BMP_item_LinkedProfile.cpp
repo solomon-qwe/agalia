@@ -4,7 +4,7 @@
 using namespace analyze_BMP;
 
 item_LinkedProfile::item_LinkedProfile(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:BMP_item_Base(image, offset, size)
 {
 }
 
@@ -12,31 +12,31 @@ item_LinkedProfile::~item_LinkedProfile()
 {
 }
 
-HRESULT item_LinkedProfile::getItemName(agaliaString** str) const
+HRESULT item_LinkedProfile::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"Profile");
 	return S_OK;
 }
 
-HRESULT item_LinkedProfile::getItemPropCount(uint32_t* count) const
+HRESULT item_LinkedProfile::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_LinkedProfile::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_LinkedProfile::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	if (index == prop_filename) {
 		*str = agaliaString::create(L"file name");
 		return S_OK;
 	}
-	return __super::getItemPropName(index, str);
+	return __super::getPropName(index, str);
 }
 
-HRESULT item_LinkedProfile::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_LinkedProfile::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	if (index == prop_filename) {
@@ -52,5 +52,5 @@ HRESULT item_LinkedProfile::getItemPropValue(uint32_t index, agaliaString** str)
 		if (FAILED(hr)) return hr;
 		return multibyte_to_widechar(buf, size, CP_ACP, str);
 	}
-	return __super::getItemPropValue(index, str);
+	return __super::getPropValue(index, str);
 }

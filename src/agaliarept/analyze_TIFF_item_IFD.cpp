@@ -8,7 +8,7 @@ using namespace analyze_TIFF;
 
 
 item_IFDBase::item_IFDBase(const container_TIFF* image, uint64_t offset, uint64_t size, int ifdtype)
-	: item_tiff_Base(image, offset, size)
+	: TIFF_item_Base(image, offset, size)
 {
 	ifd_type_id = ifdtype;
 }
@@ -21,7 +21,7 @@ item_IFDBase::~item_IFDBase()
 
 
 
-HRESULT item_IFDBase::getItemName(agaliaString** str) const
+HRESULT item_IFDBase::getName(agaliaString** str) const
 {
 	const wchar_t* name = nullptr;
 	switch (ifd_type_id)
@@ -51,7 +51,7 @@ HRESULT item_IFDBase::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_IFDBase::getItemPropCount(uint32_t* count) const
+HRESULT item_IFDBase::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
@@ -60,7 +60,7 @@ HRESULT item_IFDBase::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_IFDBase::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_IFDBase::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 

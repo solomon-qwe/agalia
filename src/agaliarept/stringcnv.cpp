@@ -1,11 +1,11 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "agaliareptImpl.h"
+#include "stringcnv.h"
 
 
-
-HRESULT multibyte_to_widechar(char* srcBuf, int size, uint32_t codepage, CHeapPtr<wchar_t>& dst)
+static HRESULT multibyte_to_widechar_internal(char* srcBuf, int size, uint32_t codepage, CHeapPtr<wchar_t>& dst)
 {
-	// ŠØ‘Œê‚Ìê‡‚Í©‘O‚ÅƒGƒXƒP[ƒv‚ğœ‹‚·‚é 
+	// éŸ“å›½èªã®å ´åˆã¯è‡ªå‰ã§ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚’é™¤å»ã™ã‚‹ 
 	std::string kor;
 	if (codepage == 949) {
 		char esc[] = { 0x1B, 0x24, 0x29, 0x43, 0x00 };
@@ -40,7 +40,7 @@ HRESULT multibyte_to_widechar(char* srcBuf, int size, uint32_t codepage, CHeapPt
 HRESULT multibyte_to_widechar(char* srcBuf, int size, uint32_t codepage, agaliaString** dst)
 {
 	CHeapPtr<wchar_t> wbuf;
-	auto hr = multibyte_to_widechar(srcBuf, size, codepage, wbuf);
+	auto hr = multibyte_to_widechar_internal(srcBuf, size, codepage, wbuf);
 	if (hr != S_OK) return hr;
 	*dst = agaliaString::create(wbuf);
 	return S_OK;
@@ -51,7 +51,7 @@ HRESULT multibyte_to_widechar(char* srcBuf, int size, uint32_t codepage, agaliaS
 HRESULT multibyte_to_widechar(char* srcBuf, int size, uint32_t codepage, std::wstringstream& dst)
 {
 	CHeapPtr<wchar_t> wbuf;
-	auto hr = multibyte_to_widechar(srcBuf, size, codepage, wbuf);
+	auto hr = multibyte_to_widechar_internal(srcBuf, size, codepage, wbuf);
 	if (hr != S_OK) return hr;
 	dst << wbuf.m_pData;
 	return S_OK;

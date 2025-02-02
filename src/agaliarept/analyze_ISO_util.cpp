@@ -9,7 +9,7 @@
 
 using namespace analyze_ISO;
 
-agaliaItem* analyze_ISO::createItem(const agaliaContainer* image, uint64_t offset, uint64_t endpos, uint32_t parent)
+agaliaElement* analyze_ISO::createItem(const agaliaContainer* image, uint64_t offset, uint64_t endpos, uint32_t parent)
 {
 	uint64_t boxsize = Box::getBoxSize(image, offset, endpos);
 
@@ -29,5 +29,5 @@ agaliaItem* analyze_ISO::createItem(const agaliaContainer* image, uint64_t offse
 	case 'tkhd':
 		return new item_TrackHeaderBox(image, offset, boxsize, endpos, parent);
 	}
-	return new item_Box(image, offset, boxsize, endpos, parent);
+	return new ISO_item_Box(image, offset, boxsize, endpos, parent);
 }

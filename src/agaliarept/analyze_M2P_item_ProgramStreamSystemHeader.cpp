@@ -57,7 +57,7 @@ public:
 
 
 item_ProgramStreamSystemHeader::item_ProgramStreamSystemHeader(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:M2P_item_Base(image, offset, size)
 {
 	bitfield = new program_stream_system_header;
 }
@@ -67,14 +67,14 @@ item_ProgramStreamSystemHeader::~item_ProgramStreamSystemHeader()
 	delete bitfield;
 }
 
-HRESULT item_ProgramStreamSystemHeader::getItemName(agaliaString** str) const
+HRESULT item_ProgramStreamSystemHeader::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"system_header");
 	return S_OK;
 }
 
-HRESULT item_ProgramStreamSystemHeader::getItemPropCount(uint32_t* count) const
+HRESULT item_ProgramStreamSystemHeader::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	uint32_t ret = prop_last;
@@ -106,10 +106,10 @@ HRESULT item_ProgramStreamSystemHeader::getItemPropCount(uint32_t* count) const
 	return S_OK;
 }
 
-HRESULT item_ProgramStreamSystemHeader::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_ProgramStreamSystemHeader::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
-	auto hr = __super::getItemPropName(index, str);
+	auto hr = __super::getPropName(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	if (index == prop_system_header_start_code) {
@@ -165,10 +165,10 @@ HRESULT item_ProgramStreamSystemHeader::getItemPropName(uint32_t index, agaliaSt
 	return E_FAIL;
 }
 
-HRESULT item_ProgramStreamSystemHeader::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_ProgramStreamSystemHeader::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
-	auto hr = __super::getItemPropValue(index, str);
+	auto hr = __super::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	program_stream_system_header* b = bitfield;
@@ -293,7 +293,7 @@ HRESULT item_ProgramStreamSystemHeader::getItemPropValue(uint32_t index, agaliaS
 
 
 
-HRESULT item_ProgramStreamSystemHeader::getGridRowCount(uint32_t* row) const
+HRESULT item_ProgramStreamSystemHeader::getElementInfoCount(uint32_t* row) const
 {
 	if (row == nullptr) return E_POINTER;
 	*row = bitfield->last;
@@ -302,7 +302,7 @@ HRESULT item_ProgramStreamSystemHeader::getGridRowCount(uint32_t* row) const
 
 
 
-HRESULT item_ProgramStreamSystemHeader::getGridValue(uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT item_ProgramStreamSystemHeader::getElementInfoValue(uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 

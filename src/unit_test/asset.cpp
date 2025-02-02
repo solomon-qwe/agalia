@@ -154,7 +154,7 @@ namespace unittest
 
 
 
-	int parse_to_nul_stub(const agaliaContainer* image, agaliaItem* parent, uint32_t column)
+	int parse_to_nul_stub(const agaliaContainer* image, agaliaElement* parent, uint32_t column)
 	{
 		int ret = 0;
 
@@ -162,7 +162,7 @@ namespace unittest
 		std::wstring err_str;
 
 		agaliaStringPtr temp;
-		agaliaPtr<agaliaItem> item(parent);
+		agaliaPtr<agaliaElement> item(parent);
 
 		do
 		{
@@ -171,16 +171,16 @@ namespace unittest
 
 			// 現在のアイテムの情報をログ出力 
 			uint32_t row = 0;
-			image->getGridRowCount(item, &row);
+			image->getElementInfoCount(item, &row);
 			for (uint32_t i = 0; i < row; i++)
 			{
-				hr = image->getGridValue(item, i, 0, &temp);
+				hr = image->getElementInfoValue(item, i, 0, &temp);
 				if (FAILED(hr))
 					break;
 
 				for (uint32_t j = 1; j < column; j++)
 				{
-					hr = image->getGridValue(item, i, j, &temp);
+					hr = image->getElementInfoValue(item, i, j, &temp);
 				}
 			}
 
@@ -188,16 +188,16 @@ namespace unittest
 			uint32_t sibling = 0;
 			do
 			{
-				agaliaPtr<agaliaItem> child;
-				hr = item->getChildItem(sibling++, &child);
+				agaliaPtr<agaliaElement> child;
+				hr = item->getChild(sibling++, &child);
 				if (SUCCEEDED(hr)) {
 					ret += parse_to_nul_stub(image, child.detach(), column);
 				}
 			} while (SUCCEEDED(hr));
 
 			// 次のアイテムへ遷移 
-			agaliaPtr<agaliaItem> next;
-			hr = item->getNextItem(&next);
+			agaliaPtr<agaliaElement> next;
+			hr = item->getNext(&next);
 			if (SUCCEEDED(hr)) {
 				item = next.detach();
 			}
@@ -224,8 +224,8 @@ namespace unittest
 		Assert::AreEqual(S_OK, hr, GetErrorMessage(hr, err_str));
 
 		// ルートアイテムを取得 
-		agaliaPtr<agaliaItem> root;
-		hr = image->getRootItem(&root);
+		agaliaPtr<agaliaElement> root;
+		hr = image->getRootElement(&root);
 		Assert::AreEqual(S_OK, hr, GetErrorMessage(hr, err_str));
 
 		// 再帰的に解析 

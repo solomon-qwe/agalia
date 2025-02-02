@@ -8,7 +8,7 @@ using namespace analyze_M2P;
 
 
 item_PES_packet::item_PES_packet(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:M2P_item_Base(image, offset, size)
 {
 }
 
@@ -20,7 +20,7 @@ item_PES_packet::~item_PES_packet()
 
 
 
-HRESULT item_PES_packet::getItemName(agaliaString** str) const
+HRESULT item_PES_packet::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"PES_packet");
@@ -29,7 +29,7 @@ HRESULT item_PES_packet::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_PES_packet::getItemPropCount(uint32_t* count) const
+HRESULT item_PES_packet::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
@@ -38,7 +38,7 @@ HRESULT item_PES_packet::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_PES_packet::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_PES_packet::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -49,7 +49,7 @@ HRESULT item_PES_packet::getItemPropName(uint32_t index, agaliaString** str) con
 	case prop_stream_id: name = L"stream_id"; break;
 	case prop_PES_packet_length: name = L"PES_packet_length"; break;
 	default:
-		return __super::getItemPropName(index, str);
+		return __super::getPropName(index, str);
 	}
 
 	*str = agaliaString::create(name);
@@ -58,10 +58,10 @@ HRESULT item_PES_packet::getItemPropName(uint32_t index, agaliaString** str) con
 
 
 
-HRESULT item_PES_packet::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_PES_packet::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
-	auto hr = __super::getItemPropValue(index, str);
+	auto hr = __super::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	uint8_t buf[6 + 8] = {};
@@ -94,7 +94,7 @@ HRESULT item_PES_packet::getItemPropValue(uint32_t index, agaliaString** str) co
 
 
 
-HRESULT item_PES_packet::getNextItem(agaliaItem** next) const
+HRESULT item_PES_packet::getNext(agaliaElement** next) const
 {
 	if (next == nullptr) return E_POINTER;
 
@@ -108,7 +108,7 @@ HRESULT item_PES_packet::getNextItem(agaliaItem** next) const
 
 
 
-HRESULT item_PES_packet::getGridRowCount(uint32_t* row) const
+HRESULT item_PES_packet::getElementInfoCount(uint32_t* row) const
 {
 	if (row == nullptr) return E_POINTER;
 	*row = 3;
@@ -117,7 +117,7 @@ HRESULT item_PES_packet::getGridRowCount(uint32_t* row) const
 
 
 
-HRESULT item_PES_packet::getGridValue(uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT item_PES_packet::getElementInfoValue(uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 

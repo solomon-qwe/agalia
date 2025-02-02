@@ -397,7 +397,7 @@ void CMainFrame::ResetGraphicView(void)
 
 
 // Hierarchy View / List View Pane 
-void CMainFrame::UpdateListViewPane(const agaliaItem* item)
+void CMainFrame::UpdateListViewPane(const agaliaElement* item)
 {
 	if (ctrl.image == nullptr) return;
 
@@ -405,7 +405,7 @@ void CMainFrame::UpdateListViewPane(const agaliaItem* item)
 	if (!pListView) return;
 
 	uint32_t prop_count = 0;
-	if (FAILED(item->getItemPropCount(&prop_count)))
+	if (FAILED(item->getPropCount(&prop_count)))
 		return;
 
 	int list_index = 0;
@@ -413,14 +413,14 @@ void CMainFrame::UpdateListViewPane(const agaliaItem* item)
 	{
 		// １列目 
 		agaliaStringPtr str;
-		if (FAILED(item->getItemPropName(i, &str)))
+		if (FAILED(item->getPropName(i, &str)))
 			continue;
 		if (pListView->GetListCtrl().InsertItem(list_index, str) < 0)
 			continue;
 		str.detach()->Release();
 
 		// ２列目 
-		if (SUCCEEDED(item->getItemPropValue(i, &str))) {
+		if (SUCCEEDED(item->getPropValue(i, &str))) {
 			pListView->GetListCtrl().SetItemText(list_index, 1, str);
 		}
 		list_index++;
@@ -428,7 +428,7 @@ void CMainFrame::UpdateListViewPane(const agaliaItem* item)
 }
 
 // Hierarchy View / Text View Pane 
-void CMainFrame::UpdateTextViewPane(const agaliaItem* item)
+void CMainFrame::UpdateTextViewPane(const agaliaElement* item)
 {
 	ChildTextView* pTextView = dynamic_cast<ChildTextView*>(m_wndHSplitter.GetPane(1, 0));
 	if (!pTextView) return;
@@ -835,7 +835,7 @@ afx_msg LRESULT CMainFrame::OnApp(WPARAM /*wParam*/, LPARAM /*lParam*/)
 	if (hTI == NULL) return 0;
 	DWORD_PTR data = pTreeView->GetTreeCtrl().GetItemData(hTI);
 	if (data == NULL) return 0;
-	agaliaItem* item = reinterpret_cast<agaliaItem*>(data);
+	agaliaElement* item = reinterpret_cast<agaliaElement*>(data);
 
 	// 右側のビューを更新 
 	if (pListView->IsWindowVisible())

@@ -12,7 +12,7 @@ using namespace analyze_JPEG;
 
 
 item_JFIF::item_JFIF(const container_JPEG* image, uint64_t offset, uint64_t size, item_type type)
-	:item_Base(image, offset, size, type)
+	:JPEG_item_Base(image, offset, size, type)
 {
 }
 
@@ -21,13 +21,13 @@ item_JFIF::~item_JFIF()
 }
 
 
-HRESULT item_JFIF::getItemPropCount(uint32_t* count) const
+HRESULT item_JFIF::getPropCount(uint32_t* count) const
 {
 	*count = 7;
 	return S_OK;
 }
 
-HRESULT item_JFIF::getItemName(agaliaString** str) const
+HRESULT item_JFIF::getName(agaliaString** str) const
 {
 	*str = agaliaString::create(L"JFIF");
 	return S_OK;
@@ -35,7 +35,7 @@ HRESULT item_JFIF::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_JFIF::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_JFIF::getPropName(uint32_t index, agaliaString** str) const
 {
 	const wchar_t* name = nullptr;
 	switch (index)
@@ -54,7 +54,7 @@ HRESULT item_JFIF::getItemPropName(uint32_t index, agaliaString** str) const
 	return S_OK;
 }
 
-HRESULT item_JFIF::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_JFIF::getPropValue(uint32_t index, agaliaString** str) const
 {
 	JPEGSEGMENT_APP0_JFIF jfif = {};
 	auto hr = image->ReadData(&jfif, getOffset(), sizeof(jfif));
@@ -78,14 +78,14 @@ HRESULT item_JFIF::getItemPropValue(uint32_t index, agaliaString** str) const
 }
 
 
-HRESULT item_JFIF::getNextItem(agaliaItem**) const
+HRESULT item_JFIF::getNext(agaliaElement**) const
 {
 	return E_FAIL;
 }
 
 
 
-HRESULT item_JFIF::getColumnValueForAPP0(uint32_t column, const container_JPEG* image, const item_Base* item, agaliaString** str)
+HRESULT item_JFIF::getColumnValueForAPP0(uint32_t column, const container_JPEG* image, const JPEG_item_Base* item, agaliaString** str)
 {
 	if (column == column_value)
 	{

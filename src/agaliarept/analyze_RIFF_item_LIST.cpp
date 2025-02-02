@@ -8,7 +8,7 @@ using namespace analyze_RIFF;
 
 
 item_LIST::item_LIST(const container_RIFF* _image, uint64_t offset, uint64_t size)
-	: item_Base(_image, offset, size)
+	: RIFF_item_Base(_image, offset, size)
 {
 }
 
@@ -20,7 +20,7 @@ item_LIST::~item_LIST()
 
 
 
-HRESULT item_LIST::getItemName(agaliaString** str) const
+HRESULT item_LIST::getName(agaliaString** str) const
 {
 	std::wstringstream temp;
 
@@ -40,7 +40,7 @@ HRESULT item_LIST::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_LIST::getItemPropCount(uint32_t* count) const
+HRESULT item_LIST::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
@@ -48,11 +48,11 @@ HRESULT item_LIST::getItemPropCount(uint32_t* count) const
 }
 
 
-HRESULT item_LIST::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_LIST::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
-	auto hr = item_Base::getItemPropName(index, str);
+	auto hr = RIFF_item_Base::getPropName(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	switch (index)
@@ -66,11 +66,11 @@ HRESULT item_LIST::getItemPropName(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_LIST::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_LIST::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
-	auto hr = item_Base::getItemPropValue(index, str);
+	auto hr = RIFF_item_Base::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	if (index == prop_fccListType)
@@ -87,7 +87,7 @@ HRESULT item_LIST::getItemPropValue(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_LIST::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_LIST::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 	if (child == nullptr) return E_POINTER;
@@ -102,7 +102,7 @@ HRESULT item_LIST::getChildItem(uint32_t sibling, agaliaItem** child) const
 	hr = image->ReadData(&child_chunk, child_item_offset, sizeof(child_chunk));
 	if (FAILED(hr)) return hr;
 
-	item_Base* item = create_item(image, child_item_offset, child_chunk.fcc, child_chunk.cb, fccType);
+	RIFF_item_Base* item = create_item(image, child_item_offset, child_chunk.fcc, child_chunk.cb, fccType);
 	item->endPos = getOffset() + sizeof(RIFFCHUNK) + cur_chunk.cb;
 	item->fccParent = cur_chunk.fcc;
 	*child = item;

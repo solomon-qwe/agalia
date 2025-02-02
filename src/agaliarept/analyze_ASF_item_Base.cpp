@@ -7,22 +7,22 @@
 using namespace analyze_ASF;
 
 // {C4333FE9-23F5-448C-9101-D0A8C525BE9A}
-const GUID item_Base::guid_asf =
+const GUID ASF_item_Base::guid_asf =
 { 0xc4333fe9, 0x23f5, 0x448c, { 0x91, 0x1, 0xd0, 0xa8, 0xc5, 0x25, 0xbe, 0x9a } };
 
-item_Base::item_Base(const agaliaContainer* image, uint64_t offset, uint64_t size, uint64_t endpos)
+ASF_item_Base::ASF_item_Base(const agaliaContainer* image, uint64_t offset, uint64_t size, uint64_t endpos)
 	:_agaliaItemBase(guid_asf, offset, size)
 {
 	this->image = image;
 	this->endpos = endpos;
 }
 
-item_Base::~item_Base()
+ASF_item_Base::~ASF_item_Base()
 {
 
 }
 
-HRESULT item_Base::getItemName(agaliaString** str) const
+HRESULT ASF_item_Base::getName(agaliaString** str) const
 {
 	GUID ObjectID = {};
 	auto hr = image->ReadData(&ObjectID, getOffset(), sizeof(ObjectID));
@@ -106,14 +106,14 @@ HRESULT item_Base::getItemName(agaliaString** str) const
 	return S_OK;
 }
 
-HRESULT item_Base::getItemPropCount(uint32_t* count) const
+HRESULT ASF_item_Base::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_Base::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT ASF_item_Base::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -130,7 +130,7 @@ HRESULT item_Base::getItemPropName(uint32_t index, agaliaString** str) const
 	return S_OK;
 }
 
-HRESULT item_Base::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT ASF_item_Base::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -143,7 +143,7 @@ HRESULT item_Base::getItemPropValue(uint32_t index, agaliaString** str) const
 	}
 	else if (index == prop_object_guid)
 	{
-		return getItemName(str);
+		return getName(str);
 	}
 	else if (index == prop_object_size)
 	{
@@ -160,7 +160,7 @@ HRESULT item_Base::getItemPropValue(uint32_t index, agaliaString** str) const
 	return E_FAIL;
 }
 
-HRESULT item_Base::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT ASF_item_Base::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	UNREFERENCED_PARAMETER(sibling);
 	UNREFERENCED_PARAMETER(child);
@@ -168,7 +168,7 @@ HRESULT item_Base::getChildItem(uint32_t sibling, agaliaItem** child) const
 }
 
 
-HRESULT item_Base::getNextItem(agaliaItem** next) const
+HRESULT ASF_item_Base::getNext(agaliaElement** next) const
 {
 	if (next == nullptr) return E_POINTER;
 	auto p = createItem(image, getOffset() + getSize(), endpos);
@@ -183,7 +183,7 @@ HRESULT item_Base::getNextItem(agaliaItem** next) const
 	return E_FAIL;
 }
 
-HRESULT item_Base::getAsocImage(const agaliaContainer** imageAsoc) const
+HRESULT ASF_item_Base::getAsocImage(const agaliaContainer** imageAsoc) const
 {
 	if (imageAsoc == nullptr) return E_POINTER;
 	*imageAsoc = image;
@@ -192,7 +192,7 @@ HRESULT item_Base::getAsocImage(const agaliaContainer** imageAsoc) const
 
 
 
-HRESULT item_Base::getGridRowCount(uint32_t* row) const
+HRESULT ASF_item_Base::getElementInfoCount(uint32_t* row) const
 {
 	if (row == nullptr) return E_POINTER;
 	*row = 1;
@@ -201,7 +201,7 @@ HRESULT item_Base::getGridRowCount(uint32_t* row) const
 
 
 
-HRESULT item_Base::getGridValue(uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT ASF_item_Base::getElementInfoValue(uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	if (row != 0) return E_INVALIDARG;
@@ -219,11 +219,11 @@ HRESULT item_Base::getGridValue(uint32_t row, uint32_t column, agaliaString** st
 	}
 	else if (column == column_objectID)
 	{
-		return getItemPropValue(prop_object_guid, str);
+		return getPropValue(prop_object_guid, str);
 	}
 	else if (column == column_size)
 	{
-		return getItemPropValue(prop_object_size, str);
+		return getPropValue(prop_object_size, str);
 	}
 	else
 	{

@@ -8,7 +8,7 @@ using namespace analyze_RIFF;
 
 
 item_idx1::item_idx1(const container_RIFF* _image, uint64_t offset, uint64_t size)
-	: item_Base(_image, offset, size)
+	: RIFF_item_Base(_image, offset, size)
 {
 }
 
@@ -20,7 +20,7 @@ item_idx1::~item_idx1()
 
 
 
-HRESULT item_idx1::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_idx1::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 	if (child == nullptr) return E_POINTER;
@@ -84,7 +84,7 @@ HRESULT item_idx1::getColumnValue(uint32_t column, agaliaString** str) const
 
 
 item_idx1_entry::item_idx1_entry(const container_RIFF* _image, uint64_t offset, uint64_t size)
-	: item_Base(_image, offset, size)
+	: RIFF_item_Base(_image, offset, size)
 {
 }
 
@@ -96,7 +96,7 @@ item_idx1_entry::~item_idx1_entry()
 
 
 
-HRESULT item_idx1_entry::getItemName(agaliaString** str) const
+HRESULT item_idx1_entry::getName(agaliaString** str) const
 {
 	std::wstringstream temp;
 	temp << L"aIndex[" << _index << L"]";
@@ -106,7 +106,7 @@ HRESULT item_idx1_entry::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_idx1_entry::getItemPropCount(uint32_t* count) const
+HRESULT item_idx1_entry::getPropCount(uint32_t* count) const
 {
 	*count = prop_last;
 	return S_OK;
@@ -114,7 +114,7 @@ HRESULT item_idx1_entry::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_idx1_entry::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_idx1_entry::getPropName(uint32_t index, agaliaString** str) const
 {
 	switch (index)
 	{
@@ -130,7 +130,7 @@ HRESULT item_idx1_entry::getItemPropName(uint32_t index, agaliaString** str) con
 
 
 
-HRESULT item_idx1_entry::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_idx1_entry::getPropValue(uint32_t index, agaliaString** str) const
 {
 	AVIOLDINDEX::_avioldindex_entry entry = {};
 	auto hr = image->ReadData(&entry, getOffset(), sizeof(entry));
@@ -164,7 +164,7 @@ HRESULT item_idx1_entry::getItemPropValue(uint32_t index, agaliaString** str) co
 
 
 
-HRESULT item_idx1_entry::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_idx1_entry::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	UNREFERENCED_PARAMETER(sibling);
 	UNREFERENCED_PARAMETER(child);
@@ -173,7 +173,7 @@ HRESULT item_idx1_entry::getChildItem(uint32_t sibling, agaliaItem** child) cons
 
 
 
-HRESULT item_idx1_entry::getNextItem(agaliaItem** next) const
+HRESULT item_idx1_entry::getNext(agaliaElement** next) const
 {
 	uint64_t next_item_offset = getOffset() + sizeof(AVIOLDINDEX::_avioldindex_entry);
 	if (endPos <= next_item_offset)

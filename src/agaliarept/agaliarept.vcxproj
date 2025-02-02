@@ -270,6 +270,8 @@
     <ClInclude Include="jpeg_def.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="stringcnv.h" />
+    <ClInclude Include="thumbnail.h" />
     <ClInclude Include="tiff_common.h" />
   </ItemGroup>
   <ItemGroup>

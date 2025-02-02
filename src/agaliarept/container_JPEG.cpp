@@ -7,10 +7,9 @@
 
 #include "jpeg_def.h"
 #include "byteswap.h"
+#include "thumbnail.h"
 
 using namespace analyze_JPEG;
-
-
 
 
 
@@ -29,14 +28,14 @@ inline bool IsSOF(uint16_t marker)
 
 HRESULT getJPEGImageWidth(const container_JPEG* image, agaliaString** s)
 {
-	agaliaPtr<agaliaItem> item;
-	auto hr = image->getRootItem(&item);
+	agaliaPtr<agaliaElement> item;
+	auto hr = image->getRootElement(&item);
 	if (FAILED(hr)) return hr;
 
 	while (item && !IsSOF(getMarker(image, item)))
 	{
-		agaliaPtr<agaliaItem> next;
-		item->getNextItem(&next);
+		agaliaPtr<agaliaElement> next;
+		item->getNext(&next);
 		item.detach()->Release();
 		item.attach(next.detach());
 	}
@@ -58,14 +57,14 @@ HRESULT getJPEGImageWidth(const container_JPEG* image, agaliaString** s)
 
 HRESULT getJPEGImageHeight(const container_JPEG* image, agaliaString** s)
 {
-	agaliaPtr<agaliaItem> item;
-	auto hr = image->getRootItem(&item);
+	agaliaPtr<agaliaElement> item;
+	auto hr = image->getRootElement(&item);
 	if (FAILED(hr)) return hr;
 
 	while (item && !IsSOF(getMarker(image, item)))
 	{
-		agaliaPtr<agaliaItem> next;
-		item->getNextItem(&next);
+		agaliaPtr<agaliaElement> next;
+		item->getNext(&next);
 		item.detach()->Release();
 		item.attach(next.detach());
 	}
@@ -132,8 +131,8 @@ HRESULT get_iccprofile_container(const container_JPEG* image, const item_APP* it
 
 HRESULT getICCProfileName(const container_JPEG* image, agaliaString** s)
 {
-	agaliaPtr<agaliaItem> item;
-	auto hr = image->getRootItem(&item);
+	agaliaPtr<agaliaElement> item;
+	auto hr = image->getRootElement(&item);
 	if (FAILED(hr)) return hr;
 
 	while (item)
@@ -150,8 +149,8 @@ HRESULT getICCProfileName(const container_JPEG* image, agaliaString** s)
 			}
 		}
 
-		agaliaPtr<agaliaItem> next;
-		item->getNextItem(&next);
+		agaliaPtr<agaliaElement> next;
+		item->getNext(&next);
 		item.detach()->Release();
 		item.attach(next.detach());
 	}
@@ -226,16 +225,16 @@ HRESULT container_JPEG::getColumnName(uint32_t column, agaliaString** str) const
 
 
 
-HRESULT container_JPEG::getGridRowCount(const agaliaItem* item, uint32_t* row) const
+HRESULT container_JPEG::getElementInfoCount(const agaliaElement* item, uint32_t* row) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (row == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_Base::guid_jpeg)
+	if (item->getGUID() != JPEG_item_Base::guid_jpeg)
 		return E_FAIL;
 
 	*row = 1;
-	auto hr = static_cast<const item_Base*>(item)->getAdditionalInfoCount(row);
+	auto hr = static_cast<const JPEG_item_Base*>(item)->getAdditionalInfoCount(row);
 	if (SUCCEEDED(hr))
 		(*row)++;
 	return S_OK;
@@ -243,30 +242,30 @@ HRESULT container_JPEG::getGridRowCount(const agaliaItem* item, uint32_t* row) c
 
 
 
-HRESULT container_JPEG::getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT container_JPEG::getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (str == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_Base::guid_jpeg)
+	if (item->getGUID() != JPEG_item_Base::guid_jpeg)
 		return E_FAIL;
 
 	if (row == 0) {
-		return static_cast<const item_Base*>(item)->getColumnValue(column, str);
+		return static_cast<const JPEG_item_Base*>(item)->getColumnValue(column, str);
 	}
 	else if (column == 0) {
 		*str = agaliaString::create(L"");
 		return S_OK;
 	}
 	else if (column == column_value) {
-		return static_cast<const item_Base*>(item)->getAdditionalInfoValue(row - 1, str);
+		return static_cast<const JPEG_item_Base*>(item)->getAdditionalInfoValue(row - 1, str);
 	}
 	return E_FAIL;
 }
 
 
 
-HRESULT container_JPEG::getRootItem(agaliaItem** root) const
+HRESULT container_JPEG::getRootElement(agaliaElement** root) const
 {
 	if (root == nullptr) return E_POINTER;
 	return create_item(root, 0, this);
@@ -307,9 +306,7 @@ HRESULT container_JPEG::getPropertyValue(PropertyType type, agaliaString** str) 
 
 HRESULT container_JPEG::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
 {
-	HRESULT loadThumbnailImageGDIP(IStream * stream, uint32_t maxW, uint32_t maxH, HBITMAP * phBitmap);
-
-	return loadThumbnailImageGDIP(data_stream, maxW, maxH, phBitmap);
+	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
 }
 
 
@@ -318,14 +315,14 @@ HRESULT container_JPEG::getColorProfile(agaliaHeap** buf) const
 {
 	if (buf == nullptr) return E_POINTER;
 
-	agaliaPtr<agaliaItem> item;
-	auto hr = getRootItem(&item);
+	agaliaPtr<agaliaElement> item;
+	auto hr = getRootElement(&item);
 	if (FAILED(hr)) return hr;
 
 	while (item && (getMarker(this, item) != APP2))
 	{
-		agaliaPtr<agaliaItem> next;
-		item->getNextItem(&next);
+		agaliaPtr<agaliaElement> next;
+		item->getNext(&next);
 		item.detach()->Release();
 		item.attach(next.detach());
 	}

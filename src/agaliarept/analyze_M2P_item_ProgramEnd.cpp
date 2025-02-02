@@ -8,7 +8,7 @@ using namespace analyze_M2P;
 
 
 item_ProgramEnd::item_ProgramEnd(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:M2P_item_Base(image, offset, size)
 {
 }
 
@@ -20,7 +20,7 @@ item_ProgramEnd::~item_ProgramEnd()
 
 
 
-HRESULT item_ProgramEnd::getItemName(agaliaString** str) const
+HRESULT item_ProgramEnd::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"MPEG_program_end_code");
@@ -29,7 +29,7 @@ HRESULT item_ProgramEnd::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_ProgramEnd::getGridRowCount(uint32_t* row) const
+HRESULT item_ProgramEnd::getElementInfoCount(uint32_t* row) const
 {
 	if (row == nullptr) return E_POINTER;
 	*row = 1;
@@ -38,7 +38,7 @@ HRESULT item_ProgramEnd::getGridRowCount(uint32_t* row) const
 
 
 
-HRESULT item_ProgramEnd::getGridValue(uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT item_ProgramEnd::getElementInfoValue(uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	if (row != 0) return E_INVALIDARG;
@@ -50,7 +50,7 @@ HRESULT item_ProgramEnd::getGridValue(uint32_t row, uint32_t column, agaliaStrin
 	}
 	else if (column == column_field)
 	{
-		return getItemName(str);
+		return getName(str);
 	}
 	else if (column == column_bits)
 	{

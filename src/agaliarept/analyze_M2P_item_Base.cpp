@@ -6,12 +6,12 @@ using namespace analyze_M2P;
 
 
 // {4FD9FF5E-B56E-4C04-BF38-B5195206F519}
-const GUID item_Base::guid_m2p =
+const GUID M2P_item_Base::guid_m2p =
 { 0x4fd9ff5e, 0xb56e, 0x4c04, { 0xbf, 0x38, 0xb5, 0x19, 0x52, 0x6, 0xf5, 0x19 } };
 
 
 
-item_Base::item_Base(const agaliaContainer* image, uint64_t offset, uint64_t size)
+M2P_item_Base::M2P_item_Base(const agaliaContainer* image, uint64_t offset, uint64_t size)
 	:_agaliaItemBase(guid_m2p, offset, size)
 {
 	this->image = image;
@@ -19,13 +19,13 @@ item_Base::item_Base(const agaliaContainer* image, uint64_t offset, uint64_t siz
 
 
 
-item_Base::~item_Base()
+M2P_item_Base::~M2P_item_Base()
 {
 }
 
 
 
-HRESULT item_Base::getItemName(agaliaString** str) const
+HRESULT M2P_item_Base::getName(agaliaString** str) const
 {
 	UNREFERENCED_PARAMETER(str);
 	return E_FAIL;
@@ -33,7 +33,7 @@ HRESULT item_Base::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_Base::getItemPropCount(uint32_t* count) const
+HRESULT M2P_item_Base::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
@@ -42,7 +42,7 @@ HRESULT item_Base::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_Base::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT M2P_item_Base::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -60,7 +60,7 @@ HRESULT item_Base::getItemPropName(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_Base::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT M2P_item_Base::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (index == prop_offset)
 	{
@@ -74,7 +74,7 @@ HRESULT item_Base::getItemPropValue(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_Base::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT M2P_item_Base::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	UNREFERENCED_PARAMETER(sibling);
 	UNREFERENCED_PARAMETER(child);
@@ -83,7 +83,7 @@ HRESULT item_Base::getChildItem(uint32_t sibling, agaliaItem** child) const
 
 
 
-HRESULT item_Base::getNextItem(agaliaItem** next) const
+HRESULT M2P_item_Base::getNext(agaliaElement** next) const
 {
 	UNREFERENCED_PARAMETER(next);
 	return E_FAIL;
@@ -91,7 +91,7 @@ HRESULT item_Base::getNextItem(agaliaItem** next) const
 
 
 
-HRESULT item_Base::getAsocImage(const agaliaContainer** imageAsoc) const
+HRESULT M2P_item_Base::getAsocImage(const agaliaContainer** imageAsoc) const
 {
 	if (imageAsoc == nullptr) return E_POINTER;
 	*imageAsoc = image;
@@ -100,7 +100,7 @@ HRESULT item_Base::getAsocImage(const agaliaContainer** imageAsoc) const
 
 
 
-HRESULT item_Base::getGridRowCount(uint32_t* row) const
+HRESULT M2P_item_Base::getElementInfoCount(uint32_t* row) const
 {
 	UNREFERENCED_PARAMETER(row);
 	return E_FAIL;
@@ -108,7 +108,7 @@ HRESULT item_Base::getGridRowCount(uint32_t* row) const
 
 
 
-HRESULT item_Base::getGridValue(uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT M2P_item_Base::getElementInfoValue(uint32_t row, uint32_t column, agaliaString** str) const
 {
 	UNREFERENCED_PARAMETER(row);
 	UNREFERENCED_PARAMETER(column);

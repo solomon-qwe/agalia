@@ -67,27 +67,27 @@ HRESULT container_M2P::getColumnName(uint32_t column, agaliaString** str) const
 
 
 
-HRESULT container_M2P::getGridRowCount(const agaliaItem* item, uint32_t* row) const
+HRESULT container_M2P::getElementInfoCount(const agaliaElement* item, uint32_t* row) const
 {
 	if (item == nullptr) return E_POINTER;
-	if (item->getGUID() == item_Base::guid_m2p)
-		return static_cast<const item_Base*>(item)->getGridRowCount(row);
+	if (item->getGUID() == M2P_item_Base::guid_m2p)
+		return static_cast<const M2P_item_Base*>(item)->getElementInfoCount(row);
 	return E_FAIL;
 }
 
 
 
-HRESULT container_M2P::getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT container_M2P::getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (item == nullptr) return E_POINTER;
-	if (item->getGUID() == item_Base::guid_m2p)
-		return static_cast<const item_Base*>(item)->getGridValue(row, column, str);
+	if (item->getGUID() == M2P_item_Base::guid_m2p)
+		return static_cast<const M2P_item_Base*>(item)->getElementInfoValue(row, column, str);
 	return E_FAIL;
 }
 
 
 
-HRESULT container_M2P::getRootItem(agaliaItem** root) const
+HRESULT container_M2P::getRootElement(agaliaElement** root) const
 {
 	if (root == nullptr) return E_POINTER;
 	auto p = new item_ProgramStream(this, 0, 0);

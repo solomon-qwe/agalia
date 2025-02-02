@@ -6,6 +6,6 @@ class agaliaContainer;
 
 namespace analyze_ASF
 {
-	class item_Base;
-	item_Base* createItem(const agaliaContainer* image, uint64_t offset, uint64_t endpos);
+	class ASF_item_Base;
+	ASF_item_Base* createItem(const agaliaContainer* image, uint64_t offset, uint64_t endpos);
 }

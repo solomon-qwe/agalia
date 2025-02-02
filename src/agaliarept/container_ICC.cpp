@@ -67,7 +67,7 @@ HRESULT container_ICC::getColumnName(uint32_t column, agaliaString** str) const
 
 
 
-HRESULT container_ICC::getGridRowCount(const agaliaItem* item, uint32_t* row) const
+HRESULT container_ICC::getElementInfoCount(const agaliaElement* item, uint32_t* row) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (row == nullptr) return E_POINTER;
@@ -81,7 +81,7 @@ HRESULT container_ICC::getGridRowCount(const agaliaItem* item, uint32_t* row) co
 
 
 
-HRESULT container_ICC::getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT container_ICC::getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (str == nullptr) return E_POINTER;
@@ -97,7 +97,7 @@ HRESULT container_ICC::getGridValue(const agaliaItem* item, uint32_t row, uint32
 
 
 
-HRESULT container_ICC::getRootItem(agaliaItem** root) const
+HRESULT container_ICC::getRootElement(agaliaElement** root) const
 {
 	if (root == nullptr) return E_POINTER;
 
@@ -124,23 +124,23 @@ HRESULT container_ICC::getPropertyValue(PropertyType type, agaliaString** str) c
 	}
 	else if (type == ICCProfile)
 	{
-		agaliaPtr<agaliaItem> root;
-		auto hr = getRootItem(&root);
+		agaliaPtr<agaliaElement> root;
+		auto hr = getRootElement(&root);
 		if (FAILED(hr)) return hr;
 
-		agaliaPtr<agaliaItem> tag_table;
-		hr = root->getChildItem(0, &tag_table);
+		agaliaPtr<agaliaElement> tag_table;
+		hr = root->getChild(0, &tag_table);
 		if (FAILED(hr)) return hr;
 
-		agaliaPtr<agaliaItem> element;
-		hr = tag_table->getChildItem(0, &element);
+		agaliaPtr<agaliaElement> element;
+		hr = tag_table->getChild(0, &element);
 		if (FAILED(hr)) return hr;
 
 		do
 		{
 			auto p = static_cast<item_Element*>(element._p);
 			agaliaStringPtr sig;
-			hr = p->getItemPropValue(item_Element::prop_signature, &sig);
+			hr = p->getPropValue(item_Element::prop_signature, &sig);
 			if (SUCCEEDED(hr))
 			{
 				if (wcscmp(sig->GetData(), L"desc") == 0)
@@ -149,8 +149,8 @@ HRESULT container_ICC::getPropertyValue(PropertyType type, agaliaString** str) c
 				}
 			}
 
-			agaliaItem* next = nullptr;
-			element->getNextItem(&next);
+			agaliaElement* next = nullptr;
+			element->getNext(&next);
 			element = next;
 		} while (element);
 	}

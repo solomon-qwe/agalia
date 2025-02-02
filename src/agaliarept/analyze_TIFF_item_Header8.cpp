@@ -11,7 +11,7 @@ using namespace analyze_TIFF;
 
 
 item_TIFFHeader8::item_TIFFHeader8(const container_TIFF* image, uint64_t offset, uint64_t size)
-	: item_tiff_Base(image, offset, size)
+	: TIFF_item_Base(image, offset, size)
 {
 }
 
@@ -23,7 +23,7 @@ item_TIFFHeader8::~item_TIFFHeader8()
 
 
 
-HRESULT item_TIFFHeader8::getItemName(agaliaString** str) const
+HRESULT item_TIFFHeader8::getName(agaliaString** str) const
 {
 	*str = agaliaString::create(L"BigTIFF Header");
 	return S_OK;
@@ -31,7 +31,7 @@ HRESULT item_TIFFHeader8::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_TIFFHeader8::getItemPropCount(uint32_t* count) const
+HRESULT item_TIFFHeader8::getPropCount(uint32_t* count) const
 {
 	*count = prop_last;
 	return S_OK;
@@ -39,7 +39,7 @@ HRESULT item_TIFFHeader8::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_TIFFHeader8::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_TIFFHeader8::getPropName(uint32_t index, agaliaString** str) const
 {
 	const wchar_t* name = nullptr;
 	switch (index)
@@ -59,7 +59,7 @@ HRESULT item_TIFFHeader8::getItemPropName(uint32_t index, agaliaString** str) co
 
 
 
-HRESULT item_TIFFHeader8::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_TIFFHeader8::getPropValue(uint32_t index, agaliaString** str) const
 {
 	CHeapPtr<TIFFHEADER8> tiff;
 	if (!tiff.AllocateBytes(sizeof(TIFFHEADER8))) return E_OUTOFMEMORY;
@@ -84,14 +84,14 @@ HRESULT item_TIFFHeader8::getItemPropValue(uint32_t index, agaliaString** str) c
 
 
 
-HRESULT item_TIFFHeader8::getChildItem(uint32_t, agaliaItem**) const
+HRESULT item_TIFFHeader8::getChild(uint32_t, agaliaElement**) const
 {
 	return E_FAIL;
 }
 
 
 
-HRESULT item_TIFFHeader8::getNextItem(agaliaItem** next) const
+HRESULT item_TIFFHeader8::getNext(agaliaElement** next) const
 {
 	// BigTIFFÉwÉbÉ_Çì«Ç›çûÇﬁ 
 	CHeapPtr<TIFFHEADER8> tiff;

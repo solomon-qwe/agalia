@@ -10,7 +10,7 @@ using namespace analyze_M2P;
 
 
 item_ProgramStreamPack::item_ProgramStreamPack(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:M2P_item_Base(image, offset, size)
 {
 }
 
@@ -22,7 +22,7 @@ item_ProgramStreamPack::~item_ProgramStreamPack()
 
 
 
-HRESULT item_ProgramStreamPack::getItemName(agaliaString** str) const
+HRESULT item_ProgramStreamPack::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"pack");
@@ -31,7 +31,7 @@ HRESULT item_ProgramStreamPack::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_ProgramStreamPack::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_ProgramStreamPack::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 	if (child == nullptr) return E_POINTER;
@@ -47,7 +47,7 @@ HRESULT item_ProgramStreamPack::getChildItem(uint32_t sibling, agaliaItem** chil
 
 
 
-HRESULT item_ProgramStreamPack::getNextItem(agaliaItem** next) const
+HRESULT item_ProgramStreamPack::getNext(agaliaElement** next) const
 {
 	if (next == nullptr) return E_POINTER;
 

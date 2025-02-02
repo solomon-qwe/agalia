@@ -3,22 +3,22 @@
 
 namespace analyze_RIFF
 {
-	class item_strh : public item_Base
+	class item_strh : public RIFF_item_Base
 	{
 	public:
 		item_strh(const container_RIFF* _image, uint64_t offset, uint64_t size);
 		virtual ~item_strh();
 
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override;
 
 		virtual HRESULT getColumnValue(uint32_t column, agaliaString** str) const override;
 		virtual HRESULT getAdditionalInfoCount(uint32_t* row) const override;
 		virtual HRESULT getAdditionalInfoValue(uint32_t row, agaliaString** str) const override;
 
 		enum {
-			prop_fccType = item_Base::prop_last,
+			prop_fccType = RIFF_item_Base::prop_last,
 			prop_fccHandler,
 			prop_dwFlags,
 			prop_wPriority,

@@ -7,7 +7,7 @@
 using namespace analyze_ICC;
 
 item_TagTable::item_TagTable(const container_ICC* image, uint64_t offset, uint64_t size, uint64_t endpos)
-	: item_Base(image, offset, size, endpos)
+	: ICC_item_Base(image, offset, size, endpos)
 {
 }
 
@@ -15,20 +15,20 @@ item_TagTable::~item_TagTable()
 {
 }
 
-HRESULT item_TagTable::getItemName(agaliaString** str) const
+HRESULT item_TagTable::getName(agaliaString** str) const
 {
 	*str = agaliaString::create(L"Tag Table");
 	return S_OK;
 }
 
-HRESULT item_TagTable::getItemPropCount(uint32_t* count) const
+HRESULT item_TagTable::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_TagTable::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_TagTable::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -45,7 +45,7 @@ HRESULT item_TagTable::getItemPropName(uint32_t index, agaliaString** str) const
 }
 
 
-HRESULT item_TagTable::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_TagTable::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (index == prop_tag_count)
 	{
@@ -63,7 +63,7 @@ HRESULT item_TagTable::getItemPropValue(uint32_t index, agaliaString** str) cons
 	return E_FAIL;
 }
 
-HRESULT item_TagTable::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_TagTable::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0)
 		return E_FAIL;
@@ -77,7 +77,7 @@ HRESULT item_TagTable::getChildItem(uint32_t sibling, agaliaItem** child) const
 	return S_OK;
 }
 
-HRESULT item_TagTable::getNextItem(agaliaItem** next) const
+HRESULT item_TagTable::getNext(agaliaElement** next) const
 {
 	UNREFERENCED_PARAMETER(next);
 	return E_FAIL;

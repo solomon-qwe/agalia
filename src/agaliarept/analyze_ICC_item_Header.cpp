@@ -7,7 +7,7 @@
 using namespace analyze_ICC;
 
 item_Header::item_Header(const container_ICC* image, uint64_t offset, uint64_t size, uint64_t endpos)
-	: item_Base(image, offset, size, endpos)
+	: ICC_item_Base(image, offset, size, endpos)
 {
 }
 
@@ -15,20 +15,20 @@ item_Header::~item_Header()
 {
 }
 
-HRESULT item_Header::getItemName(agaliaString** str) const
+HRESULT item_Header::getName(agaliaString** str) const
 {
 	*str = agaliaString::create(L"Profile header");
 	return S_OK;
 }
 
-HRESULT item_Header::getItemPropCount(uint32_t* count) const
+HRESULT item_Header::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_Header::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_Header::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -61,7 +61,7 @@ HRESULT item_Header::getItemPropName(uint32_t index, agaliaString** str) const
 }
 
 
-HRESULT item_Header::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_Header::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (index == prop_profile_size)
 	{
@@ -306,7 +306,7 @@ HRESULT item_Header::getItemPropValue(uint32_t index, agaliaString** str) const
 	return E_FAIL;
 }
 
-HRESULT item_Header::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_Header::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0)
 		return E_INVALIDARG;
@@ -317,7 +317,7 @@ HRESULT item_Header::getChildItem(uint32_t sibling, agaliaItem** child) const
 	return S_OK;
 }
 
-HRESULT item_Header::getNextItem(agaliaItem** next) const
+HRESULT item_Header::getNext(agaliaElement** next) const
 {
 	UNREFERENCED_PARAMETER(next);
 	return E_FAIL;

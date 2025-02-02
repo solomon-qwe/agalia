@@ -6,11 +6,11 @@
 namespace analyze_TIFF
 {
 	template <typename TYPE_IFD>
-	class item_IFDEntry : public item_tiff_Base
+	class item_IFDEntry : public TIFF_item_Base
 	{
 	public:
 		item_IFDEntry(const container_TIFF* image, uint64_t offset, uint64_t size, int parent_ifd_type, uint16_t parent_tag, uint64_t parent_offset, uint64_t entry_index, uint32_t burst_err_count)
-			: item_tiff_Base(image, offset, size)
+			: TIFF_item_Base(image, offset, size)
 		{
 			this->parent_tag = parent_tag;
 			this->parent_ifd_type = parent_ifd_type;
@@ -27,7 +27,7 @@ namespace analyze_TIFF
 
 
 
-		virtual HRESULT getItemName(agaliaString** str) const override
+		virtual HRESULT getName(agaliaString** str) const override
 		{
 			rsize_t bufsize = 0;
 			auto hr = UInt64ToSizeT(getSize(), &bufsize);
@@ -61,7 +61,7 @@ namespace analyze_TIFF
 
 
 
-		virtual HRESULT getItemPropCount(uint32_t* count) const override
+		virtual HRESULT getPropCount(uint32_t* count) const override
 		{
 			if (count == nullptr) return E_POINTER;
 			*count = prop_last;
@@ -70,7 +70,7 @@ namespace analyze_TIFF
 
 
 
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override
 		{
 			const wchar_t* name = nullptr;
 			switch (index)
@@ -92,7 +92,7 @@ namespace analyze_TIFF
 
 
 
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override
 		{
 			rsize_t bufsize = 0;
 			auto hr = UInt64ToSizeT(getSize(), &bufsize);
@@ -130,7 +130,7 @@ namespace analyze_TIFF
 
 
 
-		virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const override
+		virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const override
 		{
 			// エントリデータを読み込む 
 			rsize_t bufsize = 0;
@@ -177,7 +177,7 @@ namespace analyze_TIFF
 
 
 
-		virtual HRESULT getNextItem(agaliaItem** next) const override
+		virtual HRESULT getNext(agaliaElement** next) const override
 		{
 			decltype(TYPE_IFD::count) ifd_count = 0;
 			auto hr = image->ReadData(&ifd_count, parent_offset, sizeof(ifd_count));

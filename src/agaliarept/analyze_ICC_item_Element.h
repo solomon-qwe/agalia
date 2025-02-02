@@ -5,19 +5,19 @@
 
 namespace analyze_ICC
 {
-	class item_Element : public item_Base
+	class item_Element : public ICC_item_Base
 	{
 	public:
 		item_Element(const container_ICC* image, uint64_t offset, uint64_t size, uint64_t endpos, uint32_t count, uint32_t index);
 		virtual ~item_Element();
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override;
 
-		virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const override;
-		virtual HRESULT getNextItem(agaliaItem** next) const override;
+		virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const override;
+		virtual HRESULT getNext(agaliaElement** next) const override;
 
 		virtual HRESULT getValueAreaOffset(uint64_t* offset) const override;
 		virtual HRESULT getValueAreaSize(uint64_t* size) const override;
@@ -27,7 +27,7 @@ namespace analyze_ICC
 		HRESULT getProfileName(agaliaString** str);
 
 		enum {
-			prop_signature = item_Base::prop_last,
+			prop_signature = ICC_item_Base::prop_last,
 			prop_offset,
 			prop_size,
 			prop_value,

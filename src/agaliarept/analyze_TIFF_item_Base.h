@@ -5,11 +5,11 @@
 
 namespace analyze_TIFF
 {
-	class item_tiff_Base : public _agaliaItemBase
+	class TIFF_item_Base : public _agaliaItemBase
 	{
 	public:
-		item_tiff_Base(const container_TIFF* image, uint64_t offset, uint64_t size);
-		virtual ~item_tiff_Base();
+		TIFF_item_Base(const container_TIFF* image, uint64_t offset, uint64_t size);
+		virtual ~TIFF_item_Base();
 
 		virtual HRESULT getAsocImage(const agaliaContainer** imageAsoc) const;
 		

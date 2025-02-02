@@ -8,7 +8,7 @@
 
 namespace analyze_JPEG
 {
-	inline uint16_t getMarker(const container_JPEG* image, const agaliaItem* item)
+	inline uint16_t getMarker(const container_JPEG* image, const agaliaElement* item)
 	{
 		JPEGSEGMENT segment = {};
 		auto hr = image->ReadData(&segment, item->getOffset(), sizeof(segment));
@@ -28,7 +28,7 @@ namespace analyze_JPEG
 
 
 	template<class T>
-	HRESULT ReadSegment(CHeapPtr<T>& buf, rsize_t* bufsize, const container_JPEG* image, const agaliaItem* item)
+	HRESULT ReadSegment(CHeapPtr<T>& buf, rsize_t* bufsize, const container_JPEG* image, const agaliaElement* item)
 	{
 		if (bufsize == nullptr) return E_POINTER;
 		if (image == nullptr) return E_POINTER;

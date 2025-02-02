@@ -4,7 +4,7 @@
 
 namespace analyze_TIFF
 {
-	class item_IFDBase : public item_tiff_Base
+	class item_IFDBase : public TIFF_item_Base
 	{
 	public:
 		item_IFDBase(const container_TIFF* image, uint64_t offset, uint64_t size, int ifdtype);
@@ -17,9 +17,9 @@ namespace analyze_TIFF
 			prop_last
 		};
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
 
 	protected:
 		int ifd_type_id = ifd_type::ifd_unknown;
@@ -42,7 +42,7 @@ namespace analyze_TIFF
 		}
 
 
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override
 		{
 			rsize_t bufsize = 0;
 			auto hr = UInt64ToSizeT(getSize(), &bufsize);
@@ -84,7 +84,7 @@ namespace analyze_TIFF
 
 
 
-		virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const override
+		virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const override
 		{
 			if (sibling != 0) return E_FAIL;
 
@@ -119,7 +119,7 @@ namespace analyze_TIFF
 
 
 
-		virtual HRESULT getNextItem(agaliaItem** next) const override
+		virtual HRESULT getNext(agaliaElement** next) const override
 		{
 			// åªç›ÇÃ IFD ç\ë¢ëÃÇì«Ç›çûÇﬁ
 			size_t bufsize = 0;

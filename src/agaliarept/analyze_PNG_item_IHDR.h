@@ -5,20 +5,20 @@
 
 namespace analyze_PNG
 {
-	class item_IHDR : public item_Base
+	class item_IHDR : public PNG_item_Base
 	{
 	public:
 		item_IHDR(const container_PNG* image, uint64_t offset, uint64_t size, uint64_t endpos);
 		virtual ~item_IHDR();
 
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override;
 
 		virtual HRESULT getColumnValue(uint32_t column, agaliaString** str) const override;
 
 		enum {
-			prop_width = item_Base::prop_last,
+			prop_width = PNG_item_Base::prop_last,
 			prop_height,
 			prop_bit_depth,
 			prop_color_type,

@@ -61,7 +61,7 @@ public:
 
 
 item_ProgramStreamPackHeader::item_ProgramStreamPackHeader(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:M2P_item_Base(image, offset, size)
 {
 	bitfield = new program_stream_pack_header;
 }
@@ -71,21 +71,21 @@ item_ProgramStreamPackHeader::~item_ProgramStreamPackHeader()
 	delete bitfield;
 }
 
-HRESULT item_ProgramStreamPackHeader::getItemName(agaliaString** str) const
+HRESULT item_ProgramStreamPackHeader::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"pack_header");
 	return S_OK;
 }
 
-HRESULT item_ProgramStreamPackHeader::getItemPropCount(uint32_t* count) const
+HRESULT item_ProgramStreamPackHeader::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_ProgramStreamPackHeader::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_ProgramStreamPackHeader::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -116,7 +116,7 @@ HRESULT item_ProgramStreamPackHeader::getItemPropName(uint32_t index, agaliaStri
 		}
 		break;
 	default:
-		return __super::getItemPropName(index, str);
+		return __super::getPropName(index, str);
 	}
 
 	*str = agaliaString::create(name);
@@ -124,11 +124,11 @@ HRESULT item_ProgramStreamPackHeader::getItemPropName(uint32_t index, agaliaStri
 }
 
 
-HRESULT item_ProgramStreamPackHeader::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_ProgramStreamPackHeader::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
-	auto hr = __super::getItemPropValue(index, str);
+	auto hr = __super::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	program_stream_pack_header* b = bitfield;
@@ -235,7 +235,7 @@ HRESULT item_ProgramStreamPackHeader::getItemPropValue(uint32_t index, agaliaStr
 
 
 
-HRESULT item_ProgramStreamPackHeader::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_ProgramStreamPackHeader::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 	if (child == nullptr) return E_POINTER;
@@ -269,7 +269,7 @@ HRESULT item_ProgramStreamPackHeader::getChildItem(uint32_t sibling, agaliaItem*
 }
 
 
-HRESULT item_ProgramStreamPackHeader::getNextItem(agaliaItem** next) const
+HRESULT item_ProgramStreamPackHeader::getNext(agaliaElement** next) const
 {
 	if (next == nullptr) return E_POINTER;
 
@@ -283,7 +283,7 @@ HRESULT item_ProgramStreamPackHeader::getNextItem(agaliaItem** next) const
 
 
 
-HRESULT item_ProgramStreamPackHeader::getGridRowCount(uint32_t* row) const
+HRESULT item_ProgramStreamPackHeader::getElementInfoCount(uint32_t* row) const
 {
 	if (row == nullptr) return E_POINTER;
 	*row = bitfield->last;
@@ -292,7 +292,7 @@ HRESULT item_ProgramStreamPackHeader::getGridRowCount(uint32_t* row) const
 
 
 
-HRESULT item_ProgramStreamPackHeader::getGridValue(uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT item_ProgramStreamPackHeader::getElementInfoValue(uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 

@@ -6,7 +6,7 @@
 using namespace analyze_BMP;
 
 item_ColorIndexParent::item_ColorIndexParent(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:BMP_item_Base(image, offset, size)
 {
 }
 
@@ -14,14 +14,14 @@ item_ColorIndexParent::~item_ColorIndexParent()
 {
 }
 
-HRESULT item_ColorIndexParent::getItemName(agaliaString** str) const
+HRESULT item_ColorIndexParent::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"Color-index");
 	return S_OK;
 }
 
-HRESULT item_ColorIndexParent::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_ColorIndexParent::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 
@@ -53,7 +53,7 @@ HRESULT item_ColorIndexParent::getColumnValue(uint32_t column, agaliaString** st
 	}
 	else if (column == column_structure)
 	{
-		return getItemName(str);
+		return getName(str);
 	}
 	else if (column == column_value)
 	{

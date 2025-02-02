@@ -17,7 +17,7 @@ _agaliaItemDICOMPreamble::~_agaliaItemDICOMPreamble()
 }
 
 
-HRESULT _agaliaItemDICOMPreamble::getItemName(agaliaString** str) const
+HRESULT _agaliaItemDICOMPreamble::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"Preamble");
@@ -25,7 +25,7 @@ HRESULT _agaliaItemDICOMPreamble::getItemName(agaliaString** str) const
 }
 
 
-HRESULT _agaliaItemDICOMPreamble::getItemPropCount(uint32_t* count) const
+HRESULT _agaliaItemDICOMPreamble::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_max;
@@ -33,7 +33,7 @@ HRESULT _agaliaItemDICOMPreamble::getItemPropCount(uint32_t* count) const
 }
 
 
-HRESULT _agaliaItemDICOMPreamble::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT _agaliaItemDICOMPreamble::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -52,7 +52,7 @@ HRESULT _agaliaItemDICOMPreamble::getItemPropName(uint32_t index, agaliaString**
 }
 
 
-HRESULT _agaliaItemDICOMPreamble::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT _agaliaItemDICOMPreamble::getPropValue(uint32_t index, agaliaString** str) const
 {
 	std::wstringstream temp;
 	if (index == prop_offset) {
@@ -88,7 +88,7 @@ HRESULT _agaliaItemDICOMPreamble::getItemPropValue(uint32_t index, agaliaString*
 }
 
 
-HRESULT _agaliaItemDICOMPreamble::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT _agaliaItemDICOMPreamble::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	UNREFERENCED_PARAMETER(sibling);
 	UNREFERENCED_PARAMETER(child);
@@ -96,7 +96,7 @@ HRESULT _agaliaItemDICOMPreamble::getChildItem(uint32_t sibling, agaliaItem** ch
 }
 
 
-HRESULT _agaliaItemDICOMPreamble::getNextItem(agaliaItem** next) const
+HRESULT _agaliaItemDICOMPreamble::getNext(agaliaElement** next) const
 {
 	uint64_t next_data_offset = getSize();
 	uint64_t next_data_size = 0;

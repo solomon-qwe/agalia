@@ -5,6 +5,7 @@
 #include "analyze_DCM_item_preamble.h"
 #include "analyze_DCM_util.h"
 
+#include "thumbnail.h"
 
 using namespace analyze_DCM;
 
@@ -36,12 +37,12 @@ TransferSyntax search_transfer_syntax(const container_DCM_Impl* image)
 {
 	TransferSyntax ret = TransferSyntax_Unknown;
 
-	agaliaPtr<agaliaItem> item;
-	auto hr = image->getRootItem(&item);
+	agaliaPtr<agaliaElement> item;
+	auto hr = image->getRootElement(&item);
 	if (FAILED(hr)) return ret;
 
-	agaliaPtr<agaliaItem> next;
-	while (SUCCEEDED(item->getNextItem(&next)))
+	agaliaPtr<agaliaElement> next;
+	while (SUCCEEDED(item->getNext(&next)))
 	{
 		item = next.detach();
 		dicom_element elem(image, item->getOffset());
@@ -150,7 +151,7 @@ HRESULT container_DCM_Impl::getColumnName(uint32_t column, agaliaString** str) c
 }
 
 
-HRESULT container_DCM_Impl::getGridRowCount(const agaliaItem* item, uint32_t* row) const
+HRESULT container_DCM_Impl::getElementInfoCount(const agaliaElement* item, uint32_t* row) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (row == nullptr) return E_POINTER;
@@ -164,7 +165,7 @@ HRESULT container_DCM_Impl::getGridRowCount(const agaliaItem* item, uint32_t* ro
 
 
 
-HRESULT container_DCM_Impl::getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT container_DCM_Impl::getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (str == nullptr) return E_POINTER;
@@ -178,7 +179,7 @@ HRESULT container_DCM_Impl::getGridValue(const agaliaItem* item, uint32_t row, u
 }
 
 
-HRESULT container_DCM_Impl::getRootItem(agaliaItem** root) const
+HRESULT container_DCM_Impl::getRootElement(agaliaElement** root) const
 {
 	if (root == nullptr) return E_POINTER;
 	auto item = new _agaliaItemDICOMPreamble(this, 0, dicom_preamble_size + sizeof(uint32_t));
@@ -186,6 +187,7 @@ HRESULT container_DCM_Impl::getRootItem(agaliaItem** root) const
 	return S_OK;
 }
 
+#include "analyze_DCM_item_elem.h"
 
 HRESULT container_DCM_Impl::getPropertyValue(PropertyType type, agaliaString** str) const
 {

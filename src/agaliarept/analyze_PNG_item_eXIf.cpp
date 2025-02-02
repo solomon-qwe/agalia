@@ -6,7 +6,7 @@
 using namespace analyze_PNG;
 
 item_eXIf::item_eXIf(const container_PNG* image, uint64_t offset, uint64_t size, uint64_t endpos)
-	: item_Base(image, offset, size, endpos)
+	: PNG_item_Base(image, offset, size, endpos)
 {
 	agaliaStringPtr file_path;
 	auto hr = image->getFilePath(&file_path);
@@ -25,11 +25,11 @@ item_eXIf::~item_eXIf()
 		tiff_image->Release();
 }
 
-HRESULT item_eXIf::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_eXIf::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 
 	if (tiff_image)
-		return tiff_image->getRootItem(child);
+		return tiff_image->getRootElement(child);
 	return E_FAIL;
 }

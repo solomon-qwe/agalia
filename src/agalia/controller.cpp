@@ -164,12 +164,12 @@ watch_progress_param* prepare_progress(HWND hwdParent, const wchar_t* title)
 
 
 
-void ResetFlatView_Stub(parser_thread_param* param, int& pos, int count, agaliaItem* item)
+void ResetFlatView_Stub(parser_thread_param* param, int& pos, int count, agaliaElement* item)
 {
 	HRESULT hr = S_OK;
 	while (SUCCEEDED(hr))
 	{
-		agaliaPtr<agaliaItem> sp;
+		agaliaPtr<agaliaElement> sp;
 		sp.attach(item);
 
 		if (::WaitForSingleObject(param->abort_request_event, 0) != WAIT_TIMEOUT)
@@ -178,13 +178,13 @@ void ResetFlatView_Stub(parser_thread_param* param, int& pos, int count, agaliaI
 			return;
 
 		uint32_t row = 0;
-		hr = param->ctrl->image->getGridRowCount(item, &row);
+		hr = param->ctrl->image->getElementInfoCount(item, &row);
 		if (SUCCEEDED(hr))
 		{
 			for (uint32_t i = 0; i < row; i++)
 			{
 				agaliaStringPtr str;
-				hr = param->ctrl->image->getGridValue(item, i, 0, &str);
+				hr = param->ctrl->image->getElementInfoValue(item, i, 0, &str);
 				if (FAILED(hr))
 				{
 					break;
@@ -212,7 +212,7 @@ void ResetFlatView_Stub(parser_thread_param* param, int& pos, int count, agaliaI
 
 				for (int j = 1; j < count; j++)
 				{
-					hr = param->ctrl->image->getGridValue(item, i, j, &str);
+					hr = param->ctrl->image->getElementInfoValue(item, i, j, &str);
 					if (SUCCEEDED(hr))
 					{
 						ListView_SetItemText(param->hwndTarget, pos, j, str->GetData());
@@ -228,16 +228,16 @@ void ResetFlatView_Stub(parser_thread_param* param, int& pos, int count, agaliaI
 		uint32_t sibling = 0;
 		do
 		{
-			agaliaPtr<agaliaItem> child;
-			hr = item->getChildItem(sibling++, &child);
+			agaliaPtr<agaliaElement> child;
+			hr = item->getChild(sibling++, &child);
 			if (SUCCEEDED(hr)) {
 				ResetFlatView_Stub(param, pos, count, child.detach());
 			}
 		} while (SUCCEEDED(hr));
 
 		// ŽŸ‚ÌƒAƒCƒeƒ€‚ðŽæ“¾ 
-		agaliaPtr<agaliaItem> next;
-		hr = item->getNextItem(&next);
+		agaliaPtr<agaliaElement> next;
+		hr = item->getNext(&next);
 		if (SUCCEEDED(hr)) {
 			item = next.detach();
 		}
@@ -250,8 +250,8 @@ UINT ResetFlatViewThreadProc(LPVOID param)
 {
 	auto p = reinterpret_cast<parser_thread_param*>(param);
 
-	agaliaPtr<agaliaItem> root;
-	auto hr = p->ctrl->image->getRootItem(&root);
+	agaliaPtr<agaliaElement> root;
+	auto hr = p->ctrl->image->getRootElement(&root);
 	if (SUCCEEDED(hr)) {
 		uint32_t count = 0;
 		hr = p->ctrl->image->getColumnCount(&count);
@@ -269,9 +269,9 @@ UINT ResetFlatViewThreadProc(LPVOID param)
 
 
 
-void ResetHierarchyView_Stub(parser_thread_param* param, HTREEITEM hParent, agaliaItem* parent)
+void ResetHierarchyView_Stub(parser_thread_param* param, HTREEITEM hParent, agaliaElement* parent)
 {
-	agaliaPtr<agaliaItem> item;
+	agaliaPtr<agaliaElement> item;
 	item.attach(parent);
 
 	HRESULT hr = S_OK;
@@ -284,15 +284,15 @@ void ResetHierarchyView_Stub(parser_thread_param* param, HTREEITEM hParent, agal
 		if (::WaitForSingleObject(param->terminate_thread_request, 0) != WAIT_TIMEOUT)
 			return;
 
-		agaliaItem* current = item._p;
+		agaliaElement* current = item._p;
 
 		agaliaStringPtr str;
-		hr = item->getItemName(&str);
+		hr = item->getName(&str);
 		if (FAILED(hr))
 			break;
 
-		agaliaPtr<agaliaItem> next;
-		auto hrNext = item->getNextItem(&next);
+		agaliaPtr<agaliaElement> next;
+		auto hrNext = item->getNext(&next);
 
 		TVINSERTSTRUCTW s = {};
 		s.hParent = hParent;
@@ -313,8 +313,8 @@ void ResetHierarchyView_Stub(parser_thread_param* param, HTREEITEM hParent, agal
 		uint32_t sibling = 0;
 		do
 		{
-			agaliaPtr<agaliaItem> child;
-			hr = current->getChildItem(sibling++, &child);
+			agaliaPtr<agaliaElement> child;
+			hr = current->getChild(sibling++, &child);
 			if (SUCCEEDED(hr))
 			{
 				ResetHierarchyView_Stub(param, hItem, child.detach());
@@ -336,8 +336,8 @@ UINT ResetHierarchyViewThreadProc(LPVOID param)
 {
 	auto p = reinterpret_cast<parser_thread_param*>(param);
 
-	agaliaPtr<agaliaItem> root;
-	auto hr = p->ctrl->image->getRootItem(&root);
+	agaliaPtr<agaliaElement> root;
+	auto hr = p->ctrl->image->getRootElement(&root);
 	if (SUCCEEDED(hr)) {
 		ResetHierarchyView_Stub(p, TVI_ROOT, root.detach());
 	}

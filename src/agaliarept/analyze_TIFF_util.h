@@ -75,7 +75,7 @@ namespace analyze_TIFF
 	// item : エントリ管理オブジェクト 
 	// entry : エントリデータ 
 	template <typename TYPE_IFD, typename ENTRY_TYPE>
-	HRESULT getTiffValueOffset(uint64_t* result, const container_TIFF* image, const item_tiff_Base* item, const ENTRY_TYPE* entry)
+	HRESULT getTiffValueOffset(uint64_t* result, const container_TIFF* image, const TIFF_item_Base* item, const ENTRY_TYPE* entry)
 	{
 		// エントリに含まれる値の型サイズを取得 
 		rsize_t type_size = 0;
@@ -107,7 +107,7 @@ namespace analyze_TIFF
 	// value_offset : IFDの位置を指す値の位置 
 	// ifdtype : 取得するIFDのID 
 	template <typename TYPE_IFD>
-	HRESULT getEntryChildItem(const container_TIFF* image, agaliaItem** child, uint32_t sibling, uint64_t value_offset, int ifdtype)
+	HRESULT getEntryChildItem(const container_TIFF* image, agaliaElement** child, uint32_t sibling, uint64_t value_offset, int ifdtype)
 	{
 		// IFDのオフセット位置を読み込む 
 		uint32_t next_data_offset = 0;

@@ -46,21 +46,21 @@ void err_msg(HRESULT hr)
 }
 
 
-void parse_stub(FILE* stream, const agaliaContainer* image, agaliaItem* parent, uint32_t column)
+void parse_stub(FILE* stream, const agaliaContainer* image, agaliaElement* parent, uint32_t column)
 {
 	HRESULT hr;
 
 	agaliaStringPtr temp;
-	agaliaPtr<agaliaItem> item(parent);
+	agaliaPtr<agaliaElement> item(parent);
 
 	do
 	{
 		// 現在のアイテムの情報を出力 
 		uint32_t row = 0;
-		image->getGridRowCount(item, &row);
+		image->getElementInfoCount(item, &row);
 		for (uint32_t i = 0; i < row; i++)
 		{
-			hr = image->getGridValue(item, i, 0, &temp);
+			hr = image->getElementInfoValue(item, i, 0, &temp);
 			if (FAILED(hr))
 				break;
 			fputws(temp->GetData(), stream);
@@ -68,7 +68,7 @@ void parse_stub(FILE* stream, const agaliaContainer* image, agaliaItem* parent, 
 			for (uint32_t j = 1; j < column; j++)
 			{
 				fputws(L"\t", stream);
-				hr = image->getGridValue(item, i, j, &temp);
+				hr = image->getElementInfoValue(item, i, j, &temp);
 				if (SUCCEEDED(hr))
 				{
 					fputws(temp->GetData(), stream);
@@ -82,16 +82,16 @@ void parse_stub(FILE* stream, const agaliaContainer* image, agaliaItem* parent, 
 		uint32_t sibling = 0;
 		do
 		{
-			agaliaPtr<agaliaItem> child;
-			hr = item->getChildItem(sibling++, &child);
+			agaliaPtr<agaliaElement> child;
+			hr = item->getChild(sibling++, &child);
 			if (SUCCEEDED(hr)) {
 				parse_stub(stream, image, child.detach(), column);
 			}
 		} while (SUCCEEDED(hr));
 
 		// 次のアイテムへ遷移 
-		agaliaPtr<agaliaItem> next;
-		hr = item->getNextItem(&next);
+		agaliaPtr<agaliaElement> next;
+		hr = item->getNext(&next);
 		if (SUCCEEDED(hr)) {
 			item = next.detach();
 		}
@@ -126,8 +126,8 @@ HRESULT parse(FILE* stream, const wchar_t* path, uint64_t offset, uint64_t size)
 	fputws(L"\n", stream);
 
 	// ルートアイテムを取得 
-	agaliaPtr<agaliaItem> root;
-	hr = image->getRootItem(&root);
+	agaliaPtr<agaliaElement> root;
+	hr = image->getRootElement(&root);
 	if (FAILED(hr)) return hr;
 
 	// 再帰的に解析・出力 

@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "../inc/agaliarept.h"
 
 #include <atlbase.h>
@@ -62,7 +62,7 @@ HRESULT loadThumbnailImageGDIP_stub(IStream* stream, uint32_t maxW, uint32_t max
 }
 
 
-HRESULT loadThumbnailImageGDIP(IStream* stream, uint32_t maxW, uint32_t maxH, HBITMAP* phBitmap)
+HRESULT loadThumbnailBitmap(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH, IStream* stream)
 {
 	using namespace Gdiplus;
 

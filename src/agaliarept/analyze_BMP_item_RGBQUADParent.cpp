@@ -7,7 +7,7 @@
 using namespace analyze_BMP;
 
 item_RGBQUADParent::item_RGBQUADParent(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:BMP_item_Base(image, offset, size)
 {
 }
 
@@ -15,14 +15,14 @@ item_RGBQUADParent::~item_RGBQUADParent()
 {
 }
 
-HRESULT item_RGBQUADParent::getItemName(agaliaString** str) const
+HRESULT item_RGBQUADParent::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"RGBQUAD");
 	return S_OK;
 }
 
-HRESULT item_RGBQUADParent::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_RGBQUADParent::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 
@@ -37,7 +37,7 @@ HRESULT item_RGBQUADParent::getChildItem(uint32_t sibling, agaliaItem** child) c
 	return S_OK;
 }
 
-HRESULT item_RGBQUADParent::getNextItem(agaliaItem** next) const
+HRESULT item_RGBQUADParent::getNext(agaliaElement** next) const
 {
 	auto p = new item_ColorIndexParent(image, bfOffBits, biSizeImage);
 	p->bfOffBits = bfOffBits;

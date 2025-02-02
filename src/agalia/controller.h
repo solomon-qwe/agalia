@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 class agaliaContainer;
-class agaliaItem;
+class agaliaElement;
 
 class controller
 {

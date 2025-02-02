@@ -13,6 +13,7 @@
 #include "analyze_RIFF_item_text.h"
 
 #include "jpeg_def.h"
+#include "thumbnail.h"
 
 #define MJPGDHTSEG_STORAGE
 #include <mmreg.h>
@@ -30,9 +31,9 @@ inline char fcc_snip(FOURCC fcc, int i)
 
 
 
-item_Base* analyze_RIFF::create_item(const container_RIFF* image, uint64_t offset, FOURCC fcc, DWORD cb, FOURCC fccType)
+RIFF_item_Base* analyze_RIFF::create_item(const container_RIFF* image, uint64_t offset, FOURCC fcc, DWORD cb, FOURCC fccType)
 {
-	item_Base* item = nullptr;
+	RIFF_item_Base* item = nullptr;
 
 	uint64_t next_item_size = 0;
 	if (fcc == FOURCC_RIFF ||
@@ -74,7 +75,7 @@ item_Base* analyze_RIFF::create_item(const container_RIFF* image, uint64_t offse
 		}
 		else {
 			next_item_size = sizeof(RIFFCHUNK) + RIFFROUND(uint64_t(cb));
-			item = new item_Base(image, offset, next_item_size);
+			item = new RIFF_item_Base(image, offset, next_item_size);
 		}
 		item->fccType = fccType;
 	}
@@ -98,7 +99,7 @@ item_Base* analyze_RIFF::create_item(const container_RIFF* image, uint64_t offse
 	else
 	{
 		next_item_size = sizeof(RIFFCHUNK) + RIFFROUND(uint64_t(cb));
-		item = new item_Base(image, offset, next_item_size);
+		item = new RIFF_item_Base(image, offset, next_item_size);
 		item->fccType = fccType;
 	}
 
@@ -109,15 +110,15 @@ item_Base* analyze_RIFF::create_item(const container_RIFF* image, uint64_t offse
 
 HRESULT getAVIMainHeader(const container_RIFF* format, AVIMAINHEADER* avimain)
 {
-	agaliaPtr<agaliaItem> root;
-	auto hr = format->getRootItem(&root);
+	agaliaPtr<agaliaElement> root;
+	auto hr = format->getRootElement(&root);
 	if (FAILED(hr)) return E_FAIL;
 
-	agaliaPtr<agaliaItem> item;
-	hr = root->getChildItem(0, &item);
+	agaliaPtr<agaliaElement> item;
+	hr = root->getChild(0, &item);
 	if (FAILED(hr)) return E_FAIL;
 
-	if (item->getGUID() != item_Base::guid_riff)
+	if (item->getGUID() != RIFF_item_Base::guid_riff)
 		return E_FAIL;
 
 	RIFFCHUNK list_chunk = {};
@@ -127,11 +128,11 @@ HRESULT getAVIMainHeader(const container_RIFF* format, AVIMAINHEADER* avimain)
 	if (list_chunk.fcc != FOURCC_LIST)
 		return E_FAIL;
 
-	agaliaPtr<agaliaItem> avih;
-	hr = item->getChildItem(0, &avih);
+	agaliaPtr<agaliaElement> avih;
+	hr = item->getChild(0, &avih);
 	if (FAILED(hr)) return E_FAIL;
 
-	if (avih->getGUID() != item_Base::guid_riff)
+	if (avih->getGUID() != RIFF_item_Base::guid_riff)
 		return E_FAIL;
 
 	hr = format->ReadData(avimain, avih->getOffset(), sizeof(AVIMAINHEADER));
@@ -144,12 +145,12 @@ HRESULT getAVIMainHeader(const container_RIFF* format, AVIMAINHEADER* avimain)
 
 HRESULT getFirstFrame(const container_RIFF* format, uint64_t* offset, uint64_t* size)
 {
-	agaliaPtr<agaliaItem> root;
-	auto hr = format->getRootItem(&root);
+	agaliaPtr<agaliaElement> root;
+	auto hr = format->getRootElement(&root);
 	if (FAILED(hr)) return E_FAIL;
 
-	agaliaPtr<agaliaItem> item;
-	hr = root->getChildItem(0, &item);
+	agaliaPtr<agaliaElement> item;
+	hr = root->getChild(0, &item);
 	while (SUCCEEDED(hr))
 	{
 		RIFFCHUNK chunk = {};
@@ -164,8 +165,8 @@ HRESULT getFirstFrame(const container_RIFF* format, uint64_t* offset, uint64_t* 
 
 			if (list_chunk.fccListType == listtypeAVIMOVIE)
 			{
-				agaliaPtr<agaliaItem> child;
-				hr = item->getChildItem(0, &child);
+				agaliaPtr<agaliaElement> child;
+				hr = item->getChild(0, &child);
 				if (FAILED(hr)) return E_FAIL;
 				item.detach()->Release();
 				item.attach(child.detach());
@@ -177,7 +178,7 @@ HRESULT getFirstFrame(const container_RIFF* format, uint64_t* offset, uint64_t* 
 
 					if (chunk.fcc == FOURCC_LIST)
 					{
-						hr = item->getChildItem(0, &child);
+						hr = item->getChild(0, &child);
 						if (FAILED(hr)) return E_FAIL;
 
 						hr = format->ReadData(&chunk, child->getOffset(), sizeof(chunk));
@@ -198,8 +199,8 @@ HRESULT getFirstFrame(const container_RIFF* format, uint64_t* offset, uint64_t* 
 						return S_OK;
 					}
 
-					agaliaPtr<agaliaItem> next;
-					hr = item->getNextItem(&next);
+					agaliaPtr<agaliaElement> next;
+					hr = item->getNext(&next);
 					if (FAILED(hr)) return E_FAIL;
 
 					item.detach()->Release();
@@ -208,8 +209,8 @@ HRESULT getFirstFrame(const container_RIFF* format, uint64_t* offset, uint64_t* 
 			}
 		}
 
-		agaliaPtr<agaliaItem> next;
-		hr = item->getNextItem(&next);
+		agaliaPtr<agaliaElement> next;
+		hr = item->getNext(&next);
 		if (FAILED(hr)) return E_FAIL;
 
 		item.detach()->Release();
@@ -235,7 +236,7 @@ container_RIFF::~container_RIFF()
 
 
 
-HRESULT container_RIFF::getRootItem(agaliaItem** root) const
+HRESULT container_RIFF::getRootElement(agaliaElement** root) const
 {
 	if (root == nullptr) return E_POINTER;
 	auto item = new item_LIST(this, 0, sizeof(RIFFLIST));
@@ -304,16 +305,16 @@ HRESULT container_RIFF::getColumnName(uint32_t column, agaliaString** str) const
 
 
 
-HRESULT container_RIFF::getGridRowCount(const agaliaItem* item, uint32_t* row) const
+HRESULT container_RIFF::getElementInfoCount(const agaliaElement* item, uint32_t* row) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (row == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_Base::guid_riff)
+	if (item->getGUID() != RIFF_item_Base::guid_riff)
 		return E_FAIL;
 
 	*row = 1;
-	auto hr = static_cast<const item_Base*>(item)->getAdditionalInfoCount(row);
+	auto hr = static_cast<const RIFF_item_Base*>(item)->getAdditionalInfoCount(row);
 	if (SUCCEEDED(hr))
 		(*row)++;
 	return S_OK;
@@ -321,23 +322,23 @@ HRESULT container_RIFF::getGridRowCount(const agaliaItem* item, uint32_t* row) c
 
 
 
-HRESULT container_RIFF::getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT container_RIFF::getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (str == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_Base::guid_riff)
+	if (item->getGUID() != RIFF_item_Base::guid_riff)
 		return E_FAIL;
 
 	if (row == 0) {
-		return static_cast<const item_Base*>(item)->getColumnValue(column, str);
+		return static_cast<const RIFF_item_Base*>(item)->getColumnValue(column, str);
 	}
 	else if (column == 0) {
 		*str = agaliaString::create(L"");
 		return S_OK;
 	}
 	else if (column == column_value) {
-		return static_cast<const item_Base*>(item)->getAdditionalInfoValue(row - 1, str);
+		return static_cast<const RIFF_item_Base*>(item)->getAdditionalInfoValue(row - 1, str);
 	}
 	return E_FAIL;
 }
@@ -352,11 +353,11 @@ HRESULT container_RIFF::getPropertyValue(PropertyType type, agaliaString** str) 
 	}
 	else if (type == FormatType)
 	{
-		agaliaPtr<agaliaItem> root;
-		auto hr = getRootItem(&root);
+		agaliaPtr<agaliaElement> root;
+		auto hr = getRootElement(&root);
 		if (SUCCEEDED(hr))
 		{
-			root->getItemName(str);
+			root->getName(str);
 		}
 		return S_OK;
 	}
@@ -453,8 +454,7 @@ HRESULT container_RIFF::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint
 		}
 	}
 
-	HRESULT loadThumbnailImageGDIP(IStream * stream, uint32_t maxW, uint32_t maxH, HBITMAP * phBitmap);
-	return loadThumbnailImageGDIP(stream, maxW, maxH, phBitmap);
+	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
 }
 
 

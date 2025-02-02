@@ -45,9 +45,9 @@ HRESULT item_DRI::getColumnValue(uint32_t column, agaliaString** str) const
 
 
 
-HRESULT item_DRI::getItemPropCount(uint32_t* count) const
+HRESULT item_DRI::getPropCount(uint32_t* count) const
 {
-	auto hr = __super::getItemPropCount(count);
+	auto hr = __super::getPropCount(count);
 	if (FAILED(hr)) return hr;
 
 	*count += 2;
@@ -56,9 +56,9 @@ HRESULT item_DRI::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_DRI::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_DRI::getPropName(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropName(index, str);
+	auto hr = __super::getPropName(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	const wchar_t* name = nullptr;
@@ -76,9 +76,9 @@ HRESULT item_DRI::getItemPropName(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_DRI::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_DRI::getPropValue(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropValue(index, str);
+	auto hr = __super::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	JPEGSEGMENT_DRI dri = {};

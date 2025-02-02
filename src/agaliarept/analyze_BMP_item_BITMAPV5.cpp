@@ -10,7 +10,7 @@
 using namespace analyze_BMP;
 
 item_BITMAPV5::item_BITMAPV5(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:BMP_item_Base(image, offset, size)
 {
 }
 
@@ -18,7 +18,7 @@ item_BITMAPV5::~item_BITMAPV5()
 {
 }
 
-HRESULT item_BITMAPV5::getItemName(agaliaString** str) const
+HRESULT item_BITMAPV5::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -51,7 +51,7 @@ HRESULT item_BITMAPV5::getItemName(agaliaString** str) const
 	return S_OK;
 }
 
-HRESULT item_BITMAPV5::getItemPropCount(uint32_t* count) const
+HRESULT item_BITMAPV5::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	uint64_t size = getSize();
@@ -166,7 +166,7 @@ HRESULT item_BITMAPV5::getItemPropCount(uint32_t* count) const
 	return S_OK;
 }
 
-HRESULT item_BITMAPV5::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_BITMAPV5::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -206,14 +206,14 @@ HRESULT item_BITMAPV5::getItemPropName(uint32_t index, agaliaString** str) const
 	case prop_ProfileSize: name = L"ProfileSize"; break;
 	case prop_Reserved: name = L"Reserved"; break;
 	default:
-		return __super::getItemPropName(index, str);
+		return __super::getPropName(index, str);
 	};
 
 	*str = agaliaString::create(name);
 	return S_OK;
 }
 
-HRESULT item_BITMAPV5::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_BITMAPV5::getPropValue(uint32_t index, agaliaString** str) const
 {
 	BITMAPV5HEADER bv5 = {};
 	std::wstringstream temp;
@@ -456,7 +456,7 @@ HRESULT item_BITMAPV5::getItemPropValue(uint32_t index, agaliaString** str) cons
 	}
 	else
 	{
-		return __super::getItemPropValue(index, str);
+		return __super::getPropValue(index, str);
 	}
 
 	*str = agaliaString::create(temp.str().c_str());
@@ -464,7 +464,7 @@ HRESULT item_BITMAPV5::getItemPropValue(uint32_t index, agaliaString** str) cons
 }
 
 
-HRESULT item_BITMAPV5::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_BITMAPV5::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 	if (child == nullptr) return E_POINTER;
@@ -490,7 +490,7 @@ HRESULT item_BITMAPV5::getChildItem(uint32_t sibling, agaliaItem** child) const
 }
 
 
-HRESULT item_BITMAPV5::getNextItem(agaliaItem** next) const
+HRESULT item_BITMAPV5::getNext(agaliaElement** next) const
 {
 	BITMAPINFOHEADER bih = {};
 	auto hr = image->ReadData(&bih, getOffset(), sizeof(bih));
@@ -569,7 +569,7 @@ HRESULT item_BITMAPV5::getColumnValue(uint32_t column, agaliaString** str) const
 	}
 	else if (column == column_structure)
 	{
-		return getItemName(str);
+		return getName(str);
 	}
 	else if (column == column_value)
 	{
@@ -589,7 +589,7 @@ HRESULT item_BITMAPV5::getColumnValue(uint32_t column, agaliaString** str) const
 HRESULT item_BITMAPV5::getAdditionalInfoCount(uint32_t* row) const
 {
 	uint32_t count = 0;
-	auto hr = getItemPropCount(&count);
+	auto hr = getPropCount(&count);
 	if (FAILED(hr)) return hr;
 
 	*row = count - prop_Width;

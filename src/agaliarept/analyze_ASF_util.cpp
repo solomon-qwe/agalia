@@ -8,7 +8,7 @@
 
 using namespace analyze_ASF;
 
-item_Base* analyze_ASF::createItem(const agaliaContainer* image, uint64_t offset, uint64_t endpos)
+ASF_item_Base* analyze_ASF::createItem(const agaliaContainer* image, uint64_t offset, uint64_t endpos)
 {
 	ASFObject obj = {};
 	auto hr = image->ReadData(&obj, offset, sizeof(obj));
@@ -82,5 +82,5 @@ item_Base* analyze_ASF::createItem(const agaliaContainer* image, uint64_t offset
 	else if (IsEqualGUID(obj.ObjectID, ASF_Payload_Extension_System_Sample_Duration)) {}
 	else if (IsEqualGUID(obj.ObjectID, ASF_Payload_Extension_System_Encryption_Sample_ID)) {}
 
-	return new item_Base(image, offset, obj.ObjectSize, endpos);
+	return new ASF_item_Base(image, offset, obj.ObjectSize, endpos);
 }

@@ -75,7 +75,7 @@ void copy_to_clipboard(CListCtrl* pCtrl, T& dst)
 
 void dump(LPARAM lParam)
 {
-	auto param = reinterpret_cast<agaliaItem*>(lParam);
+	auto param = reinterpret_cast<agaliaElement*>(lParam);
 
 	CFileDialog dlg(FALSE);
 	if (dlg.DoModal() == IDOK)
@@ -126,7 +126,7 @@ void dump(LPARAM lParam)
 
 void analyze(LPARAM lParam)
 {
-	auto param = reinterpret_cast<agaliaItem*>(lParam);
+	auto param = reinterpret_cast<agaliaElement*>(lParam);
 
 	const agaliaContainer* image;
 	auto hr = param->getAsocImage(&image);
@@ -600,7 +600,7 @@ void TagListView::OnLvnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult)
 
 	if (pNMLV->lParam)
 	{
-		agaliaItem* p = reinterpret_cast<agaliaItem*>(pNMLV->lParam);
+		agaliaElement* p = reinterpret_cast<agaliaElement*>(pNMLV->lParam);
 		p->Release();
 	}
 

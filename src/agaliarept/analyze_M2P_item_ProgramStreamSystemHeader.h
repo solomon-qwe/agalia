@@ -7,23 +7,23 @@ namespace analyze_M2P
 {
 	class program_stream_system_header;
 
-	class item_ProgramStreamSystemHeader : public item_Base
+	class item_ProgramStreamSystemHeader : public M2P_item_Base
 	{
 	public:
 		item_ProgramStreamSystemHeader(const agaliaContainer* image, uint64_t offset, uint64_t size);
 		virtual ~item_ProgramStreamSystemHeader();
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override;
 
-		virtual HRESULT getGridRowCount(uint32_t* row) const override;
-		virtual HRESULT getGridValue(uint32_t row, uint32_t column, agaliaString** str) const override;
+		virtual HRESULT getElementInfoCount(uint32_t* row) const override;
+		virtual HRESULT getElementInfoValue(uint32_t row, uint32_t column, agaliaString** str) const override;
 
 		enum
 		{
-			prop_system_header_start_code = item_Base::prop_last,
+			prop_system_header_start_code = M2P_item_Base::prop_last,
 			prop_header_length,
 			prop_rate_bound,
 			prop_audio_bound,

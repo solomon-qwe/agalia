@@ -45,10 +45,10 @@ uint64_t analyze_ISO::Box::getDataOffset(const agaliaContainer* image, uint64_t 
 
 
 // {554A3BF5-DD08-478B-9E09-D5436450BE09}
-const GUID item_Box::guid_iso =
+const GUID ISO_item_Box::guid_iso =
 { 0x554a3bf5, 0xdd08, 0x478b, { 0x9e, 0x9, 0xd5, 0x43, 0x64, 0x50, 0xbe, 0x9 } };
 
-item_Box::item_Box(const agaliaContainer* image, uint64_t offset, uint64_t size, uint64_t endpos, uint32_t parent)
+ISO_item_Box::ISO_item_Box(const agaliaContainer* image, uint64_t offset, uint64_t size, uint64_t endpos, uint32_t parent)
 	:_agaliaItemBase(guid_iso, offset, size)
 {
 	this->image = image;
@@ -56,12 +56,12 @@ item_Box::item_Box(const agaliaContainer* image, uint64_t offset, uint64_t size,
 	this->parent = parent;
 }
 
-item_Box::~item_Box()
+ISO_item_Box::~ISO_item_Box()
 {
 
 }
 
-HRESULT item_Box::getItemName(agaliaString** str) const
+HRESULT ISO_item_Box::getName(agaliaString** str) const
 {
 	Box box = {};
 	auto hr = image->ReadData(&box, getOffset(), sizeof(box));
@@ -70,14 +70,14 @@ HRESULT item_Box::getItemName(agaliaString** str) const
 	return multibyte_to_widechar(reinterpret_cast<char*>(&box.type), sizeof(box.type), CP_US_ASCII, str);
 }
 
-HRESULT item_Box::getItemPropCount(uint32_t* count) const
+HRESULT ISO_item_Box::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_Box::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT ISO_item_Box::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -106,7 +106,7 @@ HRESULT item_Box::getItemPropName(uint32_t index, agaliaString** str) const
 	return S_OK;
 }
 
-HRESULT item_Box::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT ISO_item_Box::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -130,7 +130,7 @@ HRESULT item_Box::getItemPropValue(uint32_t index, agaliaString** str) const
 	}
 	else if (index == prop_type)
 	{
-		return getItemName(str);
+		return getName(str);
 	}
 	else if (index == prop_largesize)
 	{
@@ -150,7 +150,7 @@ HRESULT item_Box::getItemPropValue(uint32_t index, agaliaString** str) const
 }
 
 
-HRESULT item_Box::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT ISO_item_Box::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 
@@ -189,7 +189,7 @@ HRESULT item_Box::getChildItem(uint32_t sibling, agaliaItem** child) const
 	return E_FAIL;
 }
 
-HRESULT item_Box::getNextItem(agaliaItem** next) const
+HRESULT ISO_item_Box::getNext(agaliaElement** next) const
 {
 	auto p = createItem(image, getOffset() + getSize(), endpos, parent);
 	if (p)
@@ -201,7 +201,7 @@ HRESULT item_Box::getNextItem(agaliaItem** next) const
 }
 
 
-HRESULT item_Box::getAsocImage(const agaliaContainer** imageAsoc) const
+HRESULT ISO_item_Box::getAsocImage(const agaliaContainer** imageAsoc) const
 {
 	if (imageAsoc == nullptr) return E_POINTER;
 	*imageAsoc = image;
@@ -209,7 +209,7 @@ HRESULT item_Box::getAsocImage(const agaliaContainer** imageAsoc) const
 }
 
 
-HRESULT item_Box::getColumnValue(uint32_t column, agaliaString** str) const
+HRESULT ISO_item_Box::getColumnValue(uint32_t column, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 

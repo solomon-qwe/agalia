@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 #include "controller.h"
-class agaliaItem;
+class agaliaElement;
 
 class CMainFrame : public CFrameWnd
 {
@@ -33,8 +33,8 @@ protected:
 	void ResetGraphicView(void);
 	void ResetHierarchyView(void);
 	void ResetFlatView(void);
-	void UpdateTextViewPane(const agaliaItem* item);
-	void UpdateListViewPane(const agaliaItem* item);
+	void UpdateTextViewPane(const agaliaElement* item);
+	void UpdateListViewPane(const agaliaElement* item);
 
 // Overrides
 public:

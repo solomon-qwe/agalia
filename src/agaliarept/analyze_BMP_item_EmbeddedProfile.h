@@ -5,12 +5,12 @@
 
 namespace analyze_BMP
 {
-	class item_EmbeddedProfile : public item_Base
+	class item_EmbeddedProfile : public BMP_item_Base
 	{
 	public:
 		item_EmbeddedProfile(const agaliaContainer* image, uint64_t offset, uint64_t size);
 		virtual ~item_EmbeddedProfile();
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
 	};
 }

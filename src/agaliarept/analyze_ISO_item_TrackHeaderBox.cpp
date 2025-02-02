@@ -7,7 +7,7 @@ const unsigned long SecsUntil1970 = 2082844800;
 using namespace analyze_ISO;
 
 item_TrackHeaderBox::item_TrackHeaderBox(const agaliaContainer* image, uint64_t offset, uint64_t size, uint64_t endpos, uint32_t parent)
-	:item_Box(image, offset, size, endpos, parent)
+	:ISO_item_Box(image, offset, size, endpos, parent)
 {
 
 }
@@ -17,14 +17,14 @@ item_TrackHeaderBox::~item_TrackHeaderBox()
 
 }
 
-HRESULT item_TrackHeaderBox::getItemPropCount(uint32_t* count) const
+HRESULT item_TrackHeaderBox::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_TrackHeaderBox::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_TrackHeaderBox::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -45,14 +45,14 @@ HRESULT item_TrackHeaderBox::getItemPropName(uint32_t index, agaliaString** str)
 	case prop_width: name = L"width"; break;
 	case prop_height: name = L"height"; break;
 	default:
-		return __super::getItemPropName(index, str);
+		return __super::getPropName(index, str);
 	}
 
 	*str = agaliaString::create(name);
 	return S_OK;
 }
 
-HRESULT item_TrackHeaderBox::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_TrackHeaderBox::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -382,7 +382,7 @@ HRESULT item_TrackHeaderBox::getItemPropValue(uint32_t index, agaliaString** str
 	}
 	else
 	{
-		return __super::getItemPropValue(index, str);
+		return __super::getPropValue(index, str);
 	}
 
 	*str = agaliaString::create(temp.str().c_str());

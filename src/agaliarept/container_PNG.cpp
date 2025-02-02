@@ -7,6 +7,7 @@
 #include "analyze_PNG_util.h"
 #include "analyze_PNG_item_Base.h"
 #include "analyze_PNG_item_IHDR.h"
+#include "thumbnail.h"
 
 using namespace analyze_PNG;
 
@@ -68,12 +69,12 @@ HRESULT container_PNG::getColumnName(uint32_t column, agaliaString** str) const
 
 
 
-HRESULT container_PNG::getGridRowCount(const agaliaItem* item, uint32_t* row) const
+HRESULT container_PNG::getElementInfoCount(const agaliaElement* item, uint32_t* row) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (row == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_Base::guid_png)
+	if (item->getGUID() != PNG_item_Base::guid_png)
 		return E_FAIL;
 
 	*row = 1;
@@ -82,23 +83,23 @@ HRESULT container_PNG::getGridRowCount(const agaliaItem* item, uint32_t* row) co
 
 
 
-HRESULT container_PNG::getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT container_PNG::getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (str == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_Base::guid_png)
+	if (item->getGUID() != PNG_item_Base::guid_png)
 		return E_FAIL;
 
 	if (row != 0) return E_INVALIDARG;
 
-	return static_cast<const item_Base*>(item)->getColumnValue(column, str);
+	return static_cast<const PNG_item_Base*>(item)->getColumnValue(column, str);
 }
 
 
 
 
-HRESULT container_PNG::getRootItem(agaliaItem** root) const
+HRESULT container_PNG::getRootElement(agaliaElement** root) const
 {
 	if (root == nullptr) return E_POINTER;
 
@@ -124,8 +125,8 @@ HRESULT container_PNG::getPropertyValue(PropertyType type, agaliaString** str) c
 	}
 	else if (type == ImageWidth)
 	{
-		agaliaPtr<agaliaItem> root;
-		auto hr = this->getRootItem(&root);
+		agaliaPtr<agaliaElement> root;
+		auto hr = this->getRootElement(&root);
 		if (FAILED(hr)) return hr;
 
 		Chunk chunk = {};
@@ -146,8 +147,8 @@ HRESULT container_PNG::getPropertyValue(PropertyType type, agaliaString** str) c
 	}
 	else if (type == ImageHeight)
 	{
-		agaliaPtr<agaliaItem> root;
-		auto hr = this->getRootItem(&root);
+		agaliaPtr<agaliaElement> root;
+		auto hr = this->getRootElement(&root);
 		if (FAILED(hr)) return hr;
 
 		Chunk chunk = {};
@@ -171,9 +172,7 @@ HRESULT container_PNG::getPropertyValue(PropertyType type, agaliaString** str) c
 
 HRESULT container_PNG::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
 {
-	HRESULT loadThumbnailImageGDIP(IStream * stream, uint32_t maxW, uint32_t maxH, HBITMAP * phBitmap);
-
-	return loadThumbnailImageGDIP(data_stream, maxW, maxH, phBitmap);
+	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
 }
 
 

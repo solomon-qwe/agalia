@@ -6,7 +6,7 @@
 
 namespace analyze_JPEG
 {
-	class item_Base : public _agaliaItemBase
+	class JPEG_item_Base : public _agaliaItemBase
 	{
 	public:
 		enum item_type
@@ -22,10 +22,10 @@ namespace analyze_JPEG
 			adobe,			// APP14
 		};
 
-		item_Base(const container_JPEG* image, uint64_t offset, uint64_t size, item_type type);
-		virtual ~item_Base();
+		JPEG_item_Base(const container_JPEG* image, uint64_t offset, uint64_t size, item_type type);
+		virtual ~JPEG_item_Base();
 
-		virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const override;
+		virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const override;
 
 		virtual HRESULT getAsocImage(const agaliaContainer** imageAsoc) const override {
 			*imageAsoc = this->image;

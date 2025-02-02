@@ -4,18 +4,18 @@
 
 namespace analyze_ISO
 {
-    class item_MovieHeaderBox : public item_Box
+    class item_MovieHeaderBox : public ISO_item_Box
     {
 	public:
 		item_MovieHeaderBox(const agaliaContainer* image, uint64_t offset, uint64_t size, uint64_t endpos, uint32_t parent);
 		virtual ~item_MovieHeaderBox();
 
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override;
 
 		enum {
-			prop_version = item_Box::prop_last,
+			prop_version = ISO_item_Box::prop_last,
 			prop_creation_time,
 			prop_modification_time,
 			prop_timescale,

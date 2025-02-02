@@ -57,7 +57,7 @@ void ChildTreeView::OnTvnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult)
 
 	if ((pNMTreeView->itemOld.mask & TVIF_PARAM) && pNMTreeView->itemOld.lParam)
 	{
-		agaliaItem* p = reinterpret_cast<agaliaItem*>(pNMTreeView->itemOld.lParam);
+		agaliaElement* p = reinterpret_cast<agaliaElement*>(pNMTreeView->itemOld.lParam);
 		p->Release();
 	}
 

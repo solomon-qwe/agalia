@@ -6,6 +6,7 @@
 
 #include "analyze_ISO_item_Box.h"
 #include "analyze_ISO_util.h"
+#include "thumbnail.h"
 
 using namespace analyze_ISO;
 
@@ -67,12 +68,12 @@ HRESULT container_ISO::getColumnName(uint32_t column, agaliaString** str) const
 
 
 
-HRESULT container_ISO::getGridRowCount(const agaliaItem* item, uint32_t* row) const
+HRESULT container_ISO::getElementInfoCount(const agaliaElement* item, uint32_t* row) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (row == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_Box::guid_iso)
+	if (item->getGUID() != ISO_item_Box::guid_iso)
 		return E_FAIL;
 
 	*row = 1;
@@ -81,22 +82,22 @@ HRESULT container_ISO::getGridRowCount(const agaliaItem* item, uint32_t* row) co
 
 
 
-HRESULT container_ISO::getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT container_ISO::getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (str == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_Box::guid_iso)
+	if (item->getGUID() != ISO_item_Box::guid_iso)
 		return E_FAIL;
 
 	if (row != 0) return E_INVALIDARG;
 
-	return static_cast<const item_Box*>(item)->getColumnValue(column, str);
+	return static_cast<const ISO_item_Box*>(item)->getColumnValue(column, str);
 }
 
 
 
-HRESULT container_ISO::getRootItem(agaliaItem** root) const
+HRESULT container_ISO::getRootElement(agaliaElement** root) const
 {
 	if (root == nullptr) return E_POINTER;
 
@@ -129,9 +130,7 @@ HRESULT container_ISO::getPropertyValue(PropertyType type, agaliaString** str) c
 
 HRESULT container_ISO::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
 {
-	HRESULT loadThumbnailImageGDIP(IStream * stream, uint32_t maxW, uint32_t maxH, HBITMAP * phBitmap);
-
-	return loadThumbnailImageGDIP(data_stream, maxW, maxH, phBitmap);
+	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
 }
 
 

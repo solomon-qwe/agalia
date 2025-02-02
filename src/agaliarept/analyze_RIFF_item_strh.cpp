@@ -4,7 +4,7 @@
 using namespace analyze_RIFF;
 
 item_strh::item_strh(const container_RIFF* _image, uint64_t offset, uint64_t size)
-	: item_Base(_image, offset, size)
+	: RIFF_item_Base(_image, offset, size)
 {
 }
 
@@ -16,7 +16,7 @@ item_strh::~item_strh()
 
 
 
-HRESULT item_strh::getItemPropCount(uint32_t* count) const
+HRESULT item_strh::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
@@ -25,11 +25,11 @@ HRESULT item_strh::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_strh::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_strh::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
-	auto hr = item_Base::getItemPropName(index, str);
+	auto hr = RIFF_item_Base::getPropName(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	switch (index)
@@ -59,11 +59,11 @@ HRESULT item_strh::getItemPropName(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_strh::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_strh::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
-	auto hr = item_Base::getItemPropValue(index, str);
+	auto hr = RIFF_item_Base::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	std::wstringstream temp;

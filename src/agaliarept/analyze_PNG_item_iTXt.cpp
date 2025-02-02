@@ -7,7 +7,7 @@
 using namespace analyze_PNG;
 
 item_iTXt::item_iTXt(const container_PNG* image, uint64_t offset, uint64_t size, uint64_t endpos)
-	: item_Base(image, offset, size, endpos)
+	: PNG_item_Base(image, offset, size, endpos)
 {
 }
 
@@ -15,14 +15,14 @@ item_iTXt::~item_iTXt()
 {
 }
 
-HRESULT item_iTXt::getItemPropCount(uint32_t* count) const
+HRESULT item_iTXt::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_iTXt::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_iTXt::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -36,7 +36,7 @@ HRESULT item_iTXt::getItemPropName(uint32_t index, agaliaString** str) const
 	case prop_translated_keyword: name = L"Translated keyword"; break;
 	case prop_text: name = L"Text"; break;
 	default:
-		return __super::getItemPropName(index, str);
+		return __super::getPropName(index, str);
 	}
 
 	*str = agaliaString::create(name);
@@ -44,7 +44,7 @@ HRESULT item_iTXt::getItemPropName(uint32_t index, agaliaString** str) const
 }
 
 
-HRESULT item_iTXt::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_iTXt::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -257,7 +257,7 @@ HRESULT item_iTXt::getItemPropValue(uint32_t index, agaliaString** str) const
 	}
 	else
 	{
-		return __super::getItemPropValue(index, str);
+		return __super::getPropValue(index, str);
 	}
 
 	return E_FAIL;

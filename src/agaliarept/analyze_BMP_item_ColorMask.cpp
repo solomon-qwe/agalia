@@ -6,7 +6,7 @@
 using namespace analyze_BMP;
 
 item_ColorMask::item_ColorMask(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:BMP_item_Base(image, offset, size)
 {
 }
 
@@ -14,14 +14,14 @@ item_ColorMask::~item_ColorMask()
 {
 }
 
-HRESULT item_ColorMask::getItemName(agaliaString** str) const
+HRESULT item_ColorMask::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"Color-mask");
 	return S_OK;
 }
 
-HRESULT item_ColorMask::getNextItem(agaliaItem** next) const
+HRESULT item_ColorMask::getNext(agaliaElement** next) const
 {
 	auto p = new item_ColorIndexParent(image, bfOffBits, biSizeImage);
 	p->bfOffBits = bfOffBits;
@@ -33,14 +33,14 @@ HRESULT item_ColorMask::getNextItem(agaliaItem** next) const
 	return S_OK;
 }
 
-HRESULT item_ColorMask::getItemPropCount(uint32_t* count) const
+HRESULT item_ColorMask::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_ColorMask::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_ColorMask::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -51,14 +51,14 @@ HRESULT item_ColorMask::getItemPropName(uint32_t index, agaliaString** str) cons
 	case prop_green: name = L"green"; break;
 	case prop_blue: name = L"blue"; break;
 	default:
-		return __super::getItemPropName(index, str);
+		return __super::getPropName(index, str);
 	}
 
 	*str = agaliaString::create(name);
 	return S_OK;
 }
 
-HRESULT item_ColorMask::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_ColorMask::getPropValue(uint32_t index, agaliaString** str) const
 {
 	DWORD mask = 0;
 	if (index == prop_red)
@@ -78,7 +78,7 @@ HRESULT item_ColorMask::getItemPropValue(uint32_t index, agaliaString** str) con
 	}
 	else
 	{
-		return __super::getItemPropValue(index, str);
+		return __super::getPropValue(index, str);
 	}
 
 	std::wstringstream temp;
@@ -99,7 +99,7 @@ HRESULT item_ColorMask::getColumnValue(uint32_t column, agaliaString** str) cons
 	}
 	else if (column == column_structure)
 	{
-		return getItemName(str);
+		return getName(str);
 	}
 	else if (column == column_value)
 	{

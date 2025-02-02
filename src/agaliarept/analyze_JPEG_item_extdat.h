@@ -4,18 +4,18 @@
 
 namespace analyze_JPEG
 {
-	class item_extdat : public item_Base
+	class item_extdat : public JPEG_item_Base
 	{
 	public:
 		item_extdat(const container_JPEG* image, uint64_t offset, uint64_t size, item_type type);
 		virtual ~item_extdat();
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override;
 
-		virtual HRESULT getNextItem(agaliaItem** next) const override;
+		virtual HRESULT getNext(agaliaElement** next) const override;
 
 		virtual HRESULT getValueAreaOffset(uint64_t* offset) const override;
 		virtual HRESULT getValueAreaSize(uint64_t* size) const override;

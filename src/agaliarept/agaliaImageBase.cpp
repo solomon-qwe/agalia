@@ -42,7 +42,7 @@ void _agaliaContainerBase::Release(void)
 
 
 
-HRESULT _agaliaContainerBase::getGridRowCount(const agaliaItem* item, uint32_t* row) const
+HRESULT _agaliaContainerBase::getElementInfoCount(const agaliaElement* item, uint32_t* row) const
 {
 	UNREFERENCED_PARAMETER(item);
 	if (row == nullptr) return E_POINTER;
@@ -52,7 +52,7 @@ HRESULT _agaliaContainerBase::getGridRowCount(const agaliaItem* item, uint32_t* 
 
 
 
-HRESULT _agaliaContainerBase::getGridValue(const agaliaItem*, uint32_t, uint32_t, agaliaString**) const
+HRESULT _agaliaContainerBase::getElementInfoValue(const agaliaElement*, uint32_t, uint32_t, agaliaString**) const
 {
 	return E_FAIL;
 }

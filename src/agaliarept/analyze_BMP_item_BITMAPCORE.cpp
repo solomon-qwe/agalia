@@ -6,7 +6,7 @@
 using namespace analyze_BMP;
 
 item_BITMAPCORE::item_BITMAPCORE(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:BMP_item_Base(image, offset, size)
 {
 }
 
@@ -14,21 +14,21 @@ item_BITMAPCORE::~item_BITMAPCORE()
 {
 }
 
-HRESULT item_BITMAPCORE::getItemName(agaliaString** str) const
+HRESULT item_BITMAPCORE::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(L"BITMAPCOREHEADER");
 	return S_OK;
 }
 
-HRESULT item_BITMAPCORE::getItemPropCount(uint32_t* count) const
+HRESULT item_BITMAPCORE::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_BITMAPCORE::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_BITMAPCORE::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -41,14 +41,14 @@ HRESULT item_BITMAPCORE::getItemPropName(uint32_t index, agaliaString** str) con
 	case prop_bcPlanes: name = L"bcPlanes"; break;
 	case prop_bcBitCount: name = L"bcBitCount"; break;
 	default:
-		return __super::getItemPropName(index, str);
+		return __super::getPropName(index, str);
 	};
 
 	*str = agaliaString::create(name);
 	return S_OK;
 }
 
-HRESULT item_BITMAPCORE::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_BITMAPCORE::getPropValue(uint32_t index, agaliaString** str) const
 {
 	BITMAPCOREHEADER bch = {};
 	std::wstringstream temp;
@@ -84,7 +84,7 @@ HRESULT item_BITMAPCORE::getItemPropValue(uint32_t index, agaliaString** str) co
 	}
 	else
 	{
-		return __super::getItemPropValue(index, str);
+		return __super::getPropValue(index, str);
 	}
 
 	*str = agaliaString::create(temp.str().c_str());
@@ -92,7 +92,7 @@ HRESULT item_BITMAPCORE::getItemPropValue(uint32_t index, agaliaString** str) co
 }
 
 
-HRESULT item_BITMAPCORE::getNextItem(agaliaItem** next) const
+HRESULT item_BITMAPCORE::getNext(agaliaElement** next) const
 {
 	BITMAPCOREHEADER bch = {};
 	auto hr = image->ReadData(&bch, getOffset(), sizeof(bch));
@@ -122,7 +122,7 @@ HRESULT item_BITMAPCORE::getColumnValue(uint32_t column, agaliaString** str) con
 	}
 	else if (column == column_structure)
 	{
-		return getItemName(str);
+		return getName(str);
 	}
 	else if (column == column_value)
 	{

@@ -150,7 +150,7 @@ HRESULT item_Element::getProfileName(agaliaString** str)
 
 
 item_Element::item_Element(const container_ICC* image, uint64_t offset, uint64_t size, uint64_t endpos, uint32_t count, uint32_t index)
-	: item_Base(image, offset, size, endpos), tag_count(count), tag_index(index)
+	: ICC_item_Base(image, offset, size, endpos), tag_count(count), tag_index(index)
 {
 }
 
@@ -158,19 +158,19 @@ item_Element::~item_Element()
 {
 }
 
-HRESULT item_Element::getItemName(agaliaString** str) const
+HRESULT item_Element::getName(agaliaString** str) const
 {
-	return getItemPropValue(prop_signature, str);
+	return getPropValue(prop_signature, str);
 }
 
-HRESULT item_Element::getItemPropCount(uint32_t* count) const
+HRESULT item_Element::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_Element::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_Element::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -190,7 +190,7 @@ HRESULT item_Element::getItemPropName(uint32_t index, agaliaString** str) const
 }
 
 
-HRESULT item_Element::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_Element::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (index == prop_signature)
 	{
@@ -253,14 +253,14 @@ HRESULT item_Element::getItemPropValue(uint32_t index, agaliaString** str) const
 	return E_FAIL;
 }
 
-HRESULT item_Element::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_Element::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	UNREFERENCED_PARAMETER(sibling);
 	UNREFERENCED_PARAMETER(child);
 	return E_FAIL;
 }
 
-HRESULT item_Element::getNextItem(agaliaItem** next) const
+HRESULT item_Element::getNext(agaliaElement** next) const
 {
 	if (tag_count <= tag_index + 1)
 		return E_FAIL;
@@ -310,19 +310,19 @@ HRESULT item_Element::getColumnValue(uint32_t column, agaliaString** str) const
 	}
 	else if (column == column_signature)
 	{
-		return getItemPropValue(prop_signature, str);
+		return getPropValue(prop_signature, str);
 	}
 	else if (column == column_value_offset)
 	{
-		return getItemPropValue(prop_offset, str);
+		return getPropValue(prop_offset, str);
 	}
 	else if (column == column_element_size)
 	{
-		return getItemPropValue(prop_size, str);
+		return getPropValue(prop_size, str);
 	}
 	else if (column == column_value)
 	{
-		return getItemPropValue(prop_value, str);
+		return getPropValue(prop_value, str);
 	}
 	return E_INVALIDARG;
 }

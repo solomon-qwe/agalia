@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #ifdef AGALIAREPT_EXPORTS
 #define AGALIAREPT_API __declspec(dllexport)
@@ -66,7 +66,7 @@ public:
 
 // core object 
 
-class agaliaItem
+class agaliaElement
 {
 public:
 	virtual void Release(void) = 0;
@@ -75,13 +75,13 @@ public:
 	virtual uint64_t getOffset(void) const = 0;
 	virtual uint64_t getSize(void) const = 0;
 
-	virtual HRESULT getItemName(agaliaString** str) const = 0;
-	virtual HRESULT getItemPropCount(uint32_t* count) const = 0;
-	virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const = 0;
-	virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const = 0;
+	virtual HRESULT getName(agaliaString** str) const = 0;
+	virtual HRESULT getPropCount(uint32_t* count) const = 0;
+	virtual HRESULT getPropName(uint32_t index, agaliaString** str) const = 0;
+	virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const = 0;
 
-	virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const = 0;
-	virtual HRESULT getNextItem(agaliaItem** next) const = 0;
+	virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const = 0;
+	virtual HRESULT getNext(agaliaElement** next) const = 0;
 
 	virtual HRESULT getAsocImage(const agaliaContainer** imageAsoc) const = 0;
 	virtual HRESULT getValueAreaOffset(uint64_t* offset) const = 0;
@@ -94,14 +94,14 @@ class agaliaContainer
 public:
 	virtual void Release(void) = 0;
 
-	virtual HRESULT getRootItem(agaliaItem** root) const = 0;
+	virtual HRESULT getRootElement(agaliaElement** root) const = 0;
 
 	virtual HRESULT getColumnCount(uint32_t* count) const = 0;
 	virtual HRESULT getColumnWidth(uint32_t column, int32_t* length) const = 0;
 	virtual HRESULT getColumnName(uint32_t column, agaliaString** str) const = 0;
 
-	virtual HRESULT getGridRowCount(const agaliaItem* item, uint32_t* row) const = 0;
-	virtual HRESULT getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const = 0;
+	virtual HRESULT getElementInfoCount(const agaliaElement* item, uint32_t* row) const = 0;
+	virtual HRESULT getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const = 0;
 
 	enum PropertyType
 	{

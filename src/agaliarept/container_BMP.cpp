@@ -3,6 +3,7 @@
 
 #include "agaliareptImpl.h"
 #include "analyze_BMP_item_BITMAPFILE.h"
+#include "thumbnail.h"
 
 using namespace analyze_BMP;
 
@@ -56,16 +57,16 @@ HRESULT container_BMP::getColumnName(uint32_t column, agaliaString** str) const
 
 
 
-HRESULT container_BMP::getGridRowCount(const agaliaItem* item, uint32_t* row) const
+HRESULT container_BMP::getElementInfoCount(const agaliaElement* item, uint32_t* row) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (row == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_Base::guid_bmp)
+	if (item->getGUID() != BMP_item_Base::guid_bmp)
 		return E_FAIL;
 
 	*row = 1;
-	auto hr = static_cast<const item_Base*>(item)->getAdditionalInfoCount(row);
+	auto hr = static_cast<const BMP_item_Base*>(item)->getAdditionalInfoCount(row);
 	if (SUCCEEDED(hr))
 		(*row)++;
 	return S_OK;
@@ -73,30 +74,30 @@ HRESULT container_BMP::getGridRowCount(const agaliaItem* item, uint32_t* row) co
 
 
 
-HRESULT container_BMP::getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT container_BMP::getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (str == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_Base::guid_bmp)
+	if (item->getGUID() != BMP_item_Base::guid_bmp)
 		return E_FAIL;
 
 	if (row == 0) {
-		return static_cast<const item_Base*>(item)->getColumnValue(column, str);
+		return static_cast<const BMP_item_Base*>(item)->getColumnValue(column, str);
 	}
 	else if (column == 0) {
 		*str = agaliaString::create(L"");
 		return S_OK;
 	}
 	else if (column == column_value) {
-		return static_cast<const item_Base*>(item)->getAdditionalInfoValue(row - 1, str);
+		return static_cast<const BMP_item_Base*>(item)->getAdditionalInfoValue(row - 1, str);
 	}
 	return E_FAIL;
 }
 
 
 
-HRESULT container_BMP::getRootItem(agaliaItem** root) const
+HRESULT container_BMP::getRootElement(agaliaElement** root) const
 {
 	if (root == nullptr) return E_POINTER;
 	auto p = new item_BITMAPFILE(this, 0, sizeof(BITMAPFILEHEADER));
@@ -118,9 +119,7 @@ HRESULT container_BMP::getPropertyValue(PropertyType type, agaliaString** str) c
 
 HRESULT container_BMP::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
 {
-	HRESULT loadThumbnailImageGDIP(IStream * stream, uint32_t maxW, uint32_t maxH, HBITMAP * phBitmap);
-
-	return loadThumbnailImageGDIP(data_stream, maxW, maxH, phBitmap);
+	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
 }
 
 

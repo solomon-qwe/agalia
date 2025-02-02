@@ -5,6 +5,7 @@
 #include "analyze_TIFF_item_Header8.h"
 
 #include "tiff_common.h"
+#include "thumbnail.h"
 
 using namespace analyze_TIFF;
 
@@ -91,12 +92,12 @@ HRESULT container_TIFF::getColumnName(uint32_t column, agaliaString** str) const
 
 
 
-HRESULT container_TIFF::getGridRowCount(const agaliaItem* item, uint32_t* row) const
+HRESULT container_TIFF::getElementInfoCount(const agaliaElement* item, uint32_t* row) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (row == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_tiff_Base::guid_tiff)
+	if (item->getGUID() != TIFF_item_Base::guid_tiff)
 		return E_FAIL;
 
 	*row = 1;
@@ -105,22 +106,22 @@ HRESULT container_TIFF::getGridRowCount(const agaliaItem* item, uint32_t* row) c
 
 
 
-HRESULT container_TIFF::getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT container_TIFF::getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (item == nullptr) return E_POINTER;
 	if (str == nullptr) return E_POINTER;
 
-	if (item->getGUID() != item_tiff_Base::guid_tiff)
+	if (item->getGUID() != TIFF_item_Base::guid_tiff)
 		return E_FAIL;
 
 	if (row != 0) return E_INVALIDARG;
 
-	return static_cast<const item_tiff_Base*>(item)->getColumnValue(column, str);
+	return static_cast<const TIFF_item_Base*>(item)->getColumnValue(column, str);
 }
 
 
 
-HRESULT container_TIFF::getRootItem(agaliaItem** root) const
+HRESULT container_TIFF::getRootElement(agaliaElement** root) const
 {
 	if (root == nullptr) return E_POINTER;
 
@@ -158,9 +159,7 @@ HRESULT container_TIFF::getPropertyValue(PropertyType type, agaliaString** str) 
 
 HRESULT container_TIFF::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
 {
-	HRESULT loadThumbnailImageGDIP(IStream * stream, uint32_t maxW, uint32_t maxH, HBITMAP * phBitmap);
-
-	return loadThumbnailImageGDIP(data_stream, maxW, maxH, phBitmap);
+	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
 }
 
 

@@ -6,7 +6,7 @@
 using namespace analyze_ASF;
 
 item_HeaderObject::item_HeaderObject(const agaliaContainer* image, uint64_t offset, uint64_t size, uint64_t endpos)
-	:item_Base(image, offset, size, endpos)
+	:ASF_item_Base(image, offset, size, endpos)
 {
 
 }
@@ -16,14 +16,14 @@ item_HeaderObject::~item_HeaderObject()
 
 }
 
-HRESULT item_HeaderObject::getItemPropCount(uint32_t* count) const
+HRESULT item_HeaderObject::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_HeaderObject::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_HeaderObject::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -34,14 +34,14 @@ HRESULT item_HeaderObject::getItemPropName(uint32_t index, agaliaString** str) c
 	case prop_Reserved1: name = L"Reserved1"; break;
 	case prop_Reserved2: name = L"Reserved2"; break;
 	default:
-		return __super::getItemPropName(index, str);
+		return __super::getPropName(index, str);
 	}
 
 	*str = agaliaString::create(name);
 	return S_OK;
 }
 
-HRESULT item_HeaderObject::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_HeaderObject::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -72,7 +72,7 @@ HRESULT item_HeaderObject::getItemPropValue(uint32_t index, agaliaString** str) 
 	}
 	else
 	{
-		return __super::getItemPropValue(index, str);
+		return __super::getPropValue(index, str);
 	}
 
 	*str = agaliaString::create(temp.str().c_str());
@@ -81,7 +81,7 @@ HRESULT item_HeaderObject::getItemPropValue(uint32_t index, agaliaString** str) 
 
 
 
-HRESULT item_HeaderObject::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_HeaderObject::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 	if (child == nullptr) return E_POINTER;
@@ -103,18 +103,18 @@ HRESULT item_HeaderObject::getChildItem(uint32_t sibling, agaliaItem** child) co
 	return E_FAIL;
 }
 
-HRESULT item_HeaderObject::getGridRowCount(uint32_t* row) const
+HRESULT item_HeaderObject::getElementInfoCount(uint32_t* row) const
 {
 	if (row == nullptr) return E_POINTER;
 	*row = 3;
 	return S_OK;
 }
 
-HRESULT item_HeaderObject::getGridValue(uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT item_HeaderObject::getElementInfoValue(uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	
-	auto hr = __super::getGridValue(row, column, str);
+	auto hr = __super::getElementInfoValue(row, column, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	std::wstringstream temp;

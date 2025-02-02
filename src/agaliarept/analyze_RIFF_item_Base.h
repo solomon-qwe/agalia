@@ -11,20 +11,20 @@
 
 namespace analyze_RIFF
 {
-	class item_Base : public _agaliaItemBase
+	class RIFF_item_Base : public _agaliaItemBase
 	{
 	public:
-		item_Base(const container_RIFF* _image, uint64_t offset, uint64_t size);
-		virtual ~item_Base();
+		RIFF_item_Base(const container_RIFF* _image, uint64_t offset, uint64_t size);
+		virtual ~RIFF_item_Base();
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
 
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override;
 
-		virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const override;
-		virtual HRESULT getNextItem(agaliaItem** next) const override;
+		virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const override;
+		virtual HRESULT getNext(agaliaElement** next) const override;
 
 		virtual HRESULT getAsocImage(const agaliaContainer** imageAsoc) const override;
 		virtual HRESULT getValueAreaOffset(uint64_t* offset) const override;
@@ -72,7 +72,7 @@ namespace analyze_RIFF
 
 
 
-	item_Base* create_item(const container_RIFF* image, uint64_t offset, FOURCC fcc, DWORD cb, FOURCC fccType);
+	RIFF_item_Base* create_item(const container_RIFF* image, uint64_t offset, FOURCC fcc, DWORD cb, FOURCC fccType);
 
 
 
@@ -84,7 +84,7 @@ namespace analyze_RIFF
 
 
 	template <typename T>
-	HRESULT format_chunk_dec(std::wstringstream& dst, rsize_t value_offset, const agaliaItem* item)
+	HRESULT format_chunk_dec(std::wstringstream& dst, rsize_t value_offset, const agaliaElement* item)
 	{
 		const agaliaContainer* image = nullptr;
 		auto hr = item->getAsocImage(&image);
@@ -101,7 +101,7 @@ namespace analyze_RIFF
 
 
 	template <typename T>
-	HRESULT format_chunk_hex(std::wstringstream& dst, rsize_t value_offset, const agaliaItem* item)
+	HRESULT format_chunk_hex(std::wstringstream& dst, rsize_t value_offset, const agaliaElement* item)
 	{
 		const agaliaContainer* image = nullptr;
 		auto hr = item->getAsocImage(&image);
@@ -118,7 +118,7 @@ namespace analyze_RIFF
 
 
 	template <typename T>
-	HRESULT format_chunk_fcc(std::wstringstream& dst, rsize_t value_offset, const agaliaItem* item)
+	HRESULT format_chunk_fcc(std::wstringstream& dst, rsize_t value_offset, const agaliaElement* item)
 	{
 		const agaliaContainer* image = nullptr;
 		auto hr = item->getAsocImage(&image);
@@ -135,7 +135,7 @@ namespace analyze_RIFF
 
 
 	template <typename T>
-	HRESULT format_chunksub_dec(std::wstringstream& dst, rsize_t value_offset, const agaliaItem* item)
+	HRESULT format_chunksub_dec(std::wstringstream& dst, rsize_t value_offset, const agaliaElement* item)
 	{
 		const agaliaContainer* image = nullptr;
 		auto hr = item->getAsocImage(&image);
@@ -152,7 +152,7 @@ namespace analyze_RIFF
 
 
 	template <typename T>
-	HRESULT format_chunksub_fcc(std::wstringstream& dst, rsize_t value_offset, const agaliaItem* item)
+	HRESULT format_chunksub_fcc(std::wstringstream& dst, rsize_t value_offset, const agaliaElement* item)
 	{
 		const agaliaContainer* image = nullptr;
 		auto hr = item->getAsocImage(&image);

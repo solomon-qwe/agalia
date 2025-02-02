@@ -13,6 +13,66 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\ASF">
+      <UniqueIdentifier>{63f6d62c-b0ab-4850-a752-d3bbb11f49b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DICOM">
+      <UniqueIdentifier>{4eaaf365-a56d-4737-99c6-22f37a933a29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\JPEG">
+      <UniqueIdentifier>{69381eb2-18e1-4bb5-a65d-43f72ad9ebf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TIFF">
+      <UniqueIdentifier>{bf5dbec4-2bd0-4f39-aa8d-054879ed6308}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MPEG-2">
+      <UniqueIdentifier>{971460f8-87f3-4878-95df-cd1bd71afa4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bitmap">
+      <UniqueIdentifier>{7d3cd0c7-a6df-4149-a1d1-c0a9615d26c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ICC Profile">
+      <UniqueIdentifier>{025f7531-168b-445b-87e4-ba66526bfd4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ISO based media format">
+      <UniqueIdentifier>{f81b4917-33d4-4e75-a533-7c185165e575}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RIFF">
+      <UniqueIdentifier>{5cfd61b9-dbf2-4237-833e-3397af405969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PNG">
+      <UniqueIdentifier>{a0011041-a4eb-4cfe-aab2-671607c2ba31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ASF">
+      <UniqueIdentifier>{7458a2c1-c915-40db-b2e7-2f80ab6c5cb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Bitmap">
+      <UniqueIdentifier>{fe52aef3-dab3-45d1-afb6-ced919733b86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DICOM">
+      <UniqueIdentifier>{a7da8061-ffe4-4b90-bf43-61c4a08eb5b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ICC Profile">
+      <UniqueIdentifier>{76c9bcca-2b48-4785-bc07-ddee1c5d6dff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ISO based media format">
+      <UniqueIdentifier>{226803c1-233b-49f5-82ac-88741a00b006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\JPEG">
+      <UniqueIdentifier>{f84f51bd-db6f-474d-aa5c-e3f9e090f628}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MPEG-2">
+      <UniqueIdentifier>{e10572b9-8e1f-44c9-bc0e-6b7fd974c61b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PNG">
+      <UniqueIdentifier>{315594de-7ca1-40c0-b7dd-f587d701469f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\RIFF">
+      <UniqueIdentifier>{12a06b99-020d-4d18-9bf6-7b4c583da663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TIFF">
+      <UniqueIdentifier>{8097a928-01d5-49c7-87b3-a6f9044c5043}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -27,184 +87,10 @@
     <ClInclude Include="agaliareptImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="jpeg_def.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tiff_common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dcm_common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_RIFF_item_Base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_RIFF_item_LIST.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_RIFF_item_avih.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_RIFF_item_strh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_RIFF_item_strf_vids.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_RIFF_item_strf_auds.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_RIFF_item_idx1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_RIFF_item_text.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_Base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_SOF.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_DHT.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_DAC.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_SOS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_DQT.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_DRI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_COM.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_APP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_Exif.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_Marker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_JFIF.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_SOI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_JPEG_item_extdat.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_TIFF_item_Header.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_TIFF_item_Base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_TIFF_item_IFD.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_TIFF_item_Entry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_TIFF_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_TIFF_item_Header8.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="agaliaImageBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="agaliaCmdLineParamImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_BMP_item_BITMAPFILE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_BMP_item_Base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_BMP_item_BITMAPCORE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_BMP_item_BITMAPV5.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_BMP_item_EmbeddedProfile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_BMP_item_ColorIndexParent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_BMP_item_ColorIndex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_BMP_item_RGBQUAD.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_BMP_item_RGBQUADParent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_BMP_item_ColorMask.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_BMP_item_LinkedProfile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_M2P_item_ProgramStream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_M2P_item_Base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_M2P_item_ProgramStreamPack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_M2P_item_ProgramStreamPackHeader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_M2P_item_ProgramStreamSystemHeader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_M2P_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_M2P_item_PESPacket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_M2P_item_ProgramEnd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="asf_def.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_ASF_item_HeaderObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_ASF_item_Base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_ASF_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_ISO_item_Box.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_ISO_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_ISO_item_FileTypeBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="agaliaStream.h">
@@ -219,88 +105,268 @@
     <ClInclude Include="..\inc\agaliarept.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="analyze_ASF_item_Base.h">
+      <Filter>Header Files\ASF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ASF_item_HeaderObject.h">
+      <Filter>Header Files\ASF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ASF_util.h">
+      <Filter>Header Files\ASF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_Base.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_BITMAPCORE.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_BITMAPFILE.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_BITMAPV5.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_ColorIndex.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_ColorIndexParent.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_ColorMask.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_EmbeddedProfile.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_LinkedProfile.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_RGBQUAD.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_BMP_item_RGBQUADParent.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
     <ClInclude Include="analyze_DCM_item_Base.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\DICOM</Filter>
     </ClInclude>
     <ClInclude Include="analyze_DCM_item_elem.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\DICOM</Filter>
     </ClInclude>
     <ClInclude Include="analyze_DCM_item_preamble.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\DICOM</Filter>
     </ClInclude>
     <ClInclude Include="analyze_DCM_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="container_ASF.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="container_BMP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="container_DCM.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="container_ISO.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="container_JPEG.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="container_M2P.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="container_RIFF.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="container_TIFF.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="container_DCM_Impl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_ISO_item_MovieHeaderBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_ISO_item_TrackHeaderBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="container_PNG.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_PNG_item_Base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_PNG_item_iTXt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_PNG_item_IHDR.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_PNG_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_PNG_item_eXIf.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_PNG_item_iCCP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="container_ICC.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_ICC_item_Header.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\DICOM</Filter>
     </ClInclude>
     <ClInclude Include="analyze_ICC_item_Base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="analyze_ICC_item_TagTable.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\ICC Profile</Filter>
     </ClInclude>
     <ClInclude Include="analyze_ICC_item_Element.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\ICC Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ICC_item_Header.h">
+      <Filter>Header Files\ICC Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ICC_item_TagTable.h">
+      <Filter>Header Files\ICC Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ISO_item_Box.h">
+      <Filter>Header Files\ISO based media format</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ISO_item_FileTypeBox.h">
+      <Filter>Header Files\ISO based media format</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ISO_item_MovieHeaderBox.h">
+      <Filter>Header Files\ISO based media format</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ISO_item_TrackHeaderBox.h">
+      <Filter>Header Files\ISO based media format</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_ISO_util.h">
+      <Filter>Header Files\ISO based media format</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_APP.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_Base.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_COM.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_DAC.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_DHT.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_DQT.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_DRI.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_Exif.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_extdat.h">
+      <Filter>Header Files\JPEG</Filter>
     </ClInclude>
     <ClInclude Include="analyze_JPEG_item_ICC.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_JFIF.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_Marker.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_SOF.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_SOI.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_item_SOS.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_JPEG_util.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_Base.h">
+      <Filter>Header Files\MPEG-2</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_PESPacket.h">
+      <Filter>Header Files\MPEG-2</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_ProgramEnd.h">
+      <Filter>Header Files\MPEG-2</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_ProgramStream.h">
+      <Filter>Header Files\MPEG-2</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_ProgramStreamPack.h">
+      <Filter>Header Files\MPEG-2</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_ProgramStreamPackHeader.h">
+      <Filter>Header Files\MPEG-2</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_item_ProgramStreamSystemHeader.h">
+      <Filter>Header Files\MPEG-2</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_M2P_util.h">
+      <Filter>Header Files\MPEG-2</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_item_Base.h">
+      <Filter>Header Files\PNG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_item_eXIf.h">
+      <Filter>Header Files\PNG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_item_iCCP.h">
+      <Filter>Header Files\PNG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_item_IHDR.h">
+      <Filter>Header Files\PNG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_item_iTXt.h">
+      <Filter>Header Files\PNG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_PNG_util.h">
+      <Filter>Header Files\PNG</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_avih.h">
+      <Filter>Header Files\RIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_Base.h">
+      <Filter>Header Files\RIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_idx1.h">
+      <Filter>Header Files\RIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_LIST.h">
+      <Filter>Header Files\RIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_strf_auds.h">
+      <Filter>Header Files\RIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_strf_vids.h">
+      <Filter>Header Files\RIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_strh.h">
+      <Filter>Header Files\RIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_RIFF_item_text.h">
+      <Filter>Header Files\RIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="container_ASF.h">
+      <Filter>Header Files\ASF</Filter>
+    </ClInclude>
+    <ClInclude Include="container_BMP.h">
+      <Filter>Header Files\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="container_DCM.h">
+      <Filter>Header Files\DICOM</Filter>
+    </ClInclude>
+    <ClInclude Include="container_DCM_Impl.h">
+      <Filter>Header Files\DICOM</Filter>
+    </ClInclude>
+    <ClInclude Include="container_ICC.h">
+      <Filter>Header Files\ICC Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="container_ISO.h">
+      <Filter>Header Files\ISO based media format</Filter>
+    </ClInclude>
+    <ClInclude Include="container_JPEG.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="container_M2P.h">
+      <Filter>Header Files\MPEG-2</Filter>
+    </ClInclude>
+    <ClInclude Include="container_PNG.h">
+      <Filter>Header Files\PNG</Filter>
+    </ClInclude>
+    <ClInclude Include="container_RIFF.h">
+      <Filter>Header Files\RIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_item_Base.h">
+      <Filter>Header Files\TIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_item_Entry.h">
+      <Filter>Header Files\TIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_item_Header.h">
+      <Filter>Header Files\TIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_item_Header8.h">
+      <Filter>Header Files\TIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_item_IFD.h">
+      <Filter>Header Files\TIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="analyze_TIFF_util.h">
+      <Filter>Header Files\TIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="container_TIFF.h">
+      <Filter>Header Files\TIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="tiff_common.h">
+      <Filter>Header Files\TIFF</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeg_def.h">
+      <Filter>Header Files\JPEG</Filter>
+    </ClInclude>
+    <ClInclude Include="dcm_common.h">
+      <Filter>Header Files\DICOM</Filter>
+    </ClInclude>
+    <ClInclude Include="asf_def.h">
+      <Filter>Header Files\ASF</Filter>
+    </ClInclude>
+    <ClInclude Include="thumbnail.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stringcnv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -312,99 +378,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="agaliarept.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dictionary_tiff.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dictionary_dcm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_RIFF_item_Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_RIFF_item_LIST.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_RIFF_item_avih.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_RIFF_item_strh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_RIFF_item_strf_vids.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_RIFF_item_strf_auds.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_RIFF_item_idx1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_RIFF_item_text.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_SOF.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_DHT.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_DAC.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_SOS.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_DQT.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_DRI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_COM.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_APP.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_Exif.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_Marker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_JFIF.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_SOI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_JPEG_item_extdat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_TIFF_item_Header.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_TIFF_item_Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_TIFF_item_IFD.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_TIFF_item_Entry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_TIFF_util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_TIFF_item_Header8.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="agaliaImageBase.cpp">
@@ -422,166 +395,259 @@
     <ClCompile Include="stringcnv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_BMP_item_BITMAPFILE.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_BMP_item_Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_BMP_item_BITMAPCORE.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_BMP_item_BITMAPV5.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_BMP_item_EmbeddedProfile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_BMP_item_ColorIndexParent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_BMP_item_ColorIndex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_BMP_item_RGBQUAD.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_BMP_item_RGBQUADParent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_BMP_item_ColorMask.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_BMP_item_LinkedProfile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_M2P_item_ProgramStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_M2P_item_Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_M2P_item_ProgramStreamPack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_M2P_item_ProgramStreamPackHeader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_M2P_item_ProgramStreamSystemHeader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_M2P_item_PESPacket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_M2P_item_ProgramEnd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_ASF_item_HeaderObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_ASF_item_Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_ASF_util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_ISO_item_Box.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_ISO_util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_ISO_item_FileTypeBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="agaliaStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="analyze_ASF_item_Base.cpp">
+      <Filter>Source Files\ASF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ASF_item_HeaderObject.cpp">
+      <Filter>Source Files\ASF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ASF_util.cpp">
+      <Filter>Source Files\ASF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_Base.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_BITMAPCORE.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_BITMAPFILE.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_BITMAPV5.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_ColorIndex.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_ColorIndexParent.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_ColorMask.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_EmbeddedProfile.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_LinkedProfile.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_RGBQUAD.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_BMP_item_RGBQUADParent.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
     <ClCompile Include="analyze_DCM_item_Base.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\DICOM</Filter>
     </ClCompile>
     <ClCompile Include="analyze_DCM_item_elem.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\DICOM</Filter>
     </ClCompile>
     <ClCompile Include="analyze_DCM_item_preamble.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\DICOM</Filter>
     </ClCompile>
     <ClCompile Include="analyze_DCM_util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="container_ASF.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="container_BMP.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="container_DCM.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="container_ISO.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="container_JPEG.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="container_M2P.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="container_RIFF.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="container_TIFF.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="container_DCM_Impl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_ISO_item_MovieHeaderBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_ISO_item_TrackHeaderBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="container_PNG.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_PNG_item_Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_PNG_item_iTXt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_PNG_item_IHDR.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_PNG_util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_PNG_item_eXIf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_PNG_item_iCCP.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="container_ICC.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_ICC_item_Header.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\DICOM</Filter>
     </ClCompile>
     <ClCompile Include="analyze_ICC_item_Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyze_ICC_item_TagTable.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\ICC Profile</Filter>
     </ClCompile>
     <ClCompile Include="analyze_ICC_item_Element.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\ICC Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ICC_item_Header.cpp">
+      <Filter>Source Files\ICC Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ICC_item_TagTable.cpp">
+      <Filter>Source Files\ICC Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_APP.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_Base.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_COM.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_DAC.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_DHT.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_DQT.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_DRI.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_Exif.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_extdat.cpp">
+      <Filter>Source Files\JPEG</Filter>
     </ClCompile>
     <ClCompile Include="analyze_JPEG_item_ICC.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_JFIF.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_Marker.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_SOF.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_SOI.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_item_SOS.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_JPEG_util.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_Base.cpp">
+      <Filter>Source Files\MPEG-2</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_PESPacket.cpp">
+      <Filter>Source Files\MPEG-2</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_ProgramEnd.cpp">
+      <Filter>Source Files\MPEG-2</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_ProgramStream.cpp">
+      <Filter>Source Files\MPEG-2</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_ProgramStreamPack.cpp">
+      <Filter>Source Files\MPEG-2</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_ProgramStreamPackHeader.cpp">
+      <Filter>Source Files\MPEG-2</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_M2P_item_ProgramStreamSystemHeader.cpp">
+      <Filter>Source Files\MPEG-2</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_item_Base.cpp">
+      <Filter>Source Files\PNG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_item_eXIf.cpp">
+      <Filter>Source Files\PNG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_item_iCCP.cpp">
+      <Filter>Source Files\PNG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_item_IHDR.cpp">
+      <Filter>Source Files\PNG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_item_iTXt.cpp">
+      <Filter>Source Files\PNG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_PNG_util.cpp">
+      <Filter>Source Files\PNG</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_RIFF_item_avih.cpp">
+      <Filter>Source Files\RIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_RIFF_item_Base.cpp">
+      <Filter>Source Files\RIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_RIFF_item_idx1.cpp">
+      <Filter>Source Files\RIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_RIFF_item_LIST.cpp">
+      <Filter>Source Files\RIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_RIFF_item_strf_auds.cpp">
+      <Filter>Source Files\RIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_RIFF_item_strf_vids.cpp">
+      <Filter>Source Files\RIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_RIFF_item_strh.cpp">
+      <Filter>Source Files\RIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_RIFF_item_text.cpp">
+      <Filter>Source Files\RIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_item_Base.cpp">
+      <Filter>Source Files\TIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_item_Entry.cpp">
+      <Filter>Source Files\TIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_item_Header.cpp">
+      <Filter>Source Files\TIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_item_Header8.cpp">
+      <Filter>Source Files\TIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_item_IFD.cpp">
+      <Filter>Source Files\TIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_TIFF_util.cpp">
+      <Filter>Source Files\TIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="container_ASF.cpp">
+      <Filter>Source Files\ASF</Filter>
+    </ClCompile>
+    <ClCompile Include="container_BMP.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="container_DCM.cpp">
+      <Filter>Source Files\DICOM</Filter>
+    </ClCompile>
+    <ClCompile Include="container_DCM_Impl.cpp">
+      <Filter>Source Files\DICOM</Filter>
+    </ClCompile>
+    <ClCompile Include="container_ICC.cpp">
+      <Filter>Source Files\ICC Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="container_JPEG.cpp">
+      <Filter>Source Files\JPEG</Filter>
+    </ClCompile>
+    <ClCompile Include="container_M2P.cpp">
+      <Filter>Source Files\MPEG-2</Filter>
+    </ClCompile>
+    <ClCompile Include="container_PNG.cpp">
+      <Filter>Source Files\PNG</Filter>
+    </ClCompile>
+    <ClCompile Include="container_RIFF.cpp">
+      <Filter>Source Files\RIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="container_TIFF.cpp">
+      <Filter>Source Files\TIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="dictionary_dcm.cpp">
+      <Filter>Source Files\DICOM</Filter>
+    </ClCompile>
+    <ClCompile Include="dictionary_tiff.cpp">
+      <Filter>Source Files\TIFF</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ISO_item_Box.cpp">
+      <Filter>Source Files\ISO based media format</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ISO_item_FileTypeBox.cpp">
+      <Filter>Source Files\ISO based media format</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ISO_item_MovieHeaderBox.cpp">
+      <Filter>Source Files\ISO based media format</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ISO_item_TrackHeaderBox.cpp">
+      <Filter>Source Files\ISO based media format</Filter>
+    </ClCompile>
+    <ClCompile Include="analyze_ISO_util.cpp">
+      <Filter>Source Files\ISO based media format</Filter>
+    </ClCompile>
+    <ClCompile Include="container_ISO.cpp">
+      <Filter>Source Files\ISO based media format</Filter>
+    </ClCompile>
+    <ClCompile Include="stream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

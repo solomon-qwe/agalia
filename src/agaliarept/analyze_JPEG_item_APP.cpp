@@ -17,7 +17,7 @@ using namespace analyze_JPEG;
 
 
 
-HRESULT create_jfif(const container_JPEG* image, const item_APP* item, agaliaItem** child)
+HRESULT create_jfif(const container_JPEG* image, const item_APP* item, agaliaElement** child)
 {
 	CHeapPtr<JPEGSEGMENT_APPX> buf;
 	rsize_t bufsize = 0;
@@ -28,7 +28,7 @@ HRESULT create_jfif(const container_JPEG* image, const item_APP* item, agaliaIte
 	const char name[] = "JFIF";
 	if (app_identify(name, _countof(name), buf, bufsize))
 	{
-		agaliaItem* newitem = new item_JFIF(image, item->getOffset(), item->getSize(), item_Base::jfif);
+		agaliaElement* newitem = new item_JFIF(image, item->getOffset(), item->getSize(), JPEG_item_Base::jfif);
 		*child = newitem;
 		return S_OK;
 	}
@@ -38,7 +38,7 @@ HRESULT create_jfif(const container_JPEG* image, const item_APP* item, agaliaIte
 
 
 
-HRESULT create_iccprofile(const container_JPEG* image, const item_APP* item, agaliaItem** child)
+HRESULT create_iccprofile(const container_JPEG* image, const item_APP* item, agaliaElement** child)
 {
 	CHeapPtr<JPEGSEGMENT_APPX> buf;
 	rsize_t bufsize = 0;
@@ -80,7 +80,7 @@ HRESULT create_iccprofile(const container_JPEG* image, const item_APP* item, aga
 	hr = getAgaliaImage(&container, file_path, offset, size);
 	if (FAILED(hr)) return hr;
 
-	auto newitem = new item_ICC(image, offset, size, item_Base::icc_profile);
+	auto newitem = new JPEG_item_ICC(image, offset, size, JPEG_item_Base::icc_profile);
 	newitem->container = container;
 	*child = newitem;
 
@@ -89,7 +89,7 @@ HRESULT create_iccprofile(const container_JPEG* image, const item_APP* item, aga
 
 
 
-HRESULT create_ducky(const container_JPEG* image, const item_APP* item, agaliaItem** child)
+HRESULT create_ducky(const container_JPEG* image, const item_APP* item, agaliaElement** child)
 {
 	CHeapPtr<JPEGSEGMENT_APPX> buf;
 	rsize_t bufsize = 0;
@@ -100,7 +100,7 @@ HRESULT create_ducky(const container_JPEG* image, const item_APP* item, agaliaIt
 	const char name[] = "Ducky";
 	if (app_identify(name, _countof(name), buf, bufsize))
 	{
-		agaliaItem* newitem = new item_extdat(image, item->getOffset(), item->getSize(), item_Base::ducky);
+		agaliaElement* newitem = new item_extdat(image, item->getOffset(), item->getSize(), JPEG_item_Base::ducky);
 		*child = newitem;
 		return S_OK;
 	}
@@ -110,7 +110,7 @@ HRESULT create_ducky(const container_JPEG* image, const item_APP* item, agaliaIt
 
 
 
-HRESULT create_photoshop(const container_JPEG* image, const item_APP* item, agaliaItem** child)
+HRESULT create_photoshop(const container_JPEG* image, const item_APP* item, agaliaElement** child)
 {
 	CHeapPtr<JPEGSEGMENT_APPX> buf;
 	rsize_t bufsize = 0;
@@ -121,7 +121,7 @@ HRESULT create_photoshop(const container_JPEG* image, const item_APP* item, agal
 	const char name[] = "Photoshop 3.0";
 	if (app_identify(name, _countof(name), buf, bufsize))
 	{
-		agaliaItem* newitem = new item_extdat(image, item->getOffset(), item->getSize(), item_Base::photoshop);
+		agaliaElement* newitem = new item_extdat(image, item->getOffset(), item->getSize(), JPEG_item_Base::photoshop);
 		*child = newitem;
 		return S_OK;
 	}
@@ -131,7 +131,7 @@ HRESULT create_photoshop(const container_JPEG* image, const item_APP* item, agal
 
 
 
-HRESULT create_adobe(const container_JPEG* image, const item_APP* item, agaliaItem** child)
+HRESULT create_adobe(const container_JPEG* image, const item_APP* item, agaliaElement** child)
 {
 	CHeapPtr<JPEGSEGMENT_APPX> buf;
 	rsize_t bufsize = 0;
@@ -142,7 +142,7 @@ HRESULT create_adobe(const container_JPEG* image, const item_APP* item, agaliaIt
 	const char name[] = "Adobe";
 	if (app_identify(name, _countof(name), buf, bufsize))
 	{
-		agaliaItem* newitem = new item_extdat(image, item->getOffset(), item->getSize(), item_Base::adobe);
+		agaliaElement* newitem = new item_extdat(image, item->getOffset(), item->getSize(), JPEG_item_Base::adobe);
 		*child = newitem;
 		return S_OK;
 	}
@@ -152,7 +152,7 @@ HRESULT create_adobe(const container_JPEG* image, const item_APP* item, agaliaIt
 
 
 
-HRESULT create_exif(const container_JPEG* image, const item_APP* item, agaliaItem** child)
+HRESULT create_exif(const container_JPEG* image, const item_APP* item, agaliaElement** child)
 {
 	CHeapPtr<JPEGSEGMENT_APPX> buf;
 	rsize_t bufsize = 0;
@@ -171,7 +171,7 @@ HRESULT create_exif(const container_JPEG* image, const item_APP* item, agaliaIte
 		hr = getAgaliaImage(&exif_image, file_path, item->getOffset() + 10, item->getSize() - 10);
 		if (FAILED(hr)) return hr;
 
-		auto newitem = new item_ExifJPEG(image, item->getOffset(), item->getSize(), item_Base::exif);
+		auto newitem = new item_ExifJPEG(image, item->getOffset(), item->getSize(), JPEG_item_Base::exif);
 		newitem->tiff_image = exif_image;
 		*child = newitem;
 
@@ -183,7 +183,7 @@ HRESULT create_exif(const container_JPEG* image, const item_APP* item, agaliaIte
 
 
 
-HRESULT create_xmp(const container_JPEG* image, const item_APP* item, agaliaItem** child)
+HRESULT create_xmp(const container_JPEG* image, const item_APP* item, agaliaElement** child)
 {
 	CHeapPtr<JPEGSEGMENT_APPX> buf;
 	rsize_t bufsize = 0;
@@ -194,7 +194,7 @@ HRESULT create_xmp(const container_JPEG* image, const item_APP* item, agaliaItem
 	const char xmp_id[] = "http://ns.adobe.com/xap/1.0/";
 	if (app_identify(xmp_id, _countof(xmp_id), buf, bufsize))
 	{
-		agaliaItem* newitem = new item_extdat(image, item->getOffset(), item->getSize(), item_Base::xmp);
+		agaliaElement* newitem = new item_extdat(image, item->getOffset(), item->getSize(), JPEG_item_Base::xmp);
 		*child = newitem;
 		return S_OK;
 	}
@@ -224,12 +224,12 @@ item_APP::~item_APP()
 
 
 
-HRESULT item_APP::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_APP::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 	if (child == nullptr) return E_POINTER;
 
-	if (data_type != item_Base::marker_segment)
+	if (data_type != JPEG_item_Base::marker_segment)
 		return E_FAIL;
 
 	switch (getMarker(image, this))
@@ -309,9 +309,9 @@ HRESULT item_APP::getColumnValue(uint32_t column, agaliaString** str) const
 
 
 
-HRESULT item_APP::getItemPropCount(uint32_t* count) const
+HRESULT item_APP::getPropCount(uint32_t* count) const
 {
-	auto hr = __super::getItemPropCount(count);
+	auto hr = __super::getPropCount(count);
 	if (FAILED(hr)) return hr;
 
 	*count += 2;
@@ -320,9 +320,9 @@ HRESULT item_APP::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_APP::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_APP::getPropName(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropName(index, str);
+	auto hr = __super::getPropName(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	const wchar_t* name = nullptr;
@@ -340,9 +340,9 @@ HRESULT item_APP::getItemPropName(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_APP::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_APP::getPropValue(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropValue(index, str);
+	auto hr = __super::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	rsize_t bufsize = 0;

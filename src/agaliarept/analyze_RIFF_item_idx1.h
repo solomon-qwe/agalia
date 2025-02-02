@@ -3,13 +3,13 @@
 
 namespace analyze_RIFF
 {
-	class item_idx1 : public item_Base
+	class item_idx1 : public RIFF_item_Base
 	{
 	public:
 		item_idx1(const container_RIFF* _image, uint64_t offset, uint64_t size);
 		virtual ~item_idx1();
 
-		virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const override;
+		virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const override;
 
 		virtual HRESULT getValueAreaOffset(uint64_t* offset) const override;
 		virtual HRESULT getValueAreaSize(uint64_t* size) const override;
@@ -18,20 +18,20 @@ namespace analyze_RIFF
 	};
 
 
-	class item_idx1_entry : public item_Base
+	class item_idx1_entry : public RIFF_item_Base
 	{
 	public:
 		item_idx1_entry(const container_RIFF* _image, uint64_t offset, uint64_t size);
 		virtual ~item_idx1_entry();
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
 
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override;
 
-		virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const override;
-		virtual HRESULT getNextItem(agaliaItem** next) const override;
+		virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const override;
+		virtual HRESULT getNext(agaliaElement** next) const override;
 
 		virtual HRESULT getColumnValue(uint32_t column, agaliaString** str) const override;
 

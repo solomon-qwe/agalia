@@ -4,7 +4,7 @@
 using namespace analyze_ISO;
 
 item_FileTypeBox::item_FileTypeBox(const agaliaContainer* image, uint64_t offset, uint64_t size, uint64_t endpos, uint32_t parent)
-	:item_Box(image, offset, size, endpos, parent)
+	:ISO_item_Box(image, offset, size, endpos, parent)
 {
 
 }
@@ -14,14 +14,14 @@ item_FileTypeBox::~item_FileTypeBox()
 
 }
 
-HRESULT item_FileTypeBox::getItemPropCount(uint32_t* count) const
+HRESULT item_FileTypeBox::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_FileTypeBox::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_FileTypeBox::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -32,14 +32,14 @@ HRESULT item_FileTypeBox::getItemPropName(uint32_t index, agaliaString** str) co
 	case prop_minor_version: name = L"minor_version"; break;
 	case prop_compatible_brands: name = L"comatible_brands"; break;
 	default:
-		return __super::getItemPropName(index, str);
+		return __super::getPropName(index, str);
 	}
 
 	*str = agaliaString::create(name);
 	return S_OK;
 }
 
-HRESULT item_FileTypeBox::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_FileTypeBox::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -88,7 +88,7 @@ HRESULT item_FileTypeBox::getItemPropValue(uint32_t index, agaliaString** str) c
 	}
 	else
 	{
-		return __super::getItemPropValue(index, str);
+		return __super::getPropValue(index, str);
 	}
 
 	*str = agaliaString::create(temp.str().c_str());

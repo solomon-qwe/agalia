@@ -6,7 +6,7 @@
 using namespace analyze_BMP;
 
 item_RGBQUAD::item_RGBQUAD(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:BMP_item_Base(image, offset, size)
 {
 }
 
@@ -14,7 +14,7 @@ item_RGBQUAD::~item_RGBQUAD()
 {
 }
 
-HRESULT item_RGBQUAD::getItemName(agaliaString** str) const
+HRESULT item_RGBQUAD::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	std::wstringstream temp;
@@ -23,7 +23,7 @@ HRESULT item_RGBQUAD::getItemName(agaliaString** str) const
 	return S_OK;
 }
 
-HRESULT item_RGBQUAD::getNextItem(agaliaItem** next) const
+HRESULT item_RGBQUAD::getNext(agaliaElement** next) const
 {
 	if (_index + 1 < colors)
 	{
@@ -40,14 +40,14 @@ HRESULT item_RGBQUAD::getNextItem(agaliaItem** next) const
 	return E_FAIL;
 }
 
-HRESULT item_RGBQUAD::getItemPropCount(uint32_t* count) const
+HRESULT item_RGBQUAD::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
 	return S_OK;
 }
 
-HRESULT item_RGBQUAD::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_RGBQUAD::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	const wchar_t* name = nullptr;
@@ -64,11 +64,11 @@ HRESULT item_RGBQUAD::getItemPropName(uint32_t index, agaliaString** str) const
 	return S_OK;
 }
 
-HRESULT item_RGBQUAD::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_RGBQUAD::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
-	auto hr = __super::getItemPropValue(index, str);
+	auto hr = __super::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	RGBQUAD quad = {};
@@ -101,7 +101,7 @@ HRESULT item_RGBQUAD::getColumnValue(uint32_t column, agaliaString** str) const
 	}
 	else if (column == column_structure)
 	{
-		return getItemName(str);
+		return getName(str);
 	}
 	else if (column == column_value)
 	{

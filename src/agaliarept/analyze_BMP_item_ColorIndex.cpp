@@ -4,7 +4,7 @@
 using namespace analyze_BMP;
 
 item_ColorIndex::item_ColorIndex(const agaliaContainer* image, uint64_t offset, uint64_t size)
-	:item_Base(image, offset, size)
+	:BMP_item_Base(image, offset, size)
 {
 }
 
@@ -12,7 +12,7 @@ item_ColorIndex::~item_ColorIndex()
 {
 }
 
-HRESULT item_ColorIndex::getItemName(agaliaString** str) const
+HRESULT item_ColorIndex::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	std::wstringstream temp;
@@ -21,7 +21,7 @@ HRESULT item_ColorIndex::getItemName(agaliaString** str) const
 	return S_OK;
 }
 
-HRESULT item_ColorIndex::getNextItem(agaliaItem** next) const
+HRESULT item_ColorIndex::getNext(agaliaElement** next) const
 {
 	if (index + 1 < scans)
 	{

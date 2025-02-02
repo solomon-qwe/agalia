@@ -164,7 +164,7 @@ END_MESSAGE_MAP()
 
 void CTextViewer::CreateViewer(LPARAM lParam, type_t type)
 {
-	auto param = reinterpret_cast<agaliaItem*>(lParam);
+	auto param = reinterpret_cast<agaliaElement*>(lParam);
 
 	uint64_t offset = 0;
 	param->getValueAreaOffset(&offset);

@@ -81,9 +81,9 @@ HRESULT item_SOF::getAdditionalInfoValue(uint32_t row, agaliaString** str) const
 
 
 
-HRESULT item_SOF::getItemPropCount(uint32_t* count) const
+HRESULT item_SOF::getPropCount(uint32_t* count) const
 {
-	auto hr = __super::getItemPropCount(count);
+	auto hr = __super::getPropCount(count);
 	if (FAILED(hr)) return hr;
 
 	JPEGSEGMENT_SOF sof = {};
@@ -98,9 +98,9 @@ HRESULT item_SOF::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_SOF::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_SOF::getPropName(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropName(index, str);
+	auto hr = __super::getPropName(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	agaliaStringPtr s;
@@ -132,9 +132,9 @@ HRESULT item_SOF::getItemPropName(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_SOF::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_SOF::getPropValue(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropValue(index, str);
+	auto hr = __super::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	CHeapPtr<JPEGSEGMENT_SOF> sof;

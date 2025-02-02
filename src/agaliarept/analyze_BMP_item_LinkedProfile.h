@@ -5,19 +5,19 @@
 
 namespace analyze_BMP
 {
-	class item_LinkedProfile : public item_Base
+	class item_LinkedProfile : public BMP_item_Base
 	{
 	public:
 		item_LinkedProfile(const agaliaContainer* image, uint64_t offset, uint64_t size);
 		virtual ~item_LinkedProfile();
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override;
 
 		enum {
-			prop_filename = item_Base::prop_last,
+			prop_filename = BMP_item_Base::prop_last,
 			prop_last
 		};
 	};

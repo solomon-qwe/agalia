@@ -144,7 +144,7 @@ uint64_t searchNextMarker(const container_JPEG* image, uint64_t next_offset)
 
 
 
-HRESULT analyze_JPEG::create_item(agaliaItem** next, uint64_t next_item_offset, const container_JPEG* image)
+HRESULT analyze_JPEG::create_item(agaliaElement** next, uint64_t next_item_offset, const container_JPEG* image)
 {
 	if (next == nullptr) return E_POINTER;
 
@@ -176,47 +176,47 @@ HRESULT analyze_JPEG::create_item(agaliaItem** next, uint64_t next_item_offset, 
 	{
 	case SOF0: case SOF1: case SOF2: case SOF3:
 	case SOF9: case SOF10: case SOF11:
-		*next = new item_SOF(image, next_item_offset, next_item_size, item_Base::marker_segment);
+		*next = new item_SOF(image, next_item_offset, next_item_size, JPEG_item_Base::marker_segment);
 		break;
 
 	case DHT:
-		*next = new item_DHT(image, next_item_offset, next_item_size, item_Base::marker_segment);
+		*next = new item_DHT(image, next_item_offset, next_item_size, JPEG_item_Base::marker_segment);
 		break;
 
 	case DAC:
-		*next = new item_DAC(image, next_item_offset, next_item_size, item_Base::marker_segment);
+		*next = new item_DAC(image, next_item_offset, next_item_size, JPEG_item_Base::marker_segment);
 		break;
 
 	case DQT:
-		*next = new item_DQT(image, next_item_offset, next_item_size, item_Base::marker_segment);
+		*next = new item_DQT(image, next_item_offset, next_item_size, JPEG_item_Base::marker_segment);
 		break;
 
 	case SOS:
-		*next = new item_SOS(image, next_item_offset, next_item_size, item_Base::marker_segment);
+		*next = new item_SOS(image, next_item_offset, next_item_size, JPEG_item_Base::marker_segment);
 		break;
 
 	case COM:
-		*next = new item_COM(image, next_item_offset, next_item_size, item_Base::marker_segment);
+		*next = new item_COM(image, next_item_offset, next_item_size, JPEG_item_Base::marker_segment);
 		break;
 
 	case DRI:
-		*next = new item_DRI(image, next_item_offset, next_item_size, item_Base::marker_segment);
+		*next = new item_DRI(image, next_item_offset, next_item_size, JPEG_item_Base::marker_segment);
 		break;
 
 	case APP0: case APP1: case APP2: case APP3:
 	case APP4: case APP5: case APP6: case APP7:
 	case APP8: case APP9: case APP10: case APP11:
 	case APP12: case APP13: case APP14: case APP15:
-		*next = new item_APP(image, next_item_offset, next_item_size, item_Base::marker_segment);
+		*next = new item_APP(image, next_item_offset, next_item_size, JPEG_item_Base::marker_segment);
 		break;
 
 	case SOI:
 	case EOI:
-		*next = new item_SOI(image, next_item_offset, next_item_size, item_Base::marker_segment);
+		*next = new item_SOI(image, next_item_offset, next_item_size, JPEG_item_Base::marker_segment);
 		break;
 
 	default:
-		*next = new item_Marker(image, next_item_offset, next_item_size, item_Base::marker_segment);
+		*next = new item_Marker(image, next_item_offset, next_item_size, JPEG_item_Base::marker_segment);
 	}
 	return S_OK;
 }
@@ -227,7 +227,7 @@ HRESULT analyze_JPEG::create_item(agaliaItem** next, uint64_t next_item_offset, 
 
 
 item_Marker::item_Marker(const container_JPEG* image, uint64_t offset, uint64_t size, item_type type)
-	: item_Base(image, offset, size, type)
+	: JPEG_item_Base(image, offset, size, type)
 {
 }
 
@@ -239,7 +239,7 @@ item_Marker::~item_Marker()
 
 
 
-HRESULT item_Marker::getItemName(agaliaString** str) const
+HRESULT item_Marker::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 	*str = agaliaString::create(get_marker_name(getMarker(image, this)));
@@ -248,7 +248,7 @@ HRESULT item_Marker::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_Marker::getItemPropCount(uint32_t* count) const
+HRESULT item_Marker::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 
@@ -258,7 +258,7 @@ HRESULT item_Marker::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_Marker::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_Marker::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -278,7 +278,7 @@ HRESULT item_Marker::getItemPropName(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_Marker::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_Marker::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -305,7 +305,7 @@ HRESULT item_Marker::getItemPropValue(uint32_t index, agaliaString** str) const
 	return S_OK;
 
 	case 2:
-		return getItemName(str);
+		return getName(str);
 	}
 
 	return E_FAIL;
@@ -313,7 +313,7 @@ HRESULT item_Marker::getItemPropValue(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_Marker::getNextItem(agaliaItem** next) const
+HRESULT item_Marker::getNext(agaliaElement** next) const
 {
 	if (next == nullptr) return E_POINTER;
 

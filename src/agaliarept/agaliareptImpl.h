@@ -9,6 +9,9 @@
 #include "agaliaImageBase.h"
 using namespace agalia;
 
+#include "stringcnv.h"
+
+
 class _agaliaHeapImpl : public agaliaHeap
 {
 public:
@@ -26,7 +29,7 @@ protected:
 
 
 
-class _agaliaItemBase : public agaliaItem
+class _agaliaItemBase : public agaliaElement
 {
 public:
 	_agaliaItemBase(const GUID& guid, uint64_t offset, uint64_t size);
@@ -65,8 +68,6 @@ inline LARGE_INTEGER int64_to_li(int64_t i)
 	return li;
 }
 
-HRESULT multibyte_to_widechar(char* srcBuf, int size, uint32_t codepage, agaliaString** dst);
-HRESULT multibyte_to_widechar(char* srcBuf, int size, uint32_t codepage, std::wstringstream& dst);
 
 
 

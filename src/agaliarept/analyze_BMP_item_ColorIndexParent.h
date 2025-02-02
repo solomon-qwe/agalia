@@ -5,15 +5,15 @@
 
 namespace analyze_BMP
 {
-	class item_ColorIndexParent : public item_Base
+	class item_ColorIndexParent : public BMP_item_Base
 	{
 	public:
 		item_ColorIndexParent(const agaliaContainer* image, uint64_t offset, uint64_t size);
 		virtual ~item_ColorIndexParent();
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
 
-		virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const override;
+		virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const override;
 
 		virtual HRESULT getColumnValue(uint32_t column, agaliaString** str) const;
 

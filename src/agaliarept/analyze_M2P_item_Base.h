@@ -4,24 +4,24 @@
 
 namespace analyze_M2P
 {
-	class item_Base : public _agaliaItemBase
+	class M2P_item_Base : public _agaliaItemBase
 	{
 	public:
-		item_Base(const agaliaContainer* image, uint64_t offset, uint64_t size);
-		virtual ~item_Base();
+		M2P_item_Base(const agaliaContainer* image, uint64_t offset, uint64_t size);
+		virtual ~M2P_item_Base();
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override;
 
-		virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const override;
-		virtual HRESULT getNextItem(agaliaItem** next) const override;
+		virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const override;
+		virtual HRESULT getNext(agaliaElement** next) const override;
 
 		virtual HRESULT getAsocImage(const agaliaContainer** imageAsoc) const override;
 
-		virtual HRESULT getGridRowCount(uint32_t* row) const;
-		virtual HRESULT getGridValue(uint32_t row, uint32_t column, agaliaString** str) const;
+		virtual HRESULT getElementInfoCount(uint32_t* row) const;
+		virtual HRESULT getElementInfoValue(uint32_t row, uint32_t column, agaliaString** str) const;
 
 		enum {
 			prop_offset,

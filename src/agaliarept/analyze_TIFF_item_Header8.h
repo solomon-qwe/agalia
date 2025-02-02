@@ -4,13 +4,13 @@
 
 namespace analyze_TIFF
 {
-	class item_TIFFHeader8 : public item_tiff_Base
+	class item_TIFFHeader8 : public TIFF_item_Base
 	{
 	public:
 		item_TIFFHeader8(const container_TIFF* image, uint64_t offset, uint64_t size);
 		virtual ~item_TIFFHeader8();
 
-		virtual HRESULT getItemName(agaliaString** str) const override;
+		virtual HRESULT getName(agaliaString** str) const override;
 
 		enum {
 			prop_order,
@@ -21,11 +21,11 @@ namespace analyze_TIFF
 			prop_last
 		};
 
-		virtual HRESULT getItemPropCount(uint32_t* count) const override;
-		virtual HRESULT getItemPropName(uint32_t index, agaliaString** str) const override;
-		virtual HRESULT getItemPropValue(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropCount(uint32_t* count) const override;
+		virtual HRESULT getPropName(uint32_t index, agaliaString** str) const override;
+		virtual HRESULT getPropValue(uint32_t index, agaliaString** str) const override;
 
-		virtual HRESULT getChildItem(uint32_t sibling, agaliaItem** child) const override;
-		virtual HRESULT getNextItem(agaliaItem** next) const override;
+		virtual HRESULT getChild(uint32_t sibling, agaliaElement** child) const override;
+		virtual HRESULT getNext(agaliaElement** next) const override;
 	};
 }

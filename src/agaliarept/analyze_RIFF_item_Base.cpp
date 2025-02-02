@@ -11,25 +11,25 @@ using namespace analyze_RIFF;
 
 
 // {F751F8B3-FC25-46A0-9956-7EF48E55BB6B}
-const GUID item_Base::guid_riff =
+const GUID RIFF_item_Base::guid_riff =
 { 0xf751f8b3, 0xfc25, 0x46a0, { 0x99, 0x56, 0x7e, 0xf4, 0x8e, 0x55, 0xbb, 0x6b } };
 
 
 
-item_Base::item_Base(const container_RIFF* _image, uint64_t offset, uint64_t size)
+RIFF_item_Base::RIFF_item_Base(const container_RIFF* _image, uint64_t offset, uint64_t size)
 	: _agaliaItemBase(guid_riff, offset, size), image(_image)
 {
 }
 
 
 
-item_Base::~item_Base()
+RIFF_item_Base::~RIFF_item_Base()
 {
 }
 
 
 
-HRESULT item_Base::getItemName(agaliaString** str) const
+HRESULT RIFF_item_Base::getName(agaliaString** str) const
 {
 	std::wstringstream temp;
 	auto hr = format_chunk_fcc<decltype(RIFFCHUNK::fcc)>(temp, offsetof(RIFFCHUNK, fcc), this);
@@ -40,7 +40,7 @@ HRESULT item_Base::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_Base::getItemPropCount(uint32_t* count) const
+HRESULT RIFF_item_Base::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
@@ -49,7 +49,7 @@ HRESULT item_Base::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_Base::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT RIFF_item_Base::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -67,7 +67,7 @@ HRESULT item_Base::getItemPropName(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_Base::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT RIFF_item_Base::getPropValue(uint32_t index, agaliaString** str) const
 {
 	std::wstringstream temp;
 
@@ -79,7 +79,7 @@ HRESULT item_Base::getItemPropValue(uint32_t index, agaliaString** str) const
 	}
 	else if (index == prop_fcc)
 	{
-		return item_Base::getItemName(str);
+		return RIFF_item_Base::getName(str);
 	}
 	else if (index == prop_cb)
 	{
@@ -95,7 +95,7 @@ HRESULT item_Base::getItemPropValue(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_Base::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT RIFF_item_Base::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	UNREFERENCED_PARAMETER(sibling);
 	UNREFERENCED_PARAMETER(child);
@@ -104,7 +104,7 @@ HRESULT item_Base::getChildItem(uint32_t sibling, agaliaItem** child) const
 
 
 
-HRESULT item_Base::getNextItem(agaliaItem** next) const
+HRESULT RIFF_item_Base::getNext(agaliaElement** next) const
 {
 	if (next == nullptr) return E_POINTER;
 
@@ -124,7 +124,7 @@ HRESULT item_Base::getNextItem(agaliaItem** next) const
 	if (next_chunk.fcc == 0)
 		return E_FAIL;
 
-	item_Base* item = create_item(image, next_item_offset, next_chunk.fcc, next_chunk.cb, fccType);
+	RIFF_item_Base* item = create_item(image, next_item_offset, next_chunk.fcc, next_chunk.cb, fccType);
 	item->endPos = endPos;
 	item->fccParent = fccParent;
 	*next = item;
@@ -133,7 +133,7 @@ HRESULT item_Base::getNextItem(agaliaItem** next) const
 
 
 
-HRESULT item_Base::getAsocImage(const agaliaContainer** imageAsoc) const
+HRESULT RIFF_item_Base::getAsocImage(const agaliaContainer** imageAsoc) const
 {
 	if (imageAsoc == nullptr) return E_POINTER;
 	*imageAsoc = image;
@@ -142,7 +142,7 @@ HRESULT item_Base::getAsocImage(const agaliaContainer** imageAsoc) const
 
 
 
-HRESULT item_Base::getValueAreaOffset(uint64_t* offset) const
+HRESULT RIFF_item_Base::getValueAreaOffset(uint64_t* offset) const
 {
 	if (offset == nullptr) return E_POINTER;
 	*offset = getOffset() + sizeof(RIFFCHUNK);
@@ -151,7 +151,7 @@ HRESULT item_Base::getValueAreaOffset(uint64_t* offset) const
 
 
 
-HRESULT item_Base::getValueAreaSize(uint64_t* size) const
+HRESULT RIFF_item_Base::getValueAreaSize(uint64_t* size) const
 {
 	if (size == nullptr) return E_POINTER;
 	*size = getSize() - sizeof(RIFFCHUNK);
@@ -160,7 +160,7 @@ HRESULT item_Base::getValueAreaSize(uint64_t* size) const
 
 
 
-HRESULT item_Base::getColumnValue(uint32_t column, agaliaString** str) const
+HRESULT RIFF_item_Base::getColumnValue(uint32_t column, agaliaString** str) const
 {
 	std::wstringstream temp;
 
@@ -181,7 +181,7 @@ HRESULT item_Base::getColumnValue(uint32_t column, agaliaString** str) const
 	}
 	else if (column == column_id)
 	{
-		return item_Base::getItemName(str);
+		return RIFF_item_Base::getName(str);
 	}
 	else if (column == column_size)
 	{

@@ -5,6 +5,7 @@
 #include "agaliareptImpl.h"
 #include "analyze_ASF_util.h"
 #include "analyze_ASF_item_HeaderObject.h"
+#include "thumbnail.h"
 
 using namespace analyze_ASF;
 
@@ -60,27 +61,27 @@ HRESULT container_ASF::getColumnName(uint32_t column, agaliaString** str) const
 	return S_OK;
 }
 
-HRESULT container_ASF::getGridRowCount(const agaliaItem* item, uint32_t* row) const
+HRESULT container_ASF::getElementInfoCount(const agaliaElement* item, uint32_t* row) const
 {
 	if (item == nullptr) return E_POINTER;
-	if (item->getGUID() == item_Base::guid_asf)
-		return static_cast<const item_Base*>(item)->getGridRowCount(row);
+	if (item->getGUID() == ASF_item_Base::guid_asf)
+		return static_cast<const ASF_item_Base*>(item)->getElementInfoCount(row);
 	return E_FAIL;
 }
 
 
 
-HRESULT container_ASF::getGridValue(const agaliaItem* item, uint32_t row, uint32_t column, agaliaString** str) const
+HRESULT container_ASF::getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const
 {
 	if (item == nullptr) return E_POINTER;
-	if (item->getGUID() == item_Base::guid_asf)
-		return static_cast<const item_Base*>(item)->getGridValue(row, column, str);
+	if (item->getGUID() == ASF_item_Base::guid_asf)
+		return static_cast<const ASF_item_Base*>(item)->getElementInfoValue(row, column, str);
 	return E_FAIL;
 }
 
 
 
-HRESULT container_ASF::getRootItem(agaliaItem** root) const
+HRESULT container_ASF::getRootElement(agaliaElement** root) const
 {
 	if (root == nullptr) return E_POINTER;
 
@@ -112,9 +113,7 @@ HRESULT container_ASF::getPropertyValue(PropertyType type, agaliaString** str) c
 
 HRESULT container_ASF::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
 {
-	HRESULT loadThumbnailImageGDIP(IStream * stream, uint32_t maxW, uint32_t maxH, HBITMAP * phBitmap);
-
-	return loadThumbnailImageGDIP(data_stream, maxW, maxH, phBitmap);
+	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
 }
 
 _agaliaContainerBase* container_ASF::CreateInstance(const wchar_t* path, IStream* stream)

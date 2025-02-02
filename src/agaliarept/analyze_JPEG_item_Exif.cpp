@@ -8,7 +8,7 @@ using namespace analyze_JPEG;
 
 
 item_ExifJPEG::item_ExifJPEG(const container_JPEG* image, uint64_t offset, uint64_t size, item_type type)
-	:item_Base(image, offset, size, type)
+	:JPEG_item_Base(image, offset, size, type)
 {
 }
 
@@ -33,7 +33,7 @@ item_ExifJPEG::~item_ExifJPEG()
 
 
 
-HRESULT item_ExifJPEG::getItemName(agaliaString** str) const
+HRESULT item_ExifJPEG::getName(agaliaString** str) const
 {
 	*str = agaliaString::create(L"Exif");
 	return S_OK;
@@ -41,7 +41,7 @@ HRESULT item_ExifJPEG::getItemName(agaliaString** str) const
 
 
 
-HRESULT item_ExifJPEG::getItemPropCount(uint32_t* count) const
+HRESULT item_ExifJPEG::getPropCount(uint32_t* count) const
 {
 	*count = 0;
 	return S_OK;
@@ -49,32 +49,32 @@ HRESULT item_ExifJPEG::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_ExifJPEG::getItemPropName(uint32_t, agaliaString**) const
+HRESULT item_ExifJPEG::getPropName(uint32_t, agaliaString**) const
 {
 	return E_FAIL;
 }
 
 
 
-HRESULT item_ExifJPEG::getItemPropValue(uint32_t, agaliaString**) const
+HRESULT item_ExifJPEG::getPropValue(uint32_t, agaliaString**) const
 {
 	return E_FAIL;
 }
 
 
 
-HRESULT item_ExifJPEG::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT item_ExifJPEG::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 
 	if (tiff_image)
-		return tiff_image->getRootItem(child);
+		return tiff_image->getRootElement(child);
 	return E_FAIL;
 }
 
 
 
-HRESULT item_ExifJPEG::getNextItem(agaliaItem**) const
+HRESULT item_ExifJPEG::getNext(agaliaElement**) const
 {
 	return E_FAIL;
 }

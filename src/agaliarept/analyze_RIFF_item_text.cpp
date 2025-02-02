@@ -8,7 +8,7 @@ using namespace analyze_RIFF;
 
 
 item_text::item_text(const container_RIFF* _image, uint64_t offset, uint64_t size)
-	: item_Base(_image, offset, size)
+	: RIFF_item_Base(_image, offset, size)
 {
 }
 
@@ -20,7 +20,7 @@ item_text::~item_text()
 
 
 
-HRESULT item_text::getItemPropCount(uint32_t* count) const
+HRESULT item_text::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_last;
@@ -29,9 +29,9 @@ HRESULT item_text::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT item_text::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT item_text::getPropName(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropName(index, str);
+	auto hr = __super::getPropName(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	switch (index)
@@ -45,9 +45,9 @@ HRESULT item_text::getItemPropName(uint32_t index, agaliaString** str) const
 
 
 
-HRESULT item_text::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT item_text::getPropValue(uint32_t index, agaliaString** str) const
 {
-	auto hr = __super::getItemPropValue(index, str);
+	auto hr = __super::getPropValue(index, str);
 	if (SUCCEEDED(hr)) return hr;
 
 	if (index == prop_text)

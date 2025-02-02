@@ -65,7 +65,7 @@ void interpretSpecificCharacterSet(std::list<int>* codepage, const char* str)
 }
 
 
-HRESULT format_tag(std::wstringstream& dst, const container_DCM_Impl* image, const agaliaItem* item)
+HRESULT format_tag(std::wstringstream& dst, const container_DCM_Impl* image, const agaliaElement* item)
 {
 	dicom_element elem(image, item->getOffset());
 
@@ -98,7 +98,7 @@ _agaliaItemDICOMElement::~_agaliaItemDICOMElement()
 
 
 
-HRESULT _agaliaItemDICOMElement::getItemName(agaliaString** str) const
+HRESULT _agaliaItemDICOMElement::getName(agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -114,7 +114,7 @@ HRESULT _agaliaItemDICOMElement::getItemName(agaliaString** str) const
 
 
 
-HRESULT _agaliaItemDICOMElement::getItemPropCount(uint32_t* count) const
+HRESULT _agaliaItemDICOMElement::getPropCount(uint32_t* count) const
 {
 	if (count == nullptr) return E_POINTER;
 	*count = prop_max;
@@ -123,7 +123,7 @@ HRESULT _agaliaItemDICOMElement::getItemPropCount(uint32_t* count) const
 
 
 
-HRESULT _agaliaItemDICOMElement::getItemPropName(uint32_t index, agaliaString** str) const
+HRESULT _agaliaItemDICOMElement::getPropName(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -147,7 +147,7 @@ HRESULT _agaliaItemDICOMElement::getItemPropName(uint32_t index, agaliaString** 
 
 
 
-HRESULT _agaliaItemDICOMElement::getItemPropValue(uint32_t index, agaliaString** str) const
+HRESULT _agaliaItemDICOMElement::getPropValue(uint32_t index, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
 
@@ -174,7 +174,7 @@ HRESULT _agaliaItemDICOMElement::getItemPropValue(uint32_t index, agaliaString**
 	else if (index == prop_name)
 	{
 		agaliaStringPtr name;
-		auto hr = getItemName(&name);
+		auto hr = getName(&name);
 		if (FAILED(hr)) return hr;
 
 		dcm_dic_elem_iterator it = g_dcm_dic_elem->find(name->GetData());
@@ -272,7 +272,7 @@ HRESULT _agaliaItemDICOMElement::getItemPropValue(uint32_t index, agaliaString**
 
 
 
-HRESULT _agaliaItemDICOMElement::getChildItem(uint32_t sibling, agaliaItem** child) const
+HRESULT _agaliaItemDICOMElement::getChild(uint32_t sibling, agaliaElement** child) const
 {
 	if (sibling != 0) return E_FAIL;
 
@@ -353,7 +353,7 @@ HRESULT _agaliaItemDICOMElement::getChildItem(uint32_t sibling, agaliaItem** chi
 
 
 
-HRESULT _agaliaItemDICOMElement::getNextItem(agaliaItem** next) const
+HRESULT _agaliaItemDICOMElement::getNext(agaliaElement** next) const
 {
 	if (next == nullptr) return E_POINTER;
 
@@ -388,11 +388,11 @@ HRESULT _agaliaItemDICOMElement::getNextItem(agaliaItem** next) const
 	}
 	else if (!(group == 0xFFFE && element == 0xE000) && value_length == 0xFFFFFFFF) {
 		// 未定義長のシーケンスであれば、次のアイテムは、終端の子アイテムの後ろ 
-		agaliaPtr<agaliaItem> child;
-		hr = getChildItem(0, &child);
+		agaliaPtr<agaliaElement> child;
+		hr = getChild(0, &child);
 		if (FAILED(hr)) return hr;
-		agaliaPtr<agaliaItem> e;
-		while (SUCCEEDED(child->getNextItem(&e))) {
+		agaliaPtr<agaliaElement> e;
+		while (SUCCEEDED(child->getNext(&e))) {
 			child = e.detach();
 		}
 		uint64_t last_offset = 0, last_size = 0;
@@ -515,16 +515,16 @@ HRESULT _agaliaItemDICOMElement::getColumnValue(uint32_t column, agaliaString** 
 		return S_OK;
 	}
 	else if (column == column_name) {
-		return getItemPropValue(prop_name, str);
+		return getPropValue(prop_name, str);
 	}
 	else if (column == column_vr) {
-		return getItemPropValue(prop_vr, str);
+		return getPropValue(prop_vr, str);
 	}
 	else if (column == column_length) {
-		return getItemPropValue(prop_length, str);
+		return getPropValue(prop_length, str);
 	}
 	else if (column == column_value) {
-		return getItemPropValue(prop_value, str);
+		return getPropValue(prop_value, str);
 	}
 
 	return E_INVALIDARG;
