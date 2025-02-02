@@ -544,12 +544,15 @@ END_MESSAGE_MAP()
 
 CMainFrame::CMainFrame() noexcept
 {
-	HMODULE hModUser32 = LoadLibrary(L"User32.dll");
-	typedef DPI_AWARENESS_CONTEXT(_stdcall* SETTHREADDPIAWARENESSCONTEXTPROC)(DPI_AWARENESS_CONTEXT);
-	SETTHREADDPIAWARENESSCONTEXTPROC SetThreadDpiAwarenessContextProc;
-	SetThreadDpiAwarenessContextProc = (SETTHREADDPIAWARENESSCONTEXTPROC)GetProcAddress(hModUser32, "SetThreadDpiAwarenessContext");
-	if (SetThreadDpiAwarenessContextProc) {
-		SetThreadDpiAwarenessContextProc(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+	HMODULE hModUser32 = ::LoadLibrary(L"User32.dll");
+	if (hModUser32)
+	{
+		typedef DPI_AWARENESS_CONTEXT(_stdcall* SETTHREADDPIAWARENESSCONTEXTPROC)(DPI_AWARENESS_CONTEXT);
+		SETTHREADDPIAWARENESSCONTEXTPROC SetThreadDpiAwarenessContextProc;
+		SetThreadDpiAwarenessContextProc = (SETTHREADDPIAWARENESSCONTEXTPROC)::GetProcAddress(hModUser32, "SetThreadDpiAwarenessContext");
+		if (SetThreadDpiAwarenessContextProc) {
+			SetThreadDpiAwarenessContextProc(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+		}
 	}
 }
 
@@ -591,11 +594,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	HMODULE hModUser32 = ::LoadLibrary(L"User32.dll");
-	typedef UINT (WINAPI* GETDPIFORWINDOWPROC)(HWND);
-	GETDPIFORWINDOWPROC GetDpiForWindowProc;
-	GetDpiForWindowProc = (GETDPIFORWINDOWPROC)::GetProcAddress(hModUser32, "GetDpiForWindow");
-	if (GetDpiForWindowProc) {
-		uDPI = GetDpiForWindowProc(GetSafeHwnd());
+	if (hModUser32)
+	{
+		typedef UINT(WINAPI* GETDPIFORWINDOWPROC)(HWND);
+		GETDPIFORWINDOWPROC GetDpiForWindowProc;
+		GetDpiForWindowProc = (GETDPIFORWINDOWPROC)::GetProcAddress(hModUser32, "GetDpiForWindow");
+		if (GetDpiForWindowProc) {
+			uDPI = GetDpiForWindowProc(GetSafeHwnd());
+		}
 	}
 
 	ctrl.load_registry();
@@ -942,12 +948,15 @@ void CMainFrame::OnViewProperty()
 
 BOOL CMainFrame::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	HMODULE hModUser32 = LoadLibrary(L"User32.dll");
-	typedef BOOL(WINAPI* ENABLENONCLIENTDPISCALINGPROC)(HWND);
-	ENABLENONCLIENTDPISCALINGPROC EnableNonClientDpiScalingProc;
-	EnableNonClientDpiScalingProc = (ENABLENONCLIENTDPISCALINGPROC)GetProcAddress(hModUser32, "EnableNonClientDpiScaling");
-	if (EnableNonClientDpiScalingProc) {
-		EnableNonClientDpiScalingProc(GetSafeHwnd());
+	HMODULE hModUser32 = ::LoadLibrary(L"User32.dll");
+	if (hModUser32)
+	{
+		typedef BOOL(WINAPI* ENABLENONCLIENTDPISCALINGPROC)(HWND);
+		ENABLENONCLIENTDPISCALINGPROC EnableNonClientDpiScalingProc;
+		EnableNonClientDpiScalingProc = (ENABLENONCLIENTDPISCALINGPROC)::GetProcAddress(hModUser32, "EnableNonClientDpiScaling");
+		if (EnableNonClientDpiScalingProc) {
+			EnableNonClientDpiScalingProc(GetSafeHwnd());
+		}
 	}
 
 	if (!CFrameWnd::OnNcCreate(lpCreateStruct))
