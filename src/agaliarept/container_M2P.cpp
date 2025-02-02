@@ -3,6 +3,7 @@
 
 #include "agaliareptImpl.h"
 #include "analyze_M2P_item_ProgramStream.h"
+#include "thumbnail.h"
 
 using namespace analyze_M2P;
 
@@ -111,10 +112,7 @@ HRESULT container_M2P::getPropertyValue(PropertyType type, agaliaString** str) c
 
 HRESULT container_M2P::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
 {
-	UNREFERENCED_PARAMETER(phBitmap);
-	UNREFERENCED_PARAMETER(maxW);
-	UNREFERENCED_PARAMETER(maxH);
-	return E_NOTIMPL;
+	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
 }
 
 

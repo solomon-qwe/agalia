@@ -70,13 +70,13 @@
         "Entry"
         {
         "MsmKey" = "8:_38C578727F7FF1041FC98267B42E28D0"
-        "OwnerKey" = "8:_8973C4259FC24641A3AF61D7D07885B9"
+        "OwnerKey" = "8:_D6A234F6963249EC8A0E5942F18A17F0"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_38C578727F7FF1041FC98267B42E28D0"
-        "OwnerKey" = "8:_D6A234F6963249EC8A0E5942F18A17F0"
+        "MsmKey" = "8:_4670D7E12B6ABF7E973FE0C38370D341"
+        "OwnerKey" = "8:_8973C4259FC24641A3AF61D7D07885B9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -165,6 +165,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_AB480815ABD545468C08E7B761FBE865"
+        "OwnerKey" = "8:_8973C4259FC24641A3AF61D7D07885B9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B866802C3B04ABFA5CAD778D46362971"
         "OwnerKey" = "8:_8973C4259FC24641A3AF61D7D07885B9"
         "MsmSig" = "8:_UNDEFINED"
@@ -173,6 +179,12 @@
         {
         "MsmKey" = "8:_BC819943A79F9EB10E0475D3A9645209"
         "OwnerKey" = "8:_D6A234F6963249EC8A0E5942F18A17F0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D1995EE79AE743FD28C81C551BC412B2"
+        "OwnerKey" = "8:_8973C4259FC24641A3AF61D7D07885B9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -694,6 +706,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AB480815ABD545468C08E7B761FBE865"
+            {
+            "SourcePath" = "8:MFReadWrite.dll"
+            "TargetName" = "8:MFReadWrite.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_81898414F0C24E949D2755F0E67AA67D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B866802C3B04ABFA5CAD778D46362971"
             {
             "SourcePath" = "8:api-ms-win-crt-math-l1-1-0.dll"
@@ -730,6 +762,26 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:4"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D1995EE79AE743FD28C81C551BC412B2"
+            {
+            "SourcePath" = "8:MFPlat.DLL"
+            "TargetName" = "8:MFPlat.DLL"
+            "Tag" = "8:"
+            "Folder" = "8:_81898414F0C24E949D2755F0E67AA67D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -822,7 +874,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:agalia"
         "ProductCode" = "8:{8BBD1DDE-7EC9-4E65-A262-BDE209B3B2B7}"
-        "PackageCode" = "8:{75E8DB99-6522-4437-BA18-219E63164094}"
+        "PackageCode" = "8:{68275CE4-FCD1-4D9F-8EFA-676CCEFC9935}"
         "UpgradeCode" = "8:{98223F72-D157-42ED-9692-DE71E02AA948}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

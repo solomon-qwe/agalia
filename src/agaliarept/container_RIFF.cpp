@@ -393,67 +393,6 @@ HRESULT container_RIFF::getPropertyValue(PropertyType type, agaliaString** str) 
 
 HRESULT container_RIFF::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
 {
-	uint64_t offset = 0, size = 0;
-	auto hr = getFirstFrame(this, &offset, &size);
-	if (FAILED(hr)) return hr;
-
-	rsize_t bufsize = 0;
-	hr = UInt64ToSizeT(size, &bufsize);
-	if (FAILED(hr)) return hr;
-
-	CHeapPtr<uint8_t> buf;
-	if (!buf.AllocateBytes(bufsize)) return E_OUTOFMEMORY;
-	hr = ReadData(buf, offset, bufsize);
-	if (FAILED(hr)) return hr;
-
-	bool dht_found = false;
-	rsize_t sos_pos = 0;
-	rsize_t pos = 0;
-	if (agalia_byteswap(*reinterpret_cast<uint16_t*>(&buf[pos])) == analyze_JPEG::SOI)
-	{
-		pos += sizeof(analyze_JPEG::JPEGSEGMENT);
-		while ((pos + sizeof(uint16_t) < bufsize) && (buf[pos] == 0xFF))
-		{
-			if (sos_pos == 0 && agalia_byteswap(*reinterpret_cast<uint16_t*>(&buf[pos])) == analyze_JPEG::SOS)
-			{
-				sos_pos = pos;
-			}
-
-			if (agalia_byteswap(*reinterpret_cast<uint16_t*>(&buf[pos])) == analyze_JPEG::DHT)
-			{
-				dht_found = true;
-				break;
-			}
-
-			uint16_t s = agalia_byteswap(*reinterpret_cast<uint16_t*>(&buf[pos + 2]));
-			pos += sizeof(analyze_JPEG::JPEGSEGMENT) + s;
-		}
-	}
-
-	CComPtr<IStream> stream;
-	if (dht_found)
-	{
-		hr = getAgaliaStream(&stream, file_path->_p, offset, bufsize);
-		if (FAILED(hr)) return hr;
-	}
-	else if (sos_pos != 0)
-	{
-		UINT tempbufsize = 0;
-		hr = UInt64ToUInt(size + sizeof(MJPGDHTSeg), &tempbufsize);
-		if (SUCCEEDED(hr))
-		{
-			CHeapPtr<uint8_t> temp;
-			if (!temp.AllocateBytes(tempbufsize)) return E_OUTOFMEMORY;
-
-			memcpy(temp.m_pData, buf.m_pData, sos_pos);
-			memcpy(temp.m_pData + sos_pos, MJPGDHTSeg, sizeof(MJPGDHTSeg));
-			memcpy(temp.m_pData + sos_pos + sizeof(MJPGDHTSeg), buf.m_pData + sos_pos, bufsize - sos_pos);
-
-			IStream* st = ::SHCreateMemStream(temp, tempbufsize);
-			stream.Attach(st);
-		}
-	}
-
 	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
 }
 

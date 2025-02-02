@@ -34,12 +34,6 @@
         "Entry"
         {
         "MsmKey" = "8:_142A98A37D4680AFD1CA0A5A37D57A31"
-        "OwnerKey" = "8:_7B79354F61AD4C618F37A6CFD202CF26"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_142A98A37D4680AFD1CA0A5A37D57A31"
         "OwnerKey" = "8:_A4AE9E88E82B4661BFB56CF2233328B7"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -52,6 +46,12 @@
         "Entry"
         {
         "MsmKey" = "8:_401E38DBE27B339C2CB2559110FD24C3"
+        "OwnerKey" = "8:_7B79354F61AD4C618F37A6CFD202CF26"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_50E913B9F9F5E2810CE80662C95A41E7"
         "OwnerKey" = "8:_7B79354F61AD4C618F37A6CFD202CF26"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -106,6 +106,12 @@
         "Entry"
         {
         "MsmKey" = "8:_9E261A3D964EFA0D1601E4C31A151A05"
+        "OwnerKey" = "8:_7B79354F61AD4C618F37A6CFD202CF26"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9E261A3D964EFA0D1601E4C31A151A05"
         "OwnerKey" = "8:_A4AE9E88E82B4661BFB56CF2233328B7"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -136,6 +142,12 @@
         "Entry"
         {
         "MsmKey" = "8:_BD1004D851B391FB1678D1BA64AD8AA4"
+        "OwnerKey" = "8:_7B79354F61AD4C618F37A6CFD202CF26"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BF3E34776042FF43667727A91C14EBF8"
         "OwnerKey" = "8:_7B79354F61AD4C618F37A6CFD202CF26"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -400,6 +412,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_50E913B9F9F5E2810CE80662C95A41E7"
+            {
+            "SourcePath" = "8:MFPlat.DLL"
+            "TargetName" = "8:MFPlat.DLL"
+            "Tag" = "8:"
+            "Folder" = "8:_BAE1949E366E4465B4F7FD5BBAF5DCB9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5DCDEDCD337E4E1FB34BDDEA1DBD36E1"
             {
             "SourcePath" = "8:..\\..\\LICENSE.txt"
@@ -604,6 +636,26 @@
             {
             "SourcePath" = "8:api-ms-win-crt-stdio-l1-1-0.dll"
             "TargetName" = "8:api-ms-win-crt-stdio-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_BAE1949E366E4465B4F7FD5BBAF5DCB9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BF3E34776042FF43667727A91C14EBF8"
+            {
+            "SourcePath" = "8:MFReadWrite.dll"
+            "TargetName" = "8:MFReadWrite.dll"
             "Tag" = "8:"
             "Folder" = "8:_BAE1949E366E4465B4F7FD5BBAF5DCB9"
             "Condition" = "8:"
@@ -848,7 +900,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:agalia"
         "ProductCode" = "8:{E4F4ACAC-EE23-4671-95F0-A07D729E5604}"
-        "PackageCode" = "8:{8BF6C307-C134-4CA8-80C9-9CCD142B70DD}"
+        "PackageCode" = "8:{0EEE72A5-3A3A-452E-87FB-995EAA0A294A}"
         "UpgradeCode" = "8:{4A23654E-07F6-445D-A77F-4044BFC6E96F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
