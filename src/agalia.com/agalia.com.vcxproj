@@ -63,39 +63,39 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeBuildCommandLine>ECHO F | XCOPY /D /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeBuildCommandLine>
-    <NMakeOutput>$(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeOutput>
-    <NMakeCleanCommandLine>del $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>ECHO F | XCOPY /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>ECHO F | XCOPY /D /Y $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeBuildCommandLine>
+    <NMakeOutput>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeOutput>
+    <NMakeCleanCommandLine>del $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>ECHO F | XCOPY /Y $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <NMakeBuildCommandLine>ECHO F | XCOPY /D /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeBuildCommandLine>
-    <NMakeOutput>$(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeOutput>
-    <NMakeCleanCommandLine>del $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>ECHO F | XCOPY /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>ECHO F | XCOPY /D /Y $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeBuildCommandLine>
+    <NMakeOutput>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeOutput>
+    <NMakeCleanCommandLine>del $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>ECHO F | XCOPY /Y $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeBuildCommandLine>ECHO F | XCOPY /D /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeBuildCommandLine>
-    <NMakeOutput>$(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeOutput>
-    <NMakeCleanCommandLine>del $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>ECHO F | XCOPY /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>ECHO F | XCOPY /D /Y $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeBuildCommandLine>
+    <NMakeOutput>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeOutput>
+    <NMakeCleanCommandLine>del $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>ECHO F | XCOPY /Y $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <NMakeBuildCommandLine>ECHO F | XCOPY /D /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeBuildCommandLine>
-    <NMakeOutput>$(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeOutput>
-    <NMakeCleanCommandLine>del $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>ECHO F | XCOPY /Y $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)$(PlatformShortName)\$(Configuration)\agalia.com</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>ECHO F | XCOPY /D /Y $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeBuildCommandLine>
+    <NMakeOutput>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeOutput>
+    <NMakeCleanCommandLine>del $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>ECHO F | XCOPY /Y $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia_console.exe $(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\agalia.com</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <OutDir>$(SolutionDir)$(PlatformShortName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>

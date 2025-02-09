@@ -69,7 +69,7 @@ namespace unittest
 			std::wstring asset_dir;
 			get_asset_dir(&asset_dir);
 
-			parse_to_log((asset_dir + L"TestData\\ITU-T\\T083v1_0\\T83_process1\\A1.JPG").c_str());
+			parse_to_log((asset_dir + L"ITU-T\\T083v1_0\\T83_process1\\A1.JPG").c_str());
 		}
 
 
@@ -89,7 +89,7 @@ namespace unittest
 			agaliaPtr<agaliaElement> next;
 
 			agaliaPtr<agaliaContainer> image;
-			hr = getAgaliaImage(&image, (asset_dir + L"TestData\\ITU-T\\T083v1_0\\T83_process1\\A1.JPG").c_str(), 0, 0);
+			hr = getAgaliaImage(&image, (asset_dir + L"ITU-T\\T083v1_0\\T83_process1\\A1.JPG").c_str(), 0, 0);
 			Assert::AreEqual(S_OK, hr, GetErrorMessage(hr, err_str));
 
 			hr = image->getRootElement(&item);

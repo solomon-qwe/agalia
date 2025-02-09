@@ -29,7 +29,7 @@ namespace unittest
 			std::wstring asset_dir;
 			get_asset_dir(&asset_dir);
 
-			parse_to_log((asset_dir + L"TestData\\DICOM\\JIRA\\2012\\US_JPG_IR87.dcm").c_str());
+			parse_to_log((asset_dir + L"DICOM\\JIRA\\2012\\US_JPG_IR87.dcm").c_str());
 		}
 	};
 }

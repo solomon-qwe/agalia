@@ -1423,7 +1423,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_16C901BE255C4683AB10AC1FFECCD45C"
             {
-            "SourcePath" = "8:..\\..\\x86\\Release\\agalia.com"
+            "SourcePath" = "8:..\\..\\bin\\x86\\Release\\agalia.com"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_81898414F0C24E949D2755F0E67AA67D"
@@ -1451,7 +1451,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8973C4259FC24641A3AF61D7D07885B9"
             {
-            "SourcePath" = "8:..\\..\\x86\\Release\\agaliarept.dll"
+            "SourcePath" = "8:..\\..\\bin\\x86\\Release\\agaliarept.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_81898414F0C24E949D2755F0E67AA67D"
@@ -1479,7 +1479,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D6A234F6963249EC8A0E5942F18A17F0"
             {
-            "SourcePath" = "8:..\\..\\x86\\Release\\agalia.exe"
+            "SourcePath" = "8:..\\..\\bin\\x86\\Release\\agalia.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_81898414F0C24E949D2755F0E67AA67D"

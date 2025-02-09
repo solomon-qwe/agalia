@@ -9,7 +9,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace unittest
 {
-	const wchar_t* script_dir = L"..\\..\\TestCase\\";
+	const wchar_t* script_dir = L"..\\..\\..\\TestCase\\";
 
 
 	TEST_CLASS(unittest)

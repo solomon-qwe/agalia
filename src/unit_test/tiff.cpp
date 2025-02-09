@@ -29,7 +29,7 @@ namespace unittest
 			std::wstring asset_dir;
 			get_asset_dir(&asset_dir);
 
-			parse_to_log((asset_dir + L"TestData\\BigTIFF\\Classic.tif").c_str());
+			parse_to_log((asset_dir + L"BigTIFF\\Classic.tif").c_str());
 		}
 
 
@@ -74,7 +74,7 @@ namespace unittest
 			agaliaPtr<agaliaElement> next;
 
 			agaliaPtr<agaliaContainer> image;
-			hr = getAgaliaImage(&image, (asset_dir + L"TestData\\BigTIFF\\Classic.tif").c_str(), 0, 0);
+			hr = getAgaliaImage(&image, (asset_dir + L"BigTIFF\\Classic.tif").c_str(), 0, 0);
 			Assert::AreEqual(S_OK, hr, GetErrorMessage(hr, err_str));
 
 			hr = image->getRootElement(&item);
