@@ -161,6 +161,7 @@ bool container_ISO::IsSupported(IStream* stream)
 	case 'skip':
 	case 'wide':
 	case 'pnot':
+	case 'jP  ':
 		return true;
 	}
 	return false;

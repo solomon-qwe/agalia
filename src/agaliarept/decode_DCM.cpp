@@ -859,7 +859,8 @@ HRESULT analyze_DCM::loadDCMImage(const container_DCM_Impl* image, const wchar_t
 
 	remove_trailing_space(transfer_syntax_uid);
 
-	if (strcmp(transfer_syntax_uid, "1.2.840.10008.1.2.4.50") == 0)	// JPEG Baseline (Process 1)
+	if (strcmp(transfer_syntax_uid, "1.2.840.10008.1.2.4.50") == 0 ||	// JPEG Baseline (Process 1)
+		strcmp(transfer_syntax_uid, "1.2.840.10008.1.2.4.91") == 0)		// JPEG 2000 Image Compression 
 	{
 		return decodeJPEGBaseline(image, path, phBitmap, maxW, maxH);
 	}
