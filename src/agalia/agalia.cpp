@@ -11,6 +11,7 @@
 
 #include "../inc/agalia_version.h"
 #include "../inc/agaliarept.h"
+#include "../inc/decode.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -88,6 +89,8 @@ BOOL CAgaliaApp::InitInstance()
 	pFrame->ShowWindow(SW_SHOW);
 	pFrame->UpdateWindow();
 
+	initializeAgaliaDecoder();
+
 	// perse command line 
 	agaliaPtr<agaliaCmdLineParam> param;
 	auto hr = agaliaCmdLineParam::parseCmdLine(&param);
@@ -100,7 +103,8 @@ BOOL CAgaliaApp::InitInstance()
 
 int CAgaliaApp::ExitInstance()
 {
-	//TODO: handle additional resources you may have added
+	finalizeAgaliaDecoder();
+
 	return CWinAppEx::ExitInstance();
 }
 

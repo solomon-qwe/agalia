@@ -382,6 +382,11 @@
   <ItemGroup>
     <None Include="res\agaliarept.rc2" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\decode\decode.vcxproj">
+      <Project>{261b9278-a886-433f-a71e-1a4d121a368e}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
