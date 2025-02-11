@@ -394,4 +394,23 @@
 <elem tag="C7EC" enu="DepthUnits" />
 <elem tag="C7ED" enu="DepthMeasureType" />
 <elem tag="C7EE" enu="EnhanceParams" />
+
+<!-- JPEG XR -->
+<elem tag="BC01" enu="PIXEL_FORMAT" />
+<elem tag="BC02" enu="SPATIAL_XFRM_PRIMARY" />
+<elem tag="BC04" enu="IMAGE_TYPE" />
+<elem tag="BC05" enu="PTM_COLOR_INFO( )" />
+<elem tag="BC06" enu="PROFILE_LEVEL_CONTAINER( )" />
+<elem tag="BC80" enu="IMAGE_WIDTH" />
+<elem tag="BC81" enu="IMAGE_HEIGHT" />
+<elem tag="BC82" enu="WIDTH_RESOLUTION" />
+<elem tag="BC83" enu="HEIGHT_RESOLUTION" />
+<elem tag="BCC0" enu="IMAGE_OFFSET" />
+<elem tag="BCC1" enu="IMAGE_BYTE_COUNT" />
+<elem tag="BCC2" enu="ALPHA_OFFSET" />
+<elem tag="BCC3" enu="ALPHA_BYTE_COUNT" />
+<elem tag="BCC4" enu="IMAGE_BAND_PRESENCE" />
+<elem tag="BCC5" enu="ALPHA_BAND_PRESENCE" />
+<elem tag="EA1C" enu="PADDING_DATA" />
+
 </dic>

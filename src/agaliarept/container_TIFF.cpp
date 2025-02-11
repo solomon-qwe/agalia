@@ -132,6 +132,7 @@ HRESULT container_TIFF::getRootElement(agaliaElement** root) const
 	switch (header.get_version())
 	{
 	case 0x002A:
+	case 0x01BC:
 	case 'OR':
 		*root = new item_TIFFHeader(this, 0, sizeof(TIFFHEADER));
 		return S_OK;
@@ -202,6 +203,7 @@ bool container_TIFF::IsSupported(IStream* stream)
 	{
 	case 0x002A:	// TIFF 
 	case 0x002B:	// BigTIFF 
+	case 0x01BC:	// JPEG XR 
 	case 'OR':		// OLYMPUS RAW 
 		break;
 	default:
