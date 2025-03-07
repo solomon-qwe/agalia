@@ -178,6 +178,7 @@
     <ClInclude Include="..\inc\agaliarept.h" />
     <ClInclude Include="..\inc\agalia_version.h" />
     <ClInclude Include="agaliaCmdLineParamImpl.h" />
+    <ClInclude Include="agaliaDecoderDCM.h" />
     <ClInclude Include="agaliaImageBase.h" />
     <ClInclude Include="agaliareptImpl.h" />
     <ClInclude Include="agaliaStream.h" />
@@ -266,7 +267,6 @@
     <ClInclude Include="asf_def.h" />
     <ClInclude Include="byteswap.h" />
     <ClInclude Include="dcm_common.h" />
-    <ClInclude Include="decode_DCM.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="jpeg_def.h" />
     <ClInclude Include="pch.h" />
@@ -277,6 +277,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agaliaCmdLineParamImpl.cpp" />
+    <ClCompile Include="agaliaDecoderDCM.cpp" />
     <ClCompile Include="agaliaImageBase.cpp" />
     <ClCompile Include="agaliarept.cpp" />
     <ClCompile Include="agaliaStream.cpp" />
@@ -362,7 +363,6 @@
     <ClCompile Include="analyze_TIFF_item_Header8.cpp" />
     <ClCompile Include="analyze_TIFF_item_IFD.cpp" />
     <ClCompile Include="analyze_TIFF_util.cpp" />
-    <ClCompile Include="decode_DCM.cpp" />
     <ClCompile Include="dictionary_dcm.cpp" />
     <ClCompile Include="dictionary_tiff.cpp" />
     <ClCompile Include="dllmain.cpp" />
@@ -383,6 +383,9 @@
     <None Include="res\agaliarept.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\agaliaUtil\agaliaUtil.vcxproj">
+      <Project>{b83c2a23-9889-4ea3-a3d5-6c94fbd29c0d}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\decode\decode.vcxproj">
       <Project>{261b9278-a886-433f-a71e-1a4d121a368e}</Project>
     </ProjectReference>

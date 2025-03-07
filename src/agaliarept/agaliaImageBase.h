@@ -13,6 +13,8 @@ public:
 	virtual HRESULT getElementInfoCount(const agaliaElement* item, uint32_t* row) const override;
 	virtual HRESULT getElementInfoValue(const agaliaElement* item, uint32_t row, uint32_t column, agaliaString** str) const override;
 
+	virtual HRESULT loadBitmap(IWICBitmap** ppBitmap, IWICColorContext** ppColorContext) const override;
+
 	virtual HRESULT LockStream(void) const override;
 	virtual HRESULT UnlockStream(void) const override;
 	virtual HRESULT ReadData(void* buf, uint64_t pos, uint64_t size) const override;

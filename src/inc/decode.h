@@ -15,4 +15,5 @@ extern "C"
 	AGALIADECODE_API HRESULT initializeAgaliaDecoder(void);
 	AGALIADECODE_API HRESULT finalizeAgaliaDecoder(void);
 	AGALIADECODE_API HRESULT getAgaliaDecoder(agaliaDecoder** decoder);
+	AGALIADECODE_API HRESULT addAgaliaDecoder(agaliaDecoder* decoder);
 }

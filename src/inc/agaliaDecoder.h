@@ -1,7 +1,11 @@
 #pragma once
 
 #include "agaliarept.h"
+#include "../inc/agaliaUtil.h"
 #include <objidl.h>
+
+interface IWICBitmap;
+interface IWICColorContext;
 
 class agaliaDecoder
 {
@@ -11,8 +15,7 @@ public:
 
 	virtual uint32_t getPriority(void) const = 0;
 
-    virtual HRESULT decode(IStream* stream, HBITMAP* phBitmap) = 0;
-    virtual HRESULT decode(IStream* stream, agaliaHeap** bmpInfo, void** ppBits) = 0;
-    virtual HRESULT decode(IStream* stream, uint32_t maxW, uint32_t maxH, HBITMAP* phBitmap) = 0;
-    virtual HRESULT decode(IStream* stream, uint32_t maxW, uint32_t maxH, agaliaHeap** bmpInfo, void** ppBits) = 0;
+    virtual HRESULT decode(agaliaBitmap** ppBitmap, const agaliaContainer* image) = 0;
+    virtual HRESULT decode(IWICBitmap** ppBitmap, IWICColorContext** ppColorContext, const agaliaContainer* image) = 0;
+	virtual HRESULT decodeThumbnail(agaliaBitmap** ppBitmap, const agaliaContainer* image, uint32_t maxW, uint32_t maxH) = 0;
 };

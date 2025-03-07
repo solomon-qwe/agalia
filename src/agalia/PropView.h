@@ -1,5 +1,6 @@
 #pragma once
 
+class agaliaBitmap;
 
 // PropView
 
@@ -13,7 +14,7 @@ public:
 
 public:
 	CListCtrl m_listCtrl;
-	HBITMAP m_hBitmap = NULL;
+	agaliaBitmap* m_pBitmap = NULL;
 	bool pos_initialized = false;
 
 protected:

@@ -9,6 +9,7 @@
 #include "MainFrm.h"
 
 #include "../inc/agaliarept.h"
+#include "../inc/agaliaUtil.h"
 
 #include "ChildTreeView.h"
 #include "ChildListView.h"
@@ -101,11 +102,11 @@ void CMainFrame::DeleteAllContents(void)
 
 	// Property View 
 	m_wndPropView.m_listCtrl.DeleteAllItems();
-	if (m_wndPropView.m_hBitmap)
+	if (m_wndPropView.m_pBitmap)
 	{
-		auto temp = m_wndPropView.m_hBitmap;
-		m_wndPropView.m_hBitmap = NULL;
-		::DeleteObject(temp);
+		auto temp = m_wndPropView.m_pBitmap;
+		m_wndPropView.m_pBitmap = NULL;
+		temp->Release();
 	}
 
 	// clear cache data 
@@ -222,10 +223,10 @@ void CMainFrame::ResetContents(const wchar_t* path, uint64_t offset, uint64_t si
 			m_wndPropView.m_listCtrl.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
 		}
 
-		HBITMAP hBitmap = NULL;
-		if (SUCCEEDED(ctrl.image->getThumbnailImage(&hBitmap, thumbnail_area_size, thumbnail_area_size)))
+		agaliaBitmap* pBitmap = nullptr;
+		if (SUCCEEDED(ctrl.image->loadThumbnail(&pBitmap, thumbnail_area_size, thumbnail_area_size)))
 		{
-			m_wndPropView.m_hBitmap = hBitmap;
+			m_wndPropView.m_pBitmap = pBitmap;
 			m_wndPropView.Invalidate();
 		}
 	}
@@ -616,8 +617,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		int nDefaultCheck = ctrl.startup_properties_show ? MF_CHECKED : MF_UNCHECKED;
 		menu->CheckMenuItem(ID_VIEW_PROPERTY, nDefaultCheck);
 	}
-	m_wndGraphicView.reset_color_profile(ctrl.monitor_color_profile);
-	m_wndGraphicView.reset_renderer(ctrl.rendering_engine);
 
 	// initialize flat sytle 
 	if (!m_wndTagListView.Create(
@@ -631,7 +630,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndTagListView.SetExtendedStyle(dwStyle);
 
 	// initialize graphic sytle 
-	m_wndGraphicView.init_window();
+	m_wndGraphicView.create(this);
+	m_wndGraphicView.update_setting(ctrl.rendering_engine, ctrl.monitor_color_profile);
 
 	// initialize hierarchy style 
 	CListView* pListView = dynamic_cast<CListView*>(m_wndHSplitter.GetPane(0, 0));
@@ -811,7 +811,7 @@ void CMainFrame::OnDropFiles(HDROP hDropInfo)
 void CMainFrame::OnExitSizeMove()
 {
 	// Graphic View のカラープロファイルを移動先のモニタに合わせる 
-	m_wndGraphicView.reset_color_profile(-1);
+	m_wndGraphicView.reset_color_profile();
 
 	CFrameWnd::OnExitSizeMove();
 }
@@ -908,8 +908,7 @@ void CMainFrame::OnEditOptions()
 
 		// 画面更新 
 		CWaitCursor wait;
-		m_wndGraphicView.reset_renderer(ctrl.rendering_engine);
-		m_wndGraphicView.reset_color_profile(ctrl.monitor_color_profile);
+		m_wndGraphicView.update_setting(ctrl.rendering_engine, ctrl.monitor_color_profile);
 		ResetContents(ctrl.data_path, ctrl.data_offset, ctrl.data_size, ctrl.data_format);
 		RecalcLayout();
 	}

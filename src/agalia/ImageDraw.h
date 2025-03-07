@@ -12,7 +12,8 @@ enum colorManagementMode
 enum renderingMode
 {
 	rendering_GDI,
-	rendering_D2D
+	rendering_D2D_1_1,
+	rendering_D2D_1_3
 };
 
 class ImageDraw

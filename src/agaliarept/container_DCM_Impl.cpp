@@ -4,7 +4,11 @@
 #include "analyze_DCM_item_Base.h"
 #include "analyze_DCM_item_preamble.h"
 #include "analyze_DCM_util.h"
-#include "decode_DCM.h"
+#include "analyze_DCM_item_elem.h"
+#include "../inc/decode.h"
+#include "agaliaDecoderDCM.h"
+#include "thumbnail.h"
+
 
 using namespace analyze_DCM;
 
@@ -51,6 +55,13 @@ container_DCM_Impl::container_DCM_Impl(const wchar_t* path, IStream* stream)
 	}
 
 	init_dcm_dictionary(agalia_pref_dic_lang == Japanese ? L"jpn" : L"enu");
+
+	static bool initialized = false;
+	if (!initialized)
+	{
+		addAgaliaDecoder(new agaliaDecoderDCM());
+		initialized = true;
+	}
 }
 
 
@@ -146,8 +157,6 @@ HRESULT container_DCM_Impl::getRootElement(agaliaElement** root) const
 	return S_OK;
 }
 
-#include "analyze_DCM_item_elem.h"
-
 HRESULT container_DCM_Impl::getPropertyValue(PropertyType type, agaliaString** str) const
 {
 	if (str == nullptr) return E_POINTER;
@@ -174,8 +183,12 @@ HRESULT container_DCM_Impl::getPropertyValue(PropertyType type, agaliaString** s
 	return E_FAIL;
 }
 
-
-HRESULT container_DCM_Impl::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
+HRESULT container_DCM_Impl::loadBitmap(agaliaBitmap** ppBitmap) const
 {
-	return loadDCMImage(this, file_path->_p, maxW, maxH, phBitmap);
+	return ::loadBitmap(ppBitmap, this);
+}
+
+HRESULT container_DCM_Impl::loadThumbnail(agaliaBitmap** ppBitmap, uint32_t maxW, uint32_t maxH) const
+{
+	return ::loadThumbnail(ppBitmap, this, maxW, maxH);
 }

@@ -5,6 +5,8 @@
 #include "agalia.h"
 #include "PropView.h"
 
+#include "../inc/agaliaUtil.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -45,34 +47,40 @@ void PropView::OnPaint()
 
 	dc.FillSolidRect(&dc.m_ps.rcPaint, ::GetSysColor(COLOR_WINDOW));
 
-	if (m_hBitmap)
+	BITMAPV5HEADER bi = {};
+	HBITMAP hBitmap = NULL;
+	if (m_pBitmap && SUCCEEDED(m_pBitmap->getBitmapInfo(&bi)) && SUCCEEDED(m_pBitmap->getHBitmap(&hBitmap)))
 	{
-		DIBSECTION dib = {};
-		::GetObject(m_hBitmap, sizeof(dib), &dib);
-
 		CRect rcClient;
 		GetClientRect(&rcClient);
 
 		int dstAreaW = rcClient.Width();
 		int dstAreaH = dstAreaW;
 
-		auto mx = static_cast<double>(dstAreaW) / dib.dsBmih.biWidth;
-		auto my = static_cast<double>(dstAreaH) / dib.dsBmih.biHeight;
+		auto mx = static_cast<double>(dstAreaW) / bi.bV5Width;
+		auto my = static_cast<double>(dstAreaH) / bi.bV5Height;
 		double m = min(mx, my);
 
-		auto dstImgW = static_cast<int>(dib.dsBmih.biWidth * m);
-		auto dstImgH = static_cast<int>(dib.dsBmih.biHeight * m);
+		auto dstImgW = static_cast<int>(bi.bV5Width * m);
+		auto dstImgH = static_cast<int>(bi.bV5Height * m);
 
 		int dstImgX = (dstAreaW - dstImgW) / 2;
 		int dstImgY = (dstAreaH - dstImgH) / 2;
 
 		CDC memDC;
 		memDC.CreateCompatibleDC(&dc);
-		HGDIOBJ hOldBmp = memDC.SelectObject(m_hBitmap);
+		HGDIOBJ hOldBmp = memDC.SelectObject(hBitmap);
 
-		dc.SetStretchBltMode(HALFTONE);
-		dc.SetBrushOrg(0, 0);
-		dc.StretchBlt(dstImgX, dstImgY, dstImgW, dstImgH, &memDC, 0, 0, dib.dsBmih.biWidth, dib.dsBmih.biHeight, SRCCOPY);
+		if (bi.bV5AlphaMask == 0)
+		{
+			dc.SetStretchBltMode(HALFTONE);
+			dc.SetBrushOrg(0, 0);
+			dc.StretchBlt(dstImgX, dstImgY, dstImgW, dstImgH, &memDC, 0, 0, bi.bV5Width, bi.bV5Height, SRCCOPY);
+		}
+		else
+		{
+			dc.AlphaBlend(dstImgX, dstImgY, dstImgW, dstImgH, &memDC, 0, 0, bi.bV5Width, bi.bV5Height, BLENDFUNCTION{ AC_SRC_OVER, 0, 255, AC_SRC_ALPHA });
+		}
 
 		memDC.SelectObject(hOldBmp);
 		memDC.DeleteDC();

@@ -111,9 +111,15 @@ HRESULT container_ASF::getPropertyValue(PropertyType type, agaliaString** str) c
 	return E_FAIL;
 }
 
-HRESULT container_ASF::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
+
+HRESULT container_ASF::loadBitmap(agaliaBitmap** ppBitmap) const
 {
-	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
+	return ::loadBitmap(ppBitmap, this);
+}
+
+HRESULT container_ASF::loadThumbnail(agaliaBitmap** ppBitmap, uint32_t maxW, uint32_t maxH) const
+{
+	return ::loadThumbnail(ppBitmap, this, maxW, maxH);
 }
 
 _agaliaContainerBase* container_ASF::CreateInstance(const wchar_t* path, IStream* stream)

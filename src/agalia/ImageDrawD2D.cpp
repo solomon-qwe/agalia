@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ImageDrawD2D.h"
-
+#include "util.h"
+#include "../inc/agaliaUtil.h"
 
 #include <io.h>
 
@@ -332,55 +333,6 @@ HRESULT Render(IDXGISwapChain1* swapChain, ID2D1DeviceContext* d2dContext, ID2D1
 }
 
 
-HRESULT GetMonitorColorProfilePath(_In_ HWND hwnd, _Inout_ LPDWORD pBufSize, LPWSTR pszFilename)
-{
-	HMONITOR hMonitor = ::MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-	if (!hMonitor) return HRESULT_FROM_WIN32(::GetLastError());
-
-	MONITORINFOEX mi = {};
-	mi.cbSize = sizeof(mi);
-	BOOL ret = ::GetMonitorInfo(hMonitor, &mi);
-	if (!ret) return HRESULT_FROM_WIN32(::GetLastError());
-
-	HDC hdc = ::CreateDC(mi.szDevice, mi.szDevice, nullptr, nullptr);
-	if (!hdc) return HRESULT_FROM_WIN32(::GetLastError());
-
-	ret = ::GetICMProfile(hdc, pBufSize, pszFilename);
-	HRESULT result = ret ? S_OK : HRESULT_FROM_WIN32(::GetLastError());
-
-	::DeleteDC(hdc);
-
-	return result;
-}
-
-
-HRESULT LoadFile(CHeapPtr<BYTE>& buf, long* file_size, const wchar_t* path)
-{
-	// precondition check 
-	if (path == nullptr) return E_POINTER;
-	if (file_size == nullptr) return E_POINTER;
-	if (buf.m_pData) return E_FAIL;
-
-	// open 
-	FILE* fp = nullptr;
-	errno_t err = _wfopen_s(&fp, path, L"rb");
-	if (err != 0) return E_FAIL;
-	if (fp == nullptr) return E_FAIL;
-
-	// read 
-	HRESULT ret = E_FAIL;
-	*file_size = _filelength(_fileno(fp));
-	if (buf.AllocateBytes(*file_size))
-		if (fread(buf, *file_size, 1, fp) == 1)
-			ret = S_OK;
-
-	// close 
-	fclose(fp);
-
-	return ret;
-}
-
-
 HRESULT UpdateDisplayColorContext(ID2D1Effect* displayEffect, ID2D1DeviceContext* d2dContext, HWND hwnd, int mode)
 {
 	if (!displayEffect)
@@ -577,14 +529,16 @@ HRESULT ImageDrawD2D::reset_content(agaliaContainer* image, int colorManagementM
 	{
 		if (!image) return hr;
 
+		agaliaPtr<agaliaBitmap> bitmap;
+		hr = image->loadBitmap(&bitmap);
+		if (FAILED(hr)) return hr;
+
 		HBITMAP hBitmap = NULL;
-		hr = image->getThumbnailImage(&hBitmap, 0, 0);
+		hr = bitmap->getHBitmap(&hBitmap);
 		if (FAILED(hr)) return hr;
 
 		hr = ::CreateDeviceIndependentResources_HBITMAP(_p->wicFactory.Get(), _p->wicFormatConverter.GetAddressOf(), _p->wicColorContext.GetAddressOf(), hBitmap);
 		if (FAILED(hr)) return hr;
-
-		::DeleteObject(hBitmap);
 	}
 
 	hr = ::CreateDeviceResources_Image(_p->displayEffect.GetAddressOf(), _p->sourceEffect.GetAddressOf(), _p->d2dContext.Get(), _p->wicFormatConverter.Get(), _p->wicColorContext.Get(), colorManagementMode);

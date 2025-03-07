@@ -59,7 +59,23 @@ void* _agaliaHeapImpl::GetData(void) const
 }
 
 
+class agaliaContainerUnknown : public _agaliaContainerBase
+{
+public:
+	agaliaContainerUnknown(const wchar_t* path, IStream* stream):_agaliaContainerBase(path, stream) {}
+	virtual ~agaliaContainerUnknown() {}
 
+	virtual HRESULT getColumnCount(uint32_t* ) const override { return E_NOTIMPL; }
+	virtual HRESULT getColumnWidth(uint32_t , int32_t* ) const override { return E_NOTIMPL; }
+	virtual HRESULT getColumnName(uint32_t , agaliaString** ) const override { return E_NOTIMPL; }
+	virtual HRESULT getElementInfoCount(const agaliaElement* , uint32_t* ) const override { return E_NOTIMPL; }
+	virtual HRESULT getElementInfoValue(const agaliaElement* , uint32_t , uint32_t , agaliaString** ) const override { return E_NOTIMPL; }
+	virtual HRESULT getRootElement(agaliaElement** ) const override { return E_NOTIMPL; }
+	virtual HRESULT getPropertyValue(PropertyType , agaliaString** ) const override { return E_NOTIMPL; }
+	virtual HRESULT loadBitmap(IWICBitmap** , IWICColorContext** ) const  override { return E_NOTIMPL; }
+	virtual HRESULT loadBitmap(agaliaBitmap** ) const override { return E_NOTIMPL; }
+	virtual HRESULT loadThumbnail(agaliaBitmap** , uint32_t , uint32_t ) const override { return E_NOTIMPL; }
+};
 
 
 // item class 
@@ -133,7 +149,7 @@ static cn container_names[] = {
 
 
 
-HRESULT getAgaliaImage(agaliaContainer** image, const wchar_t* path, uint64_t offset, uint64_t size, int format)
+HRESULT getAgaliaImage(agaliaContainer** image, const wchar_t* path, uint64_t offset, uint64_t size, uint32_t format)
 {
 	if (image == nullptr) return E_POINTER;
 
@@ -141,11 +157,20 @@ HRESULT getAgaliaImage(agaliaContainer** image, const wchar_t* path, uint64_t of
 	auto hr = getAgaliaStream(&stream, path, offset, size);
 	if (FAILED(hr)) return hr;
 
-	if (format == agalia_format_auto)
+	if (format & agalia_format_mask)
 	{
-		for (int i = 0; i < _countof(generators); i++)
-			if (generators[i](image, path, stream))
-				return S_OK;
+		if ((format & ~agalia_format_mask) & agalia_format_auto)
+		{
+			for (int i = 0; i < _countof(generators); i++)
+				if (generators[i](image, path, stream))
+					return S_OK;
+		}
+
+		if ((format & ~agalia_format_mask) & agalia_format_force)
+		{
+			*image = new agaliaContainerUnknown(path, stream);
+			return S_OK;
+		}
 	}
 	else if (0 <= format && format < _countof(generators))
 	{

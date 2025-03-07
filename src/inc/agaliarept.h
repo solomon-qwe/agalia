@@ -10,6 +10,10 @@
 
 struct IStream;
 class agaliaContainer;
+class agaliaBitmap;
+struct IWICBitmap;
+struct IWICColorContext;
+
 
 // heap memory wrapper 
 
@@ -114,7 +118,9 @@ public:
 		ICCProfile
 	};
 	virtual HRESULT getPropertyValue(PropertyType type, agaliaString** str) const = 0;
-	virtual HRESULT getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const = 0;
+	virtual HRESULT loadBitmap(IWICBitmap** ppBitmap, IWICColorContext** ppColorContext) const = 0;
+	virtual HRESULT loadBitmap(agaliaBitmap** ppBitmap) const = 0;
+	virtual HRESULT loadThumbnail(agaliaBitmap** ppBitmap, uint32_t maxW, uint32_t maxH) const = 0;
 	virtual HRESULT getColorProfile(agaliaHeap** buf) const = 0;
 
 	virtual HRESULT LockStream(void) const = 0;
@@ -174,8 +180,10 @@ enum PreferredDictonaryLanguage {
 
 extern "C"
 {
-	const int agalia_format_auto = -1;
-	AGALIAREPT_API HRESULT getAgaliaImage(agaliaContainer** image, const wchar_t* path, uint64_t offset, uint64_t size, int format = agalia_format_auto);
+	const uint32_t agalia_format_auto	= 0x80000001;
+	const uint32_t agalia_format_force	= 0x80000002;
+	const uint32_t agalia_format_mask	= 0x80000000;
+	AGALIAREPT_API HRESULT getAgaliaImage(agaliaContainer** image, const wchar_t* path, uint64_t offset, uint64_t size, uint32_t format = agalia_format_auto);
 	AGALIAREPT_API HRESULT getAgaliaStream(IStream** stream, const wchar_t* path, uint64_t offset, uint64_t size);
 	AGALIAREPT_API HRESULT setAgaliaPreference(int property, int value);
 	AGALIAREPT_API HRESULT getAgaliaPreference(int property, int* value);

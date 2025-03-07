@@ -1,217 +1,271 @@
 #include "pch.h"
 #include "agaliaDecoderWIC.h"
 
-// for Windows Imaging Component
 #include <wincodec.h>
-
-// for Direct2D
-#include <d2d1.h>
-#pragma comment(lib, "d2d1.lib")
-
 #include <atlbase.h>
 
-static HRESULT calculateThumbnailSize(UINT orgW, UINT orgH, UINT maxW, UINT maxH, UINT* thumbWidth, UINT* thumbHeight)
+
+
+static HRESULT LoadThumbnailWIC(agaliaBitmap** ppBitmap, IStream* stream, uint32_t maxW, uint32_t maxH)
 {
-	if (!thumbWidth || !thumbHeight) return E_POINTER;
-	if (orgH == 0 || orgW == 0) return E_INVALIDARG;
+    if (!ppBitmap || !stream)
+        return E_INVALIDARG;
 
-	double scaleH = (maxH == 0) ? 1 : (double)maxH / orgH;
-	double scaleW = (maxW == 0) ? 1 : (double)maxW / orgW;
-	double scale = min(scaleH, scaleW);
-	*thumbWidth = static_cast<UINT>(orgW * scale);
-	*thumbHeight = static_cast<UINT>(orgH * scale);
+    HRESULT hr = S_OK;
 
-	return S_OK;
+    CComPtr<IWICImagingFactory> wicFactory;
+    hr = ::CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory));
+    if (FAILED(hr)) return hr;
+
+    CComPtr<IWICBitmapDecoder> decoder;
+    hr = wicFactory->CreateDecoderFromStream(stream, nullptr, WICDecodeMetadataCacheOnDemand, &decoder);
+    if (FAILED(hr)) return hr;
+
+    CComPtr<IWICBitmapFrameDecode> frame;
+    hr = decoder->GetFrame(0, &frame);
+    if (FAILED(hr)) return hr;
+
+    CComPtr<IWICFormatConverter> converter;
+    hr = wicFactory->CreateFormatConverter(&converter);
+    if (FAILED(hr)) return hr;
+
+    hr = converter->Initialize(
+        frame,
+        GUID_WICPixelFormat32bppBGRA,
+        WICBitmapDitherTypeNone,
+        nullptr,
+        0.0,
+        WICBitmapPaletteTypeMedianCut);
+    if (FAILED(hr)) return hr;
+
+    UINT srcWidth = 0, srcHeight = 0;
+    hr = converter->GetSize(&srcWidth, &srcHeight);
+    if (FAILED(hr)) return hr;
+
+    UINT targetWidth = srcWidth;
+    UINT targetHeight = srcHeight;
+    CComPtr<IWICBitmapSource> source;
+    if (maxW < srcWidth || maxH < srcHeight)
+    {
+        CComPtr<IWICBitmapScaler> scaler;
+        hr = wicFactory->CreateBitmapScaler(&scaler);
+        if (FAILED(hr)) return hr;
+
+        double scaleX = static_cast<double>(maxW) / srcWidth;
+        double scaleY = static_cast<double>(maxH) / srcHeight;
+        double scale = (scaleX < scaleY) ? scaleX : scaleY;
+        targetWidth = static_cast<UINT>(srcWidth * scale);
+        targetHeight = static_cast<UINT>(srcHeight * scale);
+
+        hr = scaler->Initialize(converter, targetWidth, targetHeight, WICBitmapInterpolationModeFant);
+        if (FAILED(hr)) return hr;
+
+        source = scaler;
+    }
+    else
+    {
+        source = converter;
+    }
+
+    CComPtr<IWICBitmapFlipRotator> flipRotator;
+    hr = wicFactory->CreateBitmapFlipRotator(&flipRotator);
+    if (FAILED(hr)) return hr;
+
+    hr = flipRotator->Initialize(source, WICBitmapTransformFlipVertical);
+    if (FAILED(hr)) return hr;
+
+    BITMAPV5HEADER bi = {};
+    bi.bV5Size = sizeof(BITMAPV5HEADER);
+    bi.bV5Width = targetWidth;
+    bi.bV5Height = targetHeight;
+    bi.bV5Planes = 1;
+    bi.bV5BitCount = 32;
+    bi.bV5Compression = BI_BITFIELDS;
+    bi.bV5RedMask   = 0xFFu << (8 * 2);
+    bi.bV5GreenMask = 0xFFu << (8 * 1);
+    bi.bV5BlueMask  = 0xFFu << (8 * 0);
+    bi.bV5AlphaMask = 0xFFu << (8 * 3);
+
+	agaliaPtr<agaliaBitmap> bitmap;
+	hr = createAgaliaBitmap(&bitmap, &bi);
+	if (FAILED(hr)) return hr;
+
+    void* pBits = nullptr;
+	bitmap->getBits(&pBits);
+
+    const UINT stride = targetWidth * 4;
+	const UINT bufferSize = stride * targetHeight;
+    hr = flipRotator->CopyPixels(nullptr, stride, bufferSize, static_cast<BYTE*>(pBits));
+    if (FAILED(hr)) return hr;
+
+    *ppBitmap = bitmap.detach();
+    
+    return S_OK;
 }
 
-
-static HRESULT createHBitmap(UINT width, UINT height, HBITMAP* phBitmap, void** ppBits)
+static HRESULT LoadImageWIC(agaliaBitmap** ppBitmap, IStream* stream)
 {
-	if (!phBitmap || !ppBits) return E_POINTER;
+    if (!ppBitmap || !stream)
+        return E_INVALIDARG;
 
-	BITMAPINFOHEADER bmi = {};
-	bmi.biSize = sizeof(BITMAPINFOHEADER);
-	bmi.biWidth = width;
-	bmi.biHeight = height;
-	bmi.biPlanes = 1;
-	bmi.biBitCount = 32;
-	bmi.biCompression = BI_RGB;
+    HRESULT hr = S_OK;
 
-	HDC hMemDC = ::CreateCompatibleDC(NULL);
-	if (hMemDC == NULL) return MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ::GetLastError());
+    CComPtr<IWICImagingFactory> wicFactory;
+    hr = ::CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory));
+    if (FAILED(hr)) return hr;
+
+    CComPtr<IWICBitmapDecoder> decoder;
+    hr = wicFactory->CreateDecoderFromStream(stream, nullptr, WICDecodeMetadataCacheOnLoad, &decoder);
+    if (FAILED(hr)) return hr;
+
+    CComPtr<IWICBitmapFrameDecode> frame;
+    hr = decoder->GetFrame(0, &frame);
+    if (FAILED(hr)) return hr;
+
+    WICPixelFormatGUID pixelFormatGUID = { 0 };
+    hr = frame->GetPixelFormat(&pixelFormatGUID);
+    if (FAILED(hr)) return hr;
+
+    CComPtr<IWICComponentInfo> componentInfo;
+	hr = wicFactory->CreateComponentInfo(pixelFormatGUID, &componentInfo);
+	if (FAILED(hr)) return hr;
+
+	CComPtr<IWICPixelFormatInfo> pixelFormatInfo;
+	hr = componentInfo.QueryInterface(&pixelFormatInfo);
+	if (FAILED(hr)) return hr;
+
+	UINT channelCount = 0;
+	hr = pixelFormatInfo->GetChannelCount(&channelCount);
+	if (FAILED(hr)) return hr;
+
+    CComPtr<IWICFormatConverter> converter;
+    hr = wicFactory->CreateFormatConverter(&converter);
+    if (FAILED(hr))
+        return hr;
+
+    bool useAlpha = (3 < channelCount);
+
+    hr = converter->Initialize(
+        frame,
+        GUID_WICPixelFormat32bppPBGRA,
+        WICBitmapDitherTypeNone,
+        nullptr,
+        0.0,
+        WICBitmapPaletteTypeMedianCut);
+    if (FAILED(hr)) return hr;
+
+    UINT width = 0, height = 0;
+    hr = converter->GetSize(&width, &height);
+    if (FAILED(hr)) return hr;
+
+    CComPtr<IWICBitmapFlipRotator> flipRotator;
+    hr = wicFactory->CreateBitmapFlipRotator(&flipRotator);
+    if (FAILED(hr)) return hr;
+
+    hr = flipRotator->Initialize(converter, WICBitmapTransformFlipVertical);
+    if (FAILED(hr)) return hr;
+
+    BITMAPV5HEADER bi = {};
+    bi.bV5Size = sizeof(BITMAPV5HEADER);
+    bi.bV5Width = width;
+    bi.bV5Height = height;
+    bi.bV5Planes = 1;
+    bi.bV5BitCount = 32;
+    bi.bV5Compression = BI_BITFIELDS;
+    bi.bV5RedMask   = 0xFFu << (8 * 2);
+    bi.bV5GreenMask = 0xFFu << (8 * 1);
+    bi.bV5BlueMask  = 0xFFu << (8 * 0);
+    bi.bV5AlphaMask = useAlpha ? (0xFFu << (8 * 3)) : 0;
+
+	agaliaPtr<agaliaBitmap> bitmap;
+	hr = createAgaliaBitmap(&bitmap, &bi);
+	if (FAILED(hr)) return hr;
 
 	void* pBits = nullptr;
-	HBITMAP hBitmap = ::CreateDIBSection(hMemDC, reinterpret_cast<BITMAPINFO*>(&bmi), DIB_RGB_COLORS, &pBits, NULL, 0);
-	DWORD dwErr = ::GetLastError();
+	bitmap->getBits(&pBits);
 
-	::DeleteDC(hMemDC);
-	if (!hBitmap) return MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, dwErr);
+    const UINT stride = width * 4;
+	const UINT bufferSize = stride * height;
+    hr = flipRotator->CopyPixels(nullptr, stride, bufferSize, static_cast<BYTE*>(pBits));
+    if (FAILED(hr)) return hr;
 
-	*phBitmap = hBitmap;
-	*ppBits = pBits;
-	return S_OK;
+	*ppBitmap = bitmap.detach();
+    return S_OK;
 }
 
-
-static HRESULT initializeWIC(IStream* stream, IWICImagingFactory** ppFactory, IWICBitmapFrameDecode** ppFrame, IWICFormatConverter** ppConverter)
+static HRESULT LoadImageWIC(IWICBitmap** ppBitmap, IWICColorContext** ppColorContext, IStream* stream)
 {
-	if (!stream || !ppFactory || !ppFrame || !ppConverter) return E_POINTER;
-	if (*ppFactory || *ppFrame || *ppConverter) return E_INVALIDARG;
+    if (ppBitmap == nullptr) return E_POINTER;
+	if (ppColorContext == nullptr) return E_POINTER;
+    if (stream == nullptr) return E_POINTER;
 
-	CComPtr<IWICImagingFactory> spFactory;
-	HRESULT hr = spFactory.CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER);
-	if (FAILED(hr)) return hr;
+    HRESULT hr = S_OK;
 
-	CComPtr<IWICBitmapDecoder> spDecoder;
-	hr = spFactory->CreateDecoderFromStream(stream, nullptr, WICDecodeMetadataCacheOnLoad, &spDecoder);
-	if (FAILED(hr)) return hr;
+    CComPtr<IWICImagingFactory> wicFactory;
+    hr = ::CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory));
+    if (FAILED(hr)) return hr;
 
-	CComPtr<IWICBitmapFrameDecode> spFrame;
-	hr = spDecoder->GetFrame(0, &spFrame);
-	if (FAILED(hr)) return hr;
+    CComPtr<IWICBitmapDecoder> decoder;
+    hr = wicFactory->CreateDecoderFromStream(stream, nullptr, WICDecodeMetadataCacheOnDemand, &decoder);
+    if (FAILED(hr)) return hr;
 
-	CComPtr<IWICFormatConverter> spConverter;
-	hr = spFactory->CreateFormatConverter(&spConverter);
-	if (FAILED(hr)) return hr;
+    CComPtr<IWICBitmapFrameDecode> frame;
+    hr = decoder->GetFrame(0, &frame);
+    if (FAILED(hr)) return hr;
 
-	hr = spConverter->Initialize(spFrame, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0.0, WICBitmapPaletteTypeCustom);
-	if (FAILED(hr)) return hr;
+    CComPtr<IWICFormatConverter> converter;
+    hr = wicFactory->CreateFormatConverter(&converter);
+    if (FAILED(hr)) return hr;
 
-	*ppFactory = spFactory.Detach();
-	*ppFrame = spFrame.Detach();
-	*ppConverter = spConverter.Detach();
-	return S_OK;
+    WICPixelFormatNumericRepresentation pixelFormat;
+    {
+        WICPixelFormatGUID pixelFormatGUID;
+        hr = frame->GetPixelFormat(&pixelFormatGUID);
+        if (FAILED(hr)) return hr;
+
+        CComPtr<IWICComponentInfo> spWicComponentInfo;
+        hr = wicFactory->CreateComponentInfo(pixelFormatGUID, &spWicComponentInfo);
+        if (FAILED(hr)) return hr;
+
+        CComPtr<IWICPixelFormatInfo2> spWicPixelFormatInfo2;
+		hr = spWicComponentInfo.QueryInterface(&spWicPixelFormatInfo2);
+        if (FAILED(hr)) return hr;
+
+        hr = spWicPixelFormatInfo2->GetNumericRepresentation(&pixelFormat);
+        if (FAILED(hr)) return hr;
+    }
+
+    WICPixelFormatGUID dstFormat =
+        (pixelFormat == WICPixelFormatNumericRepresentationFloat) ?
+        GUID_WICPixelFormat64bppRGBAHalf :
+        GUID_WICPixelFormat64bppRGBA;
+
+    hr = converter->Initialize(
+        frame,
+        dstFormat,
+        WICBitmapDitherTypeNone,
+        nullptr,
+        0.0,
+        WICBitmapPaletteTypeMedianCut);
+    if (FAILED(hr)) return hr;
+
+    CComPtr<IWICBitmap> bitmap;
+    hr = wicFactory->CreateBitmapFromSource(converter, WICBitmapCacheOnDemand, &bitmap);
+    if (FAILED(hr)) return hr;
+
+    CComPtr<IWICColorContext> colorContext;
+    hr = wicFactory->CreateColorContext(&colorContext);
+    if (FAILED(hr)) return hr;
+
+    unsigned int actualCount = 0;
+    hr = frame->GetColorContexts(1, &colorContext.p, &actualCount);
+    *ppColorContext = (SUCCEEDED(hr) && 0 < actualCount) ? colorContext.Detach() : nullptr;
+
+    *ppBitmap = bitmap.Detach();
+
+    return S_OK;
 }
 
-
-static HRESULT createScaledWICBitmap(IWICImagingFactory* pFactory, IWICFormatConverter* pConverter, UINT thumbWidth, UINT thumbHeight, IWICBitmap** ppScaledWICBitmap)
-{
-	if (!pFactory || !pConverter || !ppScaledWICBitmap) return E_POINTER;
-	if (*ppScaledWICBitmap) return E_INVALIDARG;
-
-	CComPtr<IWICBitmapScaler> spScaler;
-	HRESULT hr = pFactory->CreateBitmapScaler(&spScaler);
-	if (FAILED(hr)) return hr;
-
-	hr = spScaler->Initialize(pConverter, thumbWidth, thumbHeight, WICBitmapInterpolationModeFant);
-	if (FAILED(hr)) return hr;
-
-	hr = pFactory->CreateBitmapFromSource(spScaler, WICBitmapCacheOnLoad, ppScaledWICBitmap);
-	return hr;
-}
-
-
-static HRESULT initializeDirect2DResources(IWICBitmap* pWICBitmap, ID2D1RenderTarget** ppRenderTarget)
-{
-	if (!pWICBitmap || !ppRenderTarget) return E_POINTER;
-	if (*ppRenderTarget) return E_INVALIDARG;
-
-	CComPtr<ID2D1Factory> spFactory;
-	HRESULT hr = ::D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &spFactory);
-	if (FAILED(hr)) return hr;
-
-	D2D1_RENDER_TARGET_PROPERTIES rtProps = D2D1::RenderTargetProperties();
-	rtProps.pixelFormat = D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
-
-	CComPtr<ID2D1RenderTarget> spRenderTarget;
-	hr = spFactory->CreateWicBitmapRenderTarget(pWICBitmap, rtProps, &spRenderTarget);
-	if (FAILED(hr)) return hr;
-
-	*ppRenderTarget = spRenderTarget.Detach();
-	return S_OK;
-}
-
-
-static HRESULT drawBitmapToRenderTarget(ID2D1RenderTarget* pRenderTarget, IWICBitmap* pWICBitmap, D2D1_COLOR_F color)
-{
-	if (!pRenderTarget || !pWICBitmap) return E_POINTER;
-
-	CComPtr<ID2D1Bitmap> spD2DBitmap;
-	HRESULT hr = pRenderTarget->CreateBitmapFromWicBitmap(pWICBitmap, nullptr, &spD2DBitmap);
-	if (FAILED(hr)) return hr;
-
-	D2D1_SIZE_F size = pRenderTarget->GetSize();
-
-	// 上下反転 
-	D2D1_MATRIX_3X2_F transform = D2D1::Matrix3x2F::Scale(1.0f, -1.0f, D2D1::Point2F(0.0f, 0.0f));
-	transform = transform * D2D1::Matrix3x2F::Translation(0.0f, size.height);
-
-	pRenderTarget->BeginDraw();
-	pRenderTarget->SetTransform(transform);
-	pRenderTarget->Clear(color);
-	pRenderTarget->DrawBitmap(spD2DBitmap, D2D1::RectF(0, 0, size.width, size.height));
-	hr = pRenderTarget->EndDraw();
-
-	return hr;
-}
-
-static HRESULT generateThumbnailWIC(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH, IStream* stream)
-{
-	if (!stream || !phBitmap) return E_POINTER;
-
-	LARGE_INTEGER li = {};
-	HRESULT hr = stream->Seek(li, STREAM_SEEK_SET, nullptr);
-	if (FAILED(hr)) return hr;
-
-	// WIC のリソースを初期化 
-	CComPtr<IWICImagingFactory> spFactory;
-	CComPtr<IWICBitmapFrameDecode> spFrameDecode;
-	CComPtr<IWICFormatConverter> spConverter;
-	hr = initializeWIC(stream, &spFactory, &spFrameDecode, &spConverter);
-	if (FAILED(hr)) return hr;
-
-	// 画像のサイズを取得 
-	UINT imageWidth = 0, imageHeight = 0;
-	hr = spFrameDecode->GetSize(&imageWidth, &imageHeight);
-	if (FAILED(hr)) return hr;
-
-	// サムネイルのサイズを計算 
-	UINT thumbWidth = 0, thumbHeight = 0;
-	hr = calculateThumbnailSize(imageWidth, imageHeight, maxW, maxH, &thumbWidth, &thumbHeight);
-	if (FAILED(hr)) return hr;
-
-	// サムネイルサイズにスケーリングした WICBitmap を作成 
-	CComPtr<IWICBitmap> spScaledWICBitmap;
-	hr = createScaledWICBitmap(spFactory, spConverter, thumbWidth, thumbHeight, &spScaledWICBitmap);
-	if (FAILED(hr)) return hr;
-
-	// 合成用の WICBitmap を作成 
-	CComPtr<IWICBitmap> spTargetWICBitmap;
-	hr = spFactory->CreateBitmap(thumbWidth, thumbHeight, GUID_WICPixelFormat32bppPBGRA, WICBitmapCacheOnLoad, &spTargetWICBitmap);
-	if (FAILED(hr)) return hr;
-
-	// 合成用 WICBitmap を D2D の RenderTarget とする 
-	CComPtr<ID2D1RenderTarget> spRenderTarget;
-	hr = initializeDirect2DResources(spTargetWICBitmap, &spRenderTarget);
-	if (FAILED(hr)) return hr;
-
-	// 背景色で塗りつぶした RenderTarget に スケーリングした画像を合成 
-	auto bkcolor = ::GetSysColor(COLOR_WINDOW);
-	float r = GetRValue(bkcolor) / 255.0f;
-	float g = GetGValue(bkcolor) / 255.0f;
-	float b = GetBValue(bkcolor) / 255.0f;
-	hr = drawBitmapToRenderTarget(spRenderTarget, spScaledWICBitmap, D2D1::ColorF(r, g, b));
-	if (FAILED(hr)) return hr;
-
-	// 合成した画像を HBITMAP に変換 
-	void* pBits = nullptr;
-	HBITMAP hBitmap = NULL;
-	hr = createHBitmap(thumbWidth, thumbHeight, &hBitmap, &pBits);
-	if (FAILED(hr)) return hr;
-
-	WICRect rcLock = { 0, 0, static_cast<INT>(thumbWidth), static_cast<INT>(thumbHeight) };
-	UINT cbStrideWIC = thumbWidth * 4;
-	UINT cbBufferSizeWIC = cbStrideWIC * thumbHeight;
-
-	hr = spTargetWICBitmap->CopyPixels(&rcLock, cbStrideWIC, cbBufferSizeWIC, (PBYTE)pBits);
-
-	if (FAILED(hr))
-		::DeleteObject(hBitmap);
-	else
-		*phBitmap = hBitmap;
-
-	return hr;
-}
 
 extern "C"
 __declspec(dllexport) agaliaDecoder* GetAgaliaDecoder(void)
@@ -243,32 +297,66 @@ ULONG agaliaDecoderWIC::Release(void)
 	return refCount;
 }
 
-HRESULT agaliaDecoderWIC::decode(IStream* stream, HBITMAP* phBitmap)
+HRESULT agaliaDecoderWIC::decode(agaliaBitmap** ppBitmap, const agaliaContainer* image)
 {
-	return generateThumbnailWIC(phBitmap, 0, 0, stream);
+    if (!image || !ppBitmap) return E_POINTER;
+
+    CComPtr<IStream> stream;
+    auto hr = image->getAsocStream(&stream);
+    if (FAILED(hr)) return hr;
+
+    stream->Seek({ 0 }, STREAM_SEEK_SET, nullptr);
+    
+    return LoadImageWIC(ppBitmap, stream);
 }
 
-HRESULT agaliaDecoderWIC::decode(IStream* stream, agaliaHeap** bmpInfo, void** ppBits)
-{
-	UNREFERENCED_PARAMETER(stream);
-	UNREFERENCED_PARAMETER(bmpInfo);
-	UNREFERENCED_PARAMETER(ppBits);
+#include <io.h>
 
-	return E_NOTIMPL;
+static HRESULT LoadFile(CHeapPtr<BYTE>& buf, long* file_size, const wchar_t* path)
+{
+    if (path == nullptr) return E_POINTER;
+    if (file_size == nullptr) return E_POINTER;
+    if (buf.m_pData) return E_FAIL;
+
+    FILE* fp = nullptr;
+    errno_t err = _wfopen_s(&fp, path, L"rb");
+    if (err != 0) return E_FAIL;
+    if (fp == nullptr) return E_FAIL;
+
+    HRESULT ret = E_FAIL;
+    *file_size = _filelength(_fileno(fp));
+    if (buf.AllocateBytes(*file_size))
+        if (fread(buf, *file_size, 1, fp) == 1)
+            ret = S_OK;
+
+    fclose(fp);
+
+    return ret;
 }
 
-HRESULT agaliaDecoderWIC::decode(IStream* stream, uint32_t maxW, uint32_t maxH, HBITMAP* phBitmap)
+HRESULT agaliaDecoderWIC::decode(IWICBitmap** ppBitmap, IWICColorContext** ppColorContext, const agaliaContainer* image)
 {
-	return generateThumbnailWIC(phBitmap, maxW, maxH, stream);
+    if (!ppBitmap || !ppColorContext || !image) return E_POINTER;
+
+    CComPtr<IStream> stream;
+    auto hr = image->getAsocStream(&stream);
+    if (FAILED(hr)) return hr;
+
+	CComPtr<IStream> stream2;
+	stream->Clone(&stream2);
+
+    return LoadImageWIC(ppBitmap, ppColorContext, stream2);
 }
 
-HRESULT agaliaDecoderWIC::decode(IStream* stream, uint32_t maxW, uint32_t maxH, agaliaHeap** bmpInfo, void** ppBits)
+HRESULT agaliaDecoderWIC::decodeThumbnail(agaliaBitmap** ppBitmap, const agaliaContainer* image, uint32_t maxW, uint32_t maxH)
 {
-	UNREFERENCED_PARAMETER(stream);
-	UNREFERENCED_PARAMETER(maxW);
-	UNREFERENCED_PARAMETER(maxH);
-	UNREFERENCED_PARAMETER(bmpInfo);
-	UNREFERENCED_PARAMETER(ppBits);
+    if (!image || !ppBitmap) return E_POINTER;
 
-	return E_NOTIMPL;
+    CComPtr<IStream> stream;
+    auto hr = image->getAsocStream(&stream);
+    if (FAILED(hr)) return hr;
+
+    stream->Seek({ 0 }, STREAM_SEEK_SET, nullptr);
+
+    return LoadThumbnailWIC(ppBitmap, stream, maxW, maxH); 
 }

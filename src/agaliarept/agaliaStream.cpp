@@ -149,7 +149,7 @@ HRESULT agaliaStream::Read(
 	if (pcbRead) {
 		*pcbRead = size;
 	}
-	return S_OK;
+	return (size == 0) ? S_FALSE : S_OK;
 }
 
 
@@ -176,7 +176,6 @@ HRESULT agaliaStream::Seek(
 	/* [annotation] */
 	_Out_opt_  ULARGE_INTEGER* plibNewPosition)
 {
-	//LARGE_INTEGER newPos = {};
 	uint64_t newPos = 0;
 
 	HRESULT hr = E_INVALIDARG;
@@ -315,8 +314,8 @@ HRESULT agaliaStream::Stat(
 HRESULT agaliaStream::Clone(
 	/* [out] */ __RPC__deref_out_opt IStream** ppstm)
 {
-	UNREFERENCED_PARAMETER(ppstm);
-	return E_NOTIMPL;
+	*ppstm = ::SHCreateMemStream(reinterpret_cast<BYTE*>(param->m_pBase) + param->offset, static_cast<UINT>(param->size));
+	return S_OK;
 }
 
 

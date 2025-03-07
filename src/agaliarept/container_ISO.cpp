@@ -128,9 +128,16 @@ HRESULT container_ISO::getPropertyValue(PropertyType type, agaliaString** str) c
 	return E_FAIL;
 }
 
-HRESULT container_ISO::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
+
+HRESULT container_ISO::loadBitmap(agaliaBitmap** ppBitmap) const
 {
-	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
+	return ::loadBitmap(ppBitmap, this);
+}
+
+
+HRESULT container_ISO::loadThumbnail(agaliaBitmap** ppBitmap, uint32_t maxW, uint32_t maxH) const
+{
+	return ::loadThumbnail(ppBitmap, this, maxW, maxH);
 }
 
 

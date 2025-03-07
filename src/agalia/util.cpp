@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "util.h"
 
+#include <io.h>
+
+
 // refer. https://support.microsoft.com/ja-jp/help/242577/ 
 void OnInitMenuPopup(CWnd* pWnd, CMenu* pPopupMenu, UINT /*nIndex*/, BOOL /*bSysMenu*/)
 {
@@ -81,4 +84,49 @@ void OnInitMenuPopup(CWnd* pWnd, CMenu* pPopupMenu, UINT /*nIndex*/, BOOL /*bSys
 		}
 		state.m_nIndexMax = nCount;
 	}
+}
+
+
+HRESULT LoadFile(CHeapPtr<BYTE>& buf, long* file_size, const wchar_t* path)
+{
+	if (path == nullptr) return E_POINTER;
+	if (file_size == nullptr) return E_POINTER;
+	if (buf.m_pData) return E_FAIL;
+
+	FILE* fp = nullptr;
+	errno_t err = _wfopen_s(&fp, path, L"rb");
+	if (err != 0) return E_FAIL;
+	if (fp == nullptr) return E_FAIL;
+
+	HRESULT ret = E_FAIL;
+	*file_size = _filelength(_fileno(fp));
+	if (buf.AllocateBytes(*file_size))
+		if (fread(buf, *file_size, 1, fp) == 1)
+			ret = S_OK;
+
+	fclose(fp);
+
+	return ret;
+}
+
+
+HRESULT GetMonitorColorProfilePath(_In_ HWND hwnd, _Inout_ LPDWORD pBufSize, LPWSTR pszFilename)
+{
+	HMONITOR hMonitor = ::MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+	if (!hMonitor) return HRESULT_FROM_WIN32(::GetLastError());
+
+	MONITORINFOEX mi = {};
+	mi.cbSize = sizeof(mi);
+	BOOL ret = ::GetMonitorInfo(hMonitor, &mi);
+	if (!ret) return HRESULT_FROM_WIN32(::GetLastError());
+
+	HDC hdc = ::CreateDC(mi.szDevice, mi.szDevice, nullptr, nullptr);
+	if (!hdc) return HRESULT_FROM_WIN32(::GetLastError());
+
+	ret = ::GetICMProfile(hdc, pBufSize, pszFilename);
+	HRESULT result = ret ? S_OK : HRESULT_FROM_WIN32(::GetLastError());
+
+	::DeleteDC(hdc);
+
+	return result;
 }

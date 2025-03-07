@@ -48,7 +48,7 @@
     <ClInclude Include="PropView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicView.h">
+    <ClInclude Include="ChildGraphicView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpenFileDialog.h">
@@ -81,6 +81,12 @@
     <ClInclude Include="OptionDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChildGraphicViewD2D1_3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agalia.cpp">
@@ -107,7 +113,7 @@
     <ClCompile Include="PropView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicView.cpp">
+    <ClCompile Include="ChildGraphicView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OpenFileDialog.cpp">
@@ -129,6 +135,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OptionDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChildGraphicViewD2D1_3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

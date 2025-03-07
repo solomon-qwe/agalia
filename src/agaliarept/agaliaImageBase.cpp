@@ -2,7 +2,7 @@
 #include "agaliaImageBase.h"
 
 #include "agaliareptImpl.h"
-
+#include "thumbnail.h"
 
 
 _agaliaContainerBase::_agaliaContainerBase(const wchar_t* path, IStream* stream)
@@ -57,6 +57,10 @@ HRESULT _agaliaContainerBase::getElementInfoValue(const agaliaElement*, uint32_t
 	return E_FAIL;
 }
 
+HRESULT _agaliaContainerBase::loadBitmap(IWICBitmap** ppBitmap, IWICColorContext** ppColorContext) const
+{
+	return ::loadWICBitmap(ppBitmap, ppColorContext, this);
+}
 
 
 HRESULT _agaliaContainerBase::LockStream(void) const

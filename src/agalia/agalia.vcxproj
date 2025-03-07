@@ -217,12 +217,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="agalia.h" />
+    <ClInclude Include="ChildGraphicViewD2D1_3.h" />
     <ClInclude Include="ChildListView.h" />
     <ClInclude Include="ChildTextView.h" />
     <ClInclude Include="ChildTreeView.h" />
     <ClInclude Include="controller.h" />
     <ClInclude Include="CSVString.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="ChildGraphicView.h" />
     <ClInclude Include="GraphicView.h" />
     <ClInclude Include="handle_wrapper.h" />
     <ClInclude Include="ImageDraw.h" />
@@ -241,10 +243,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agalia.cpp" />
+    <ClCompile Include="ChildGraphicViewD2D1_3.cpp" />
     <ClCompile Include="ChildListView.cpp" />
     <ClCompile Include="ChildTextView.cpp" />
     <ClCompile Include="ChildTreeView.cpp" />
     <ClCompile Include="controller.cpp" />
+    <ClCompile Include="ChildGraphicView.cpp" />
     <ClCompile Include="GraphicView.cpp" />
     <ClCompile Include="ImageDrawD2D.cpp" />
     <ClCompile Include="ImageDrawGDI.cpp" />
@@ -274,6 +278,9 @@
   <ItemGroup>
     <ProjectReference Include="..\agaliarept\agaliarept.vcxproj">
       <Project>{741aff56-3282-4eae-8464-b27bf983911d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\agaliaUtil\agaliaUtil.vcxproj">
+      <Project>{b83c2a23-9889-4ea3-a3d5-6c94fbd29c0d}</Project>
     </ProjectReference>
     <ProjectReference Include="..\decode\decode.vcxproj">
       <Project>{261b9278-a886-433f-a71e-1a4d121a368e}</Project>

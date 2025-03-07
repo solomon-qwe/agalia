@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ImageDraw.h"
+#include "../inc/agaliarept.h"
 
 class ImageDrawGDI : public ImageDraw
 {
@@ -23,9 +24,9 @@ protected:
 
 protected:
 	HWND hwnd = NULL;
-	HBITMAP hOffscreenBmp = NULL;
-	CHeapPtr<BITMAPV5HEADER> source_bmpInfo;
-	CHeapPtr<char> image_buf;
+	CHeapPtr<BITMAPV5HEADER> bmpInfoWithProfile;
+	agaliaPtr<agaliaBitmap> source_bmp;
+	agaliaPtr<agaliaBitmap> offscreen_bmp;
 	CPoint ptOffset;
 	FLOAT fScale = 1.f;
 

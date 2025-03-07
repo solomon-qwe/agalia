@@ -157,9 +157,16 @@ HRESULT container_ICC::getPropertyValue(PropertyType type, agaliaString** str) c
 	return E_FAIL;
 }
 
-HRESULT container_ICC::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
+
+HRESULT container_ICC::loadBitmap(agaliaBitmap** ppBitmap) const
 {
-	UNREFERENCED_PARAMETER(phBitmap);
+	UNREFERENCED_PARAMETER(ppBitmap);
+	return E_FAIL;
+}
+
+HRESULT container_ICC::loadThumbnail(agaliaBitmap** ppBitmap, uint32_t maxW, uint32_t maxH) const
+{
+	UNREFERENCED_PARAMETER(ppBitmap);
 	UNREFERENCED_PARAMETER(maxW);
 	UNREFERENCED_PARAMETER(maxH);
 	return E_FAIL;

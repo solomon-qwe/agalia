@@ -158,7 +158,8 @@ BOOL OptionDlg::OnInitDialog()
 			item.name = L"Rendering";
 			item.desc = L"";
 			item.options.push_back(L"GDI");
-			item.options.push_back(L"Direct2D");
+			item.options.push_back(L"Direct2D 1.1 (Windows 7 SP1 and later)");
+			item.options.push_back(L"Direct2D 1.3 (Windows 10 and later)");
 			int default = rendering_engine;
 
 			add_prop(propGroup, item, default);

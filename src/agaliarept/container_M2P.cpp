@@ -109,10 +109,15 @@ HRESULT container_M2P::getPropertyValue(PropertyType type, agaliaString** str) c
 }
 
 
-
-HRESULT container_M2P::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
+HRESULT container_M2P::loadBitmap(agaliaBitmap** ppBitmap) const
 {
-	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
+	return ::loadBitmap(ppBitmap, this);
+}
+
+
+HRESULT container_M2P::loadThumbnail(agaliaBitmap** ppBitmap, uint32_t maxW, uint32_t maxH) const
+{
+	return ::loadThumbnail(ppBitmap, this, maxW, maxH);
 }
 
 

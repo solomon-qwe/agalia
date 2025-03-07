@@ -170,9 +170,16 @@ HRESULT container_PNG::getPropertyValue(PropertyType type, agaliaString** str) c
 	return E_FAIL;
 }
 
-HRESULT container_PNG::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
+
+HRESULT container_PNG::loadBitmap(agaliaBitmap** ppBitmap) const
 {
-	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
+	return ::loadBitmap(ppBitmap, this);
+}
+
+
+HRESULT container_PNG::loadThumbnail(agaliaBitmap** ppBitmap, uint32_t maxW, uint32_t maxH) const
+{
+	return ::loadThumbnail(ppBitmap, this, maxW, maxH);
 }
 
 

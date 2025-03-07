@@ -29,46 +29,34 @@ ULONG agaliaDecoderImpl::Release(void)
 	return refCount;
 }
 
-HRESULT agaliaDecoderImpl::decode(IStream* stream, HBITMAP* phBitmap)
+HRESULT agaliaDecoderImpl::decode(agaliaBitmap** ppBitmap, const agaliaContainer* image)
 {
 	if (decoders == nullptr) return E_FAIL;
-
 	for (auto decoder : *decoders)
 	{
-		HRESULT hr = decoder.decoder->decode(stream, phBitmap);
+		HRESULT hr = decoder.decoder->decode(ppBitmap, image);
 		if (SUCCEEDED(hr)) return hr;
 	}
 	return E_FAIL;
 }
 
-HRESULT agaliaDecoderImpl::decode(IStream* stream, agaliaHeap** bmpInfo, void** ppBits)
+HRESULT agaliaDecoderImpl::decode(IWICBitmap** ppBitmap, IWICColorContext** ppColorContext, const agaliaContainer* image)
 {
 	if (decoders == nullptr) return E_FAIL;
 	for (auto decoder : *decoders)
 	{
-		HRESULT hr = decoder.decoder->decode(stream, bmpInfo, ppBits);
+		HRESULT hr = decoder.decoder->decode(ppBitmap, ppColorContext, image);
 		if (SUCCEEDED(hr)) return hr;
 	}
 	return E_FAIL;
 }
 
-HRESULT agaliaDecoderImpl::decode(IStream* stream, uint32_t maxW, uint32_t maxH, HBITMAP* phBitmap)
+HRESULT agaliaDecoderImpl::decodeThumbnail(agaliaBitmap** ppBitmap, const agaliaContainer* image, uint32_t maxW, uint32_t maxH)
 {
 	if (decoders == nullptr) return E_FAIL;
 	for (auto decoder : *decoders)
 	{
-		HRESULT hr = decoder.decoder->decode(stream, maxW, maxH, phBitmap);
-		if (SUCCEEDED(hr)) return hr;
-	}
-	return E_FAIL;
-}
-
-HRESULT agaliaDecoderImpl::decode(IStream* stream, uint32_t maxW, uint32_t maxH, agaliaHeap** bmpInfo, void** ppBits)
-{
-	if (decoders == nullptr) return E_FAIL;
-	for (auto decoder : *decoders)
-	{
-		HRESULT hr = decoder.decoder->decode(stream, maxW, maxH, bmpInfo, ppBits);
+		HRESULT hr = decoder.decoder->decodeThumbnail(ppBitmap, image, maxW, maxH);
 		if (SUCCEEDED(hr)) return hr;
 	}
 	return E_FAIL;
@@ -126,13 +114,30 @@ HRESULT agaliaDecoderImpl::finalize(void)
 
 		auto tempModule = decoder.hModule;
 		decoder.hModule = NULL;
-		::FreeLibrary(tempModule);
+		if (tempModule)
+		{
+			::FreeLibrary(tempModule);
+		}
 	}
 
 	auto temp = decoders;
 	decoders = nullptr;
 	delete temp;
 
+	return S_OK;
+}
+
+HRESULT agaliaDecoderImpl::add(agaliaDecoder* decoder)
+{
+	if (decoders == nullptr) return E_FAIL;
+	if (decoder == nullptr) return E_POINTER;
+
+	item it = { NULL, decoder };
+	decoders->push_back(it);
+	decoders->sort([](const item& a, const item& b) -> bool
+		{
+			return a.decoder->getPriority() < b.decoder->getPriority();
+		});
 	return S_OK;
 }
 
@@ -147,6 +152,14 @@ HRESULT getAgaliaDecoder(agaliaDecoder** decoder)
 	(*decoder)->AddRef();
 	return S_OK;
 }
+
+HRESULT addAgaliaDecoder(agaliaDecoder* decoder)
+{
+	if (g_decoder == nullptr)
+		return agalia::AGALIA_ERR_NOTINITIALIZED;
+	return g_decoder->add(decoder);
+}
+
 
 HRESULT initializeAgaliaDecoder(void)
 {

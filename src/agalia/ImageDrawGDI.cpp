@@ -2,6 +2,7 @@
 #include "ImageDrawGDI.h"
 
 #include "../inc/agaliarept.h"
+#include "../inc/agaliaUtil.h"
 
 #include <stdint.h>
 
@@ -18,54 +19,6 @@ inline LARGE_INTEGER uint64_to_li(uint64_t u)
 
 
 
-HRESULT read_jpeg(IStream* stream, BITMAPV5HEADER* bmpInfo, CHeapPtr<char>& image_buf)
-{
-	using namespace Gdiplus;
-
-	Image image(stream);
-	if (image.GetLastStatus() != Ok)
-		return E_FAIL;
-
-	BITMAPINFOHEADER bmi = {};
-	bmi.biSize = sizeof(BITMAPINFOHEADER);
-	bmi.biWidth = image.GetWidth();
-	bmi.biHeight = image.GetHeight();
-	bmi.biPlanes = 1;
-	bmi.biBitCount = 32;
-	void* pBits = nullptr;
-
-	bmpInfo->bV5Width = bmi.biWidth;
-	bmpInfo->bV5Height = bmi.biHeight;
-
-	HDC memDC = ::CreateCompatibleDC(NULL);
-	HBITMAP hBitmap = ::CreateDIBSection(memDC, reinterpret_cast<BITMAPINFO*>(&bmi), DIB_RGB_COLORS, &pBits, NULL, 0);
-	if (hBitmap)
-	{
-		HGDIOBJ hOldBmp = SelectObject(memDC, hBitmap);
-		Graphics* graphics = new Graphics(memDC);
-		if (graphics)
-		{
-			graphics->DrawImage(&image, 0, 0, image.GetWidth(), image.GetHeight());
-			delete graphics;
-		}
-		SelectObject(memDC, hOldBmp);
-	}
-	DeleteDC(memDC);
-
-	if (hBitmap)
-	{
-		rsize_t bufsize = size_t(4) * bmi.biWidth * bmi.biHeight;
-		image_buf.AllocateBytes(bufsize);
-		memcpy(image_buf.m_pData, pBits, bufsize);
-
-		::DeleteObject(hBitmap);
-		return S_OK;
-	}
-	return E_FAIL;
-}
-
-
-
 ImageDrawGDI::ImageDrawGDI()
 {
 
@@ -74,12 +27,6 @@ ImageDrawGDI::ImageDrawGDI()
 
 ImageDrawGDI::~ImageDrawGDI()
 {
-	if (hOffscreenBmp)
-	{
-		auto temp = hOffscreenBmp;
-		hOffscreenBmp = NULL;
-		::DeleteObject(temp);
-	}
 }
 
 
@@ -97,103 +44,53 @@ void ImageDrawGDI::detach(void)
 
 HRESULT ImageDrawGDI::reset_content(agaliaContainer* image, int colorManagementMode)
 {
+	if (offscreen_bmp) {
+		offscreen_bmp.detach()->Release();
+	}
+
+	if (bmpInfoWithProfile) {
+		bmpInfoWithProfile.Free();
+	}
+
+	if (source_bmp) {
+		source_bmp.detach()->Release();
+	}
+
 	if (!image)
 		return E_FAIL;
-
-	if (hOffscreenBmp)
-	{
-		auto temp = hOffscreenBmp;
-		hOffscreenBmp = NULL;
-		::DeleteObject(temp);
-	}
-
-	if (source_bmpInfo) {
-		source_bmpInfo.Free();
-	}
-
-	if (image_buf) {
-		image_buf.Free();
-	}
 
 	agaliaPtr<agaliaHeap> profile;
 	if (colorManagementMode != color_management_disable) {
 		image->getColorProfile(&profile);
 	}
 
-	rsize_t bmpInfoSize = sizeof(BITMAPV5HEADER) + (profile ? profile->GetSize() : 0);
-	if (!source_bmpInfo.AllocateBytes(bmpInfoSize)) return E_OUTOFMEMORY;
-	memset(source_bmpInfo.m_pData, 0, bmpInfoSize);
-
-	source_bmpInfo->bV5Size = sizeof(BITMAPV5HEADER);
-	source_bmpInfo->bV5Width = 0;
-	source_bmpInfo->bV5Height = 0;
-	source_bmpInfo->bV5Planes = 1;
-	source_bmpInfo->bV5BitCount = 32;
-	if (profile)
+	agaliaPtr<agaliaBitmap> bitmap;
+	HRESULT hr = image->loadBitmap(&bitmap);
+	if (SUCCEEDED(hr))
 	{
-		source_bmpInfo->bV5CSType = PROFILE_EMBEDDED;
-		source_bmpInfo->bV5ProfileData = sizeof(BITMAPV5HEADER);
-		auto hr = SizeTToDWord(profile->GetSize(), &source_bmpInfo->bV5ProfileSize);
-		if (FAILED(hr)) return hr;
-		memcpy(reinterpret_cast<uint8_t*>(source_bmpInfo.m_pData) + sizeof(BITMAPV5HEADER), profile->GetData(), profile->GetSize());
-	}
-
-	CComPtr<IStream> stream;
-	auto hr = image->getAsocStream(&stream);
-	if (FAILED(hr)) return hr;
-
-	using namespace Gdiplus;
-
-	GdiplusStartupInput gdiplusStartupInput = {};
-	ULONG_PTR gdiplusToken = 0;
-	Status stat = GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-	if (stat != Ok) {
-		return E_FAIL;
-	}
-
-	hr = read_jpeg(stream, source_bmpInfo, image_buf);
-
-	GdiplusShutdown(gdiplusToken);
-
-	if (FAILED(hr))
-	{
-		HBITMAP hBitmap = NULL;
-		if (SUCCEEDED(image->getThumbnailImage(&hBitmap, 0, 0)))
+		BITMAPV5HEADER bmpInfo = {};
+		hr = bitmap->getBitmapInfo(&bmpInfo);
+		if (SUCCEEDED(hr))
 		{
-			DIBSECTION dib = {};
-			if (::GetObject(hBitmap, sizeof(DIBSECTION), &dib) == sizeof(DIBSECTION))
+			source_bmp = bitmap.detach();
+
+			rsize_t bmpInfoSize = sizeof(BITMAPV5HEADER) + (profile ? profile->GetSize() : 0);
+			if (!bmpInfoWithProfile.AllocateBytes(bmpInfoSize)) return E_OUTOFMEMORY;
+			memset(bmpInfoWithProfile.m_pData, 0, bmpInfoSize);
+			memcpy(bmpInfoWithProfile.m_pData, &bmpInfo, sizeof(BITMAPV5HEADER));
+			if (profile)
 			{
-				if (dib.dsBmih.biCompression == BI_BITFIELDS)
-				{
-					source_bmpInfo->bV5Compression = BI_BITFIELDS;
-					source_bmpInfo->bV5RedMask = dib.dsBitfields[0];
-					source_bmpInfo->bV5GreenMask = dib.dsBitfields[1];
-					source_bmpInfo->bV5BlueMask = dib.dsBitfields[2];
-
-					source_bmpInfo->bV5Width = dib.dsBmih.biWidth;
-					source_bmpInfo->bV5Height = dib.dsBmih.biHeight;
-
-					rsize_t bufsize = 4 * dib.dsBmih.biWidth * abs(dib.dsBmih.biHeight);
-					image_buf.AllocateBytes(bufsize);
-					memcpy(image_buf.m_pData, dib.dsBm.bmBits, bufsize);
-					hr = S_OK;
-				}
-				else
-				{
-					memcpy(source_bmpInfo, &dib.dsBmih, dib.dsBmih.biSize);
-					rsize_t bufsize = dib.dsBmih.biBitCount / 8 * dib.dsBmih.biWidth * abs(dib.dsBmih.biHeight);
-					image_buf.AllocateBytes(bufsize);
-					memcpy(image_buf.m_pData, dib.dsBm.bmBits, bufsize);
-					hr = S_OK;
-				}
+				bmpInfoWithProfile->bV5CSType = PROFILE_EMBEDDED;
+				bmpInfoWithProfile->bV5ProfileData = sizeof(BITMAPV5HEADER);
+				hr = SizeTToDWord(profile->GetSize(), &bmpInfoWithProfile->bV5ProfileSize);
+				if (FAILED(hr)) return hr;
+				memcpy(reinterpret_cast<uint8_t*>(bmpInfoWithProfile.m_pData) + sizeof(BITMAPV5HEADER), profile->GetData(), profile->GetSize());
 			}
-			::DeleteObject(hBitmap);
+
+			reset_color_profile(colorManagementMode);
+			UpdateImagePosition();
 		}
 	}
-
-	reset_color_profile(colorManagementMode);
-
-	UpdateImagePosition();
 
 	if (FAILED(hr))
 	{
@@ -207,10 +104,9 @@ HRESULT ImageDrawGDI::reset_content(agaliaContainer* image, int colorManagementM
 
 HRESULT ImageDrawGDI::reset_color_profile(int colorManagementMode)
 {
-	if (!source_bmpInfo)
+	if (!bmpInfoWithProfile)
 		return E_FAIL;
 
-	// ウィンドウデバイスコンテキストの初期化して、それを元にメモリデバイス子テキストを作成 
 	HDC hdc = ::GetDC(hwnd);
 	if (colorManagementMode != color_management_disable) {
 		::SetICMMode(hdc, ICM_ON);
@@ -231,38 +127,52 @@ HRESULT ImageDrawGDI::reset_color_profile(int colorManagementMode)
 		::SetICMMode(hdc, ICM_OFF);
 	}
 
-	// オフスクリーン用ビットマップを作成 
-	BITMAPV5HEADER bmpInfoHeader = {};
-	memcpy(&bmpInfoHeader, source_bmpInfo.m_pData, sizeof(BITMAPV5HEADER));
-	void* pBits = nullptr;
-	HBITMAP hBitmap = ::CreateDIBSection(hMemDC, reinterpret_cast<BITMAPINFO*>(&bmpInfoHeader), DIB_RGB_COLORS, &pBits, NULL, 0);
-	if (hBitmap)
+	auto hr = createAgaliaBitmap(&offscreen_bmp, nullptr);
+	if (SUCCEEDED(hr))
 	{
-		// オフスクリーンビットマップに原画像を色変換して転送 
-		HGDIOBJ hOldBmp = ::SelectObject(hMemDC, hBitmap);
-		if (colorManagementMode != color_management_disable) {
-			::SetICMMode(hMemDC, ICM_ON);
+		BITMAPV5HEADER bmpInfo = *bmpInfoWithProfile;
+		bmpInfo.bV5CSType = 0;
+		bmpInfo.bV5ProfileData = 0;
+		bmpInfo.bV5ProfileSize = 0;
+
+		void* pBits = nullptr;
+		HBITMAP hOffscreeBitmap = ::CreateDIBSection(hMemDC, reinterpret_cast<BITMAPINFO*>(&bmpInfo), DIB_RGB_COLORS, &pBits, NULL, 0);
+		if (hOffscreeBitmap) {
+			offscreen_bmp->init(hOffscreeBitmap, bmpInfo, pBits);
 		}
-		::SetDIBitsToDevice(
-			hMemDC,
-			0, 0, source_bmpInfo->bV5Width, source_bmpInfo->bV5Height,
-			0, 0, 0, source_bmpInfo->bV5Height,
-			image_buf.m_pData,
-			reinterpret_cast<BITMAPINFO*>(source_bmpInfo.m_pData),
-			DIB_RGB_COLORS);
-		if (colorManagementMode != color_management_disable) {
-			::SetICMMode(hMemDC, ICM_OFF);
+		else {
+			hr = HRESULT_FROM_WIN32(::GetLastError());
 		}
-		::SelectObject(hMemDC, hOldBmp);
+	}
+
+	if (SUCCEEDED(hr))
+	{
+		void* pSrcBits = nullptr;
+		HBITMAP hOfscreenbmp = NULL;
+		if (SUCCEEDED(source_bmp->getBits(&pSrcBits)) &&
+			SUCCEEDED(offscreen_bmp->getHBitmap(&hOfscreenbmp)))
+		{
+			HGDIOBJ hOldBmp = ::SelectObject(hMemDC, hOfscreenbmp);
+			if (colorManagementMode != color_management_disable) {
+				::SetICMMode(hMemDC, ICM_ON);
+			}
+			::SetDIBitsToDevice(
+				hMemDC,
+				0, 0, bmpInfoWithProfile->bV5Width, bmpInfoWithProfile->bV5Height,
+				0, 0, 0, bmpInfoWithProfile->bV5Height,
+				pSrcBits,
+				reinterpret_cast<BITMAPINFO*>(bmpInfoWithProfile.m_pData),
+				DIB_RGB_COLORS);
+			if (colorManagementMode != color_management_disable) {
+				::SetICMMode(hMemDC, ICM_OFF);
+			}
+			::SelectObject(hMemDC, hOldBmp);
+		}
 	}
 
 	::ReleaseDC(hwnd, hdc);
 	::DeleteDC(hMemDC);
 
-	if (hBitmap == NULL)
-		return E_FAIL;
-
-	hOffscreenBmp = hBitmap;
 	return S_OK;
 }
 
@@ -278,50 +188,59 @@ HRESULT ImageDrawGDI::render(DWORD bkcolor)
 {
 	if (hwnd == NULL) return E_FAIL;
 
-	HDC hDC = ::GetDC(hwnd);
-
 	CRect rcClient(0, 0, 0, 0);
 	::GetClientRect(hwnd, &rcClient);
 
-	DIBSECTION dib = {};
-	::GetObject(hOffscreenBmp, sizeof(dib), &dib);
+	HDC hDC = ::GetDC(hwnd);
+	HBITMAP hMemBitmap = ::CreateCompatibleBitmap(hDC, rcClient.Width(), rcClient.Height());
+	HDC hMemDC = ::CreateCompatibleDC(hDC);
+	HGDIOBJ hOldMemBmp = ::SelectObject(hMemDC, hMemBitmap);
 
-	// 画像描画 
-	::SetStretchBltMode(hDC, HALFTONE);
-	::SetBrushOrgEx(hDC, 0, 0, NULL);
-	::StretchDIBits(
-		hDC,
-		rcDst.left, rcDst.top, rcDst.Width(), rcDst.Height(),
-		rcSrc.left, rcSrc.top, rcSrc.Width(), rcSrc.Height(),
-		dib.dsBm.bmBits, reinterpret_cast<BITMAPINFO*>(source_bmpInfo.m_pData),
-		DIB_RGB_COLORS,
-		SRCCOPY);
+	HBITMAP hOfscreenBmp = NULL;
+	void* pBits = nullptr;
+	BITMAPV5HEADER bmpInfo = {};
+	if (offscreen_bmp) {
+		offscreen_bmp->getBits(&pBits);
+		offscreen_bmp->getBitmapInfo(&bmpInfo);
+		offscreen_bmp->getHBitmap(&hOfscreenBmp);
+	}
 
-	// 背景描画 
 	HBRUSH br = ::CreateSolidBrush(bkcolor);
-	CRect rcFill;
-
-	rcFill = rcClient;
-	rcFill.bottom = rcDst.top;
-	::FillRect(hDC, &rcFill, br);	// upper 
-
-	rcFill = rcClient;
-	rcFill.top = rcDst.top;
-	rcFill.right = rcDst.left;
-	rcFill.bottom = rcDst.bottom;
-	::FillRect(hDC, &rcFill, br);	// left 
-
-	rcFill = rcClient;
-	rcFill.top = rcDst.top;
-	rcFill.left = rcDst.right;
-	rcFill.bottom = rcDst.bottom;
-	::FillRect(hDC, &rcFill, br);	// right 
-
-	rcFill = rcClient;
-	rcFill.top = rcDst.bottom;
-	::FillRect(hDC, &rcFill, br);	// lower 
-
+	::FillRect(hMemDC, &rcClient, br);
 	::DeleteObject(br);
+
+	if (hOfscreenBmp)
+	{
+		HDC hOffscreenDC = ::CreateCompatibleDC(hMemDC);
+		HGDIOBJ hOldBmp = ::SelectObject(hOffscreenDC, hOfscreenBmp);
+		if (bmpInfo.bV5AlphaMask == 0)
+		{
+			::SetStretchBltMode(hMemDC, HALFTONE);
+			::SetBrushOrgEx(hMemDC, 0, 0, NULL);
+			::StretchDIBits(
+				hMemDC,
+				rcDst.left, rcDst.top, rcDst.Width(), rcDst.Height(),
+				rcSrc.left, rcSrc.top, rcSrc.Width(), rcSrc.Height(),
+				pBits, reinterpret_cast<BITMAPINFO*>(&bmpInfo),
+				DIB_RGB_COLORS,
+				SRCCOPY);
+		}
+		else {
+			::AlphaBlend(
+				hMemDC,
+				rcDst.left, rcDst.top, rcDst.Width(), rcDst.Height(),
+				hOffscreenDC,
+				rcSrc.left, rcSrc.top, rcSrc.Width(), rcSrc.Height(),
+				BLENDFUNCTION{ AC_SRC_OVER, 0, 255, AC_SRC_ALPHA });
+		}
+		::SelectObject(hOffscreenDC, hOldBmp);
+		::DeleteDC(hOffscreenDC);
+	}
+
+	::BitBlt(hDC, 0, 0, rcClient.Width(), rcClient.Height(), hMemDC, 0, 0, SRCCOPY);
+	::SelectObject(hMemDC, hOldMemBmp);
+	::DeleteObject(hMemBitmap);
+	::DeleteDC(hMemDC);
 	::ReleaseDC(hwnd, hDC);
 
 	return S_OK;
@@ -352,14 +271,13 @@ void ImageDrawGDI::UpdateImagePosition(void)
 	CRect rcClient(0, 0, 0, 0);
 	::GetClientRect(hwnd, &rcClient);
 
-	DIBSECTION dib = {};
-	::GetObject(hOffscreenBmp, sizeof(dib), &dib);
+	if (!bmpInfoWithProfile) return;
 
 	double fWndW = rcClient.Width();
 	double fWndH = rcClient.Height();
 
-	double fImgW = dib.dsBmih.biWidth;
-	double fImgH = dib.dsBmih.biHeight;
+	double fImgW = bmpInfoWithProfile->bV5Width;
+	double fImgH = bmpInfoWithProfile->bV5Height;
 
 	double fDstW = min(fImgW * fScale, fWndW);
 	double fDstH = min(fImgH * fScale, fWndH);
@@ -375,8 +293,15 @@ void ImageDrawGDI::UpdateImagePosition(void)
 	rcDst.right  = rcDst.left + (int)fDstW;
 	rcDst.bottom = rcDst.top  + (int)fDstH;
 
-	rcSrc.left   = (int)fSrcX;
-	rcSrc.top    = (int)(fImgH - (fDstH / fScale + fSrcY));
-	rcSrc.right  = rcSrc.left + (int)(fDstW / fScale);
-	rcSrc.bottom = rcSrc.top  + (int)(fDstH / fScale);
+	bool isInvert = false;
+	if (offscreen_bmp) {
+		BITMAPV5HEADER bmpInfo = {};
+		offscreen_bmp->getBitmapInfo(&bmpInfo);
+		isInvert = (bmpInfo.bV5AlphaMask == 0);
+	}
+
+	rcSrc.left = (int)fSrcX;
+	rcSrc.top = isInvert ? (int)(fImgH - (fDstH / fScale + fSrcY)) : (int)fSrcY;
+	rcSrc.right = rcSrc.left + (int)(fDstW / fScale);
+	rcSrc.bottom = rcSrc.top + (int)(fDstH / fScale);
 }

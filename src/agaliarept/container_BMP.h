@@ -19,7 +19,8 @@ namespace analyze_BMP
 		virtual HRESULT getRootElement(agaliaElement** root) const override;
 
 		virtual HRESULT getPropertyValue(PropertyType type, agaliaString** str) const override;
-		virtual HRESULT getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const override;
+		virtual HRESULT loadBitmap(agaliaBitmap** ppBitmap) const override;
+		virtual HRESULT loadThumbnail(agaliaBitmap** ppBitmap, uint32_t maxW, uint32_t maxH) const override;
 
 	public:
 		static _agaliaContainerBase* CreateInstance(const wchar_t* path, IStream* stream);

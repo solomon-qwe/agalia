@@ -185,6 +185,11 @@
   <ItemGroup>
     <ResourceCompile Include="decode_openjpeg.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\agaliaUtil\agaliaUtil.vcxproj">
+      <Project>{b83c2a23-9889-4ea3-a3d5-6c94fbd29c0d}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

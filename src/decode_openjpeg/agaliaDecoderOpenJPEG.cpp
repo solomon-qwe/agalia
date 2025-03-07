@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "agaliaDecoderOpenJPEG.h"
 
+#include <atlbase.h>
+#include <wincodec.h>
+
 #include "openjpeg/inc/openjpeg.h"
 
 #if defined(_M_IX86)
@@ -144,180 +147,377 @@ static HRESULT decodeJPEG2000stub(IStream* pStream, opj_image_t** ppImage, OPJ_C
 	return S_OK;
 }
 
-auto convert_sample = [](opj_image_comp_t* comp, int sample_val) -> uint8_t
+
+auto convert_sample = [](opj_image_comp_t* comp, int sample_val, uint16_t limit) -> uint16_t
     {
         if (comp->sgnd) {
             sample_val += (1 << (comp->prec - 1));
         }
         int max_val = (1 << comp->prec) - 1;
         sample_val = max(min(sample_val, max_val), 0);
-        return static_cast<uint8_t>((sample_val * 255) / max_val);
+        return static_cast<uint16_t>((sample_val * limit) / max_val);
     };
 
-static void ycc_to_rgb32(const opj_image_t* image, uint8_t* pDest)
+template<class T>
+class decodeProcess
 {
-    opj_image_comp_t* compY = &image->comps[0];
-    opj_image_comp_t* compCb = &image->comps[1];
-    opj_image_comp_t* compCr = &image->comps[2];
+};
 
-    size_t width = compY->w;
-    size_t height = compY->h;
-    size_t stride = width * 4;
-
-    float x_ratio_cb = static_cast<float>(compCb->w) / compY->w;
-    float y_ratio_cb = static_cast<float>(compCb->h) / compY->h;
-    float x_ratio_cr = static_cast<float>(compCr->w) / compY->w;
-    float y_ratio_cr = static_cast<float>(compCr->h) / compY->h;
-
-    uint8_t* line = pDest + stride * (height - 1);
-
-    for (size_t y = 0; y < height; y++)
-    {
-        size_t idxY = y * compY->w;
-        size_t idxLine = 0;
-
-        for (size_t x = 0; x < width; x++)
-        {
-            size_t posY = idxY + x;
-
-            size_t xCb = static_cast<size_t>(x * x_ratio_cb);
-            size_t yCb = static_cast<size_t>(y * y_ratio_cb);
-            size_t posCb = yCb * compCb->w + xCb;
-
-            size_t xCr = static_cast<size_t>(x * x_ratio_cr);
-            size_t yCr = static_cast<size_t>(y * y_ratio_cr);
-            size_t posCr = yCr * compCr->w + xCr;
-
-            uint8_t Y = convert_sample(compY, compY->data[posY]);
-            uint8_t Cb = convert_sample(compCb, compCb->data[posCb]);
-            uint8_t Cr = convert_sample(compCr, compCr->data[posCr]);
-
-            int r = static_cast<int>(Y + 1.402 * (Cr - 128));
-            int g = static_cast<int>(Y - 0.344136 * (Cb - 128) - 0.714136 * (Cr - 128));
-            int b = static_cast<int>(Y + 1.772 * (Cb - 128));
-
-            line[idxLine + 0] = static_cast<uint8_t>(min(max(b, 0), 255));
-            line[idxLine + 1] = static_cast<uint8_t>(min(max(g, 0), 255));
-            line[idxLine + 2] = static_cast<uint8_t>(min(max(r, 0), 255));
-            line[idxLine + 3] = 0xFF;
-
-            idxLine += 4;
-        }
-        line -= stride;
-    }
-}
-
-
-static void rgb_to_rgb32(const opj_image_t* image, uint8_t* pDest)
+template<>
+class decodeProcess<agaliaBitmap>
 {
-    size_t width = image->comps[0].w;
-    size_t height = image->comps[0].h;
-
-	opj_image_comp_t* comp0 = &image->comps[0];
-	opj_image_comp_t* comp1 = &image->comps[1];
-	opj_image_comp_t* comp2 = &image->comps[2];
-
-    size_t pos = 0;
-    size_t stride = width * 4;
-
-    uint8_t* line = pDest + stride * (height - 1);
-    for (size_t y = 0; y < height; y++)
-    {
-        for (size_t x = 0; x < stride; x += 4, pos++)
-        {
-			line[x + 0] = convert_sample(comp2, comp2->data[pos]);
-			line[x + 1] = convert_sample(comp1, comp1->data[pos]);
-			line[x + 2] = convert_sample(comp0, comp0->data[pos]);
-			line[x + 3] = 0xFF;
-        }
-        line -= stride;
-    }
-}
-
-static void gray_to_rgb32(const opj_image_t* image, uint8_t* pDest)
-{
-    size_t width = image->comps[0].w;
-    size_t height = image->comps[0].h;
-
-	opj_image_comp_t* comp = &image->comps[0];
-
-	size_t pos = 0;
-	size_t stride = width * 4;
-
-	uint8_t* line = pDest + stride * (height - 1);
-	for (size_t y = 0; y < height; y++)
+protected:
+    void* getScan0(void* pBits, uint32_t stride, uint32_t height)
 	{
-		for (size_t x = 0; x < stride; x += 4, pos++)
-		{
-			uint8_t gray = convert_sample(comp, comp->data[pos]);
-			line[x + 0] = gray;
-			line[x + 1] = gray;
-			line[x + 2] = gray;
-			line[x + 3] = 0xFF;
-		}
-		line -= stride;
+		return static_cast<uint8_t*>(pBits) + stride * (height - 1);
 	}
-}
 
-static HRESULT opjimage_to_HBITMAP(const opj_image_t* image, HBITMAP* phBitmap)
+	int32_t getScanOffset(uint32_t width) const
+	{
+		return -static_cast<int32_t>(width);
+	}
+
+    uint32_t getBpc() const
+    {
+        return 8;
+    }
+
+	uint32_t getRIndex() const
+	{
+		return 2;
+	}
+
+	uint32_t getGIndex() const
+	{
+		return 1;
+	}
+
+	uint32_t getBIndex() const
+	{
+		return 0;
+	}
+
+    uint32_t dummy = 0;
+};
+
+template<>
+class decodeProcess<IWICBitmap>
 {
-    if (!image || !phBitmap)
+protected:
+    void* getScan0(void* pBits, uint32_t stride, uint32_t height)
+    {
+		UNREFERENCED_PARAMETER(stride);
+		UNREFERENCED_PARAMETER(height);
+        return static_cast<uint8_t*>(pBits);
+    }
+
+    int32_t getScanOffset(uint32_t width) const
+    {
+        return width;
+    }
+
+    uint32_t getBpc() const
+    {
+        return 16;
+    }
+
+	uint32_t getRIndex() const
+	{
+		return 0;
+	}
+
+	uint32_t getGIndex() const
+	{
+		return 1;
+	}
+
+	uint32_t getBIndex() const
+	{
+		return 2;
+	}
+
+    uint64_t dummy = 0;
+};
+
+
+template<class T>
+class opj_conv_ycc : public decodeProcess<T>
+{
+public:
+    void conv(const opj_image_t* image, uint8_t* pDest)
+    {
+        opj_image_comp_t* compY = &image->comps[0];
+        opj_image_comp_t* compCb = &image->comps[1];
+        opj_image_comp_t* compCr = &image->comps[2];
+
+        uint32_t width = compY->w;
+        uint32_t height = compY->h;
+        uint32_t stride = width * sizeof(decodeProcess<T>::dummy);
+
+        using type = decltype(decodeProcess<T>::dummy);
+		type mask = (1 << decodeProcess<T>::getBpc()) - 1;
+        type alpha = ~static_cast<type>(0) ^ ((static_cast<type>(1) << (decodeProcess<T>::getBpc() * 3)) - 1);
+
+        float x_ratio_cb = static_cast<float>(compCb->w) / compY->w;
+        float y_ratio_cb = static_cast<float>(compCb->h) / compY->h;
+        float x_ratio_cr = static_cast<float>(compCr->w) / compY->w;
+        float y_ratio_cr = static_cast<float>(compCr->h) / compY->h;
+
+        const int k = 1 << (decodeProcess<T>::getBpc() - 1);
+
+        type* line = static_cast<type*>(decodeProcess<T>::getScan0(pDest, stride, height));
+        for (size_t y = 0; y < height; y++)
+        {
+            size_t idxY = y * compY->w;
+
+            for (size_t x = 0; x < width; x++)
+            {
+                size_t posY = idxY + x;
+
+                size_t xCb = static_cast<size_t>(x * x_ratio_cb);
+                size_t yCb = static_cast<size_t>(y * y_ratio_cb);
+                size_t posCb = yCb * compCb->w + xCb;
+
+                size_t xCr = static_cast<size_t>(x * x_ratio_cr);
+                size_t yCr = static_cast<size_t>(y * y_ratio_cr);
+                size_t posCr = yCr * compCr->w + xCr;
+
+                auto Y = convert_sample(compY, compY->data[posY], (uint16_t)mask);
+                auto Cb = convert_sample(compCb, compCb->data[posCb], (uint16_t)mask);
+                auto Cr = convert_sample(compCr, compCr->data[posCr], (uint16_t)mask);
+
+                int r = static_cast<int>(Y + 1.402 * (Cr - k));
+                int g = static_cast<int>(Y - 0.344136 * (Cb - k) - 0.714136 * (Cr - k));
+                int b = static_cast<int>(Y + 1.772 * (Cb - k));
+
+				line[x] = alpha |
+					(static_cast<type>(min(max(r, 0), (int)mask)) << (decodeProcess<T>::getBpc() * decodeProcess<T>::getRIndex())) |
+					(static_cast<type>(min(max(g, 0), (int)mask)) << (decodeProcess<T>::getBpc() * decodeProcess<T>::getGIndex())) |
+					(static_cast<type>(min(max(b, 0), (int)mask)) << (decodeProcess<T>::getBpc() * decodeProcess<T>::getBIndex()));
+            }
+			line += decodeProcess<T>::getScanOffset(width);
+        }
+    }
+};
+
+template<class T>
+class opj_conv_rgb : public decodeProcess<T>
+{
+public:
+    void conv(const opj_image_t* image, uint8_t* pDest)
+    {
+        uint32_t width = image->comps[0].w;
+        uint32_t height = image->comps[0].h;
+
+        opj_image_comp_t* comp0 = &image->comps[0];
+        opj_image_comp_t* comp1 = &image->comps[1];
+        opj_image_comp_t* comp2 = &image->comps[2];
+
+        uint32_t stride = width * sizeof(decodeProcess<T>::dummy);
+
+        using type = decltype(decodeProcess<T>::dummy);
+        type mask = (1 << decodeProcess<T>::getBpc()) - 1;
+        type alpha = ~static_cast<type>(0) ^ ((static_cast<type>(1) << (decodeProcess<T>::getBpc() * 3)) - 1);
+
+        type* line = static_cast<type*>(decodeProcess<T>::getScan0(pDest, stride, height));
+        size_t pos = 0;
+        for (size_t y = 0; y < height; y++)
+        {
+            for (size_t x = 0; x < width; x++, pos++)
+            {
+				line[x] = alpha |
+					((type)convert_sample(comp0, comp0->data[pos], (uint16_t)mask) << (decodeProcess<T>::getBpc() * decodeProcess<T>::getRIndex())) |
+					((type)convert_sample(comp1, comp1->data[pos], (uint16_t)mask) << (decodeProcess<T>::getBpc() * decodeProcess<T>::getGIndex())) |
+					((type)convert_sample(comp2, comp2->data[pos], (uint16_t)mask) << (decodeProcess<T>::getBpc() * decodeProcess<T>::getBIndex()));
+            }
+			line += decodeProcess<T>::getScanOffset(width);
+        }
+    }
+};
+
+template<class T>
+class opj_conv_gray : public decodeProcess<T>
+{
+public:
+    void conv(const opj_image_t* image, uint8_t* pDest)
+    {
+        uint32_t width = image->comps[0].w;
+        uint32_t height = image->comps[0].h;
+
+        opj_image_comp_t* comp = &image->comps[0];
+
+        uint32_t stride = width * sizeof(decodeProcess<T>::dummy);
+
+		using type = decltype(decodeProcess<T>::dummy);
+        type mask = (1 << decodeProcess<T>::getBpc()) - 1;
+        type alpha = ~static_cast<type>(0) ^ ((static_cast<type>(1) << (decodeProcess<T>::getBpc() * 3)) - 1);
+
+        type* line = static_cast<type*>(decodeProcess<T>::getScan0(pDest, stride, height));
+        size_t pos = 0;
+        for (size_t y = 0; y < height; y++)
+        {
+            for (size_t x = 0; x < width; x++, pos++)
+            {
+                auto gray = convert_sample(comp, comp->data[pos], (uint16_t)mask);
+				line[x] = alpha |
+					((type)gray << (decodeProcess<T>::getBpc() * decodeProcess<T>::getRIndex())) |
+					((type)gray << (decodeProcess<T>::getBpc() * decodeProcess<T>::getGIndex())) |
+					((type)gray << (decodeProcess<T>::getBpc() * decodeProcess<T>::getBIndex()));
+            }
+			line += decodeProcess<T>::getScanOffset(width);
+        }
+    }
+};
+
+
+static HRESULT opjimage_to_HBITMAP(const opj_image_t* image, agaliaBitmap** ppBitmap)
+{
+    if (!image || !ppBitmap)
         return E_POINTER;
 
     int width = image->comps[0].w;
     int height = image->comps[0].h;
 
-    BITMAPINFO bmi = {};
-    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.bmiHeader.biWidth = width;
-    bmi.bmiHeader.biHeight = height;
-    bmi.bmiHeader.biPlanes = 1;
-    bmi.bmiHeader.biBitCount = 32;
-    bmi.bmiHeader.biCompression = BI_RGB;
+	BITMAPV5HEADER bi = {};
+	bi.bV5Size = sizeof(BITMAPV5HEADER);
+	bi.bV5Width = width;
+	bi.bV5Height = height;
+	bi.bV5Planes = 1;
+	bi.bV5BitCount = 32;
+	bi.bV5Compression = BI_BITFIELDS;
+	bi.bV5RedMask = 0x00FF0000;
+	bi.bV5GreenMask = 0x0000FF00;
+	bi.bV5BlueMask = 0x000000FF;
+	bi.bV5AlphaMask = 0x00000000;
 
-    void* pBits = nullptr;
-    HBITMAP hBitmap = CreateDIBSection(nullptr, &bmi, DIB_RGB_COLORS, &pBits, nullptr, 0);
-    if (!hBitmap) {
-        return E_FAIL;
-    }
+	agaliaPtr<agaliaBitmap> bitmap;
+	auto hr = createAgaliaBitmap(&bitmap, &bi);
+	if (FAILED(hr))
+		return hr;
+
+	void* pBits = nullptr;
+	hr = bitmap->getBits(&pBits);
+	if (FAILED(hr))
+		return hr;
 
     if (image->numcomps >= 3)
     {
         if (image->color_space == OPJ_CLRSPC_SYCC)
         {
-			ycc_to_rgb32(image, static_cast<uint8_t*>(pBits));
+			opj_conv_ycc<agaliaBitmap> conv;
+			conv.conv(image, static_cast<uint8_t*>(pBits));
 		}
 		else
 		{
-			rgb_to_rgb32(image, static_cast<uint8_t*>(pBits));
+            opj_conv_rgb<agaliaBitmap> conv;
+            conv.conv(image, static_cast<uint8_t*>(pBits));
         }
     }
     else if (image->numcomps == 1)
     {
-		gray_to_rgb32(image, static_cast<uint8_t*>(pBits));
+        opj_conv_gray<agaliaBitmap> conv;
+        conv.conv(image, static_cast<uint8_t*>(pBits));
     }
     else
     {
-        DeleteObject(hBitmap);
         return E_FAIL;
     }
 
-    *phBitmap = hBitmap;
+	*ppBitmap = bitmap.detach();
+    return S_OK;
+}
+
+static HRESULT opjimage_to_IWICBitmap(const opj_image_t* image, IWICBitmap** ppBitmap)
+{
+    if (!image || !ppBitmap)
+        return E_POINTER;
+
+	HRESULT hr = S_OK;
+
+    int width = image->comps[0].w;
+    int height = image->comps[0].h;
+    UINT stride = width * 8;
+
+	CHeapPtr<uint8_t> buf;
+	buf.Allocate(stride * height);
+	if (!buf)
+		return E_OUTOFMEMORY;
+
+    if (image->numcomps >= 3)
+    {
+        if (image->color_space == OPJ_CLRSPC_SYCC)
+        {
+            opj_conv_ycc<IWICBitmap> conv;
+            conv.conv(image, buf);
+        }
+        else
+        {
+            opj_conv_rgb<IWICBitmap> conv;
+            conv.conv(image, buf);
+
+        }
+    }
+    else if (image->numcomps == 1)
+    {
+        opj_conv_gray<IWICBitmap> conv;
+        conv.conv(image, buf);
+    }
+    else
+    {
+        return E_FAIL;
+    }
+
+    CComPtr<IWICImagingFactory> wicFactory;
+    hr = ::CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory));
+    if (FAILED(hr)) return hr;
+
+    hr = wicFactory->CreateBitmapFromMemory(
+        width, height,
+        GUID_WICPixelFormat64bppRGBA,
+        stride, stride * height,
+        buf,
+        ppBitmap);
+    if (FAILED(hr)) return hr;
+
     return S_OK;
 }
 
 
-static HRESULT decodeJPEG2000(IStream* pStream, HBITMAP* phBitmap, OPJ_CODEC_FORMAT format)
+static HRESULT decodeJPEG2000(agaliaBitmap** ppBitmap, const agaliaContainer* image, OPJ_CODEC_FORMAT format)
 {
-    if (!pStream || !phBitmap)
+    if (!image || !ppBitmap)
         return E_POINTER;
 
-    opj_image_t* image = nullptr;
-    auto hr = decodeJPEG2000stub(pStream, &image, format);
+	CComPtr<IStream> stream;
+	auto hr = image->getAsocStream(&stream);
+	if (FAILED(hr)) return hr;
+
+    opj_image_t* opj_image = nullptr;
+    hr = decodeJPEG2000stub(stream, &opj_image, format);
     if (SUCCEEDED(hr))
     {
-        hr = opjimage_to_HBITMAP(image, phBitmap);
-        opj_image_destroy(image);
+        hr = opjimage_to_HBITMAP(opj_image, ppBitmap);
+        opj_image_destroy(opj_image);
+    }
+    return hr;
+}
+
+
+static HRESULT decodeJPEG2000(IWICBitmap** ppBitmap, const agaliaContainer* image, OPJ_CODEC_FORMAT format)
+{
+    if (!image || !ppBitmap)
+        return E_POINTER;
+
+    CComPtr<IStream> stream;
+    auto hr = image->getAsocStream(&stream);
+    if (FAILED(hr)) return hr;
+
+    opj_image_t* opj_image = nullptr;
+    hr = decodeJPEG2000stub(stream, &opj_image, format);
+    if (SUCCEEDED(hr))
+    {
+        hr = opjimage_to_IWICBitmap(opj_image, ppBitmap);
+        opj_image_destroy(opj_image);
     }
     return hr;
 }
@@ -350,40 +550,30 @@ ULONG agaliaDecoderOpenJPEG::Release(void)
 }
 
 
-HRESULT agaliaDecoderOpenJPEG::decode(IStream* stream, HBITMAP* phBitmap)
+HRESULT agaliaDecoderOpenJPEG::decode(agaliaBitmap** ppBitmap, const agaliaContainer* image)
 {
-    auto hr = decodeJPEG2000(stream, phBitmap, OPJ_CODEC_JP2);
+    auto hr = decodeJPEG2000(ppBitmap, image, OPJ_CODEC_JP2);
     if (SUCCEEDED(hr))
         return hr;
-	return decodeJPEG2000(stream, phBitmap, OPJ_CODEC_J2K);
+    return decodeJPEG2000(ppBitmap, image, OPJ_CODEC_J2K);
 }
 
-
-HRESULT agaliaDecoderOpenJPEG::decode(IStream* stream, agaliaHeap** bmpInfo, void** ppBits)
+HRESULT agaliaDecoderOpenJPEG::decode(IWICBitmap** ppBitmap, IWICColorContext** ppColorContext, const agaliaContainer* image)
 {
-    UNREFERENCED_PARAMETER(stream);
-    UNREFERENCED_PARAMETER(bmpInfo);
-	UNREFERENCED_PARAMETER(ppBits);
-	return E_NOTIMPL;
+    auto hr = decodeJPEG2000(ppBitmap, image, OPJ_CODEC_JP2);
+    if (SUCCEEDED(hr))
+        return hr;
+    hr = decodeJPEG2000(ppBitmap, image, OPJ_CODEC_J2K);
+	if (SUCCEEDED(hr))
+		*ppColorContext = nullptr;
+	return hr;
 }
 
-
-HRESULT agaliaDecoderOpenJPEG::decode(IStream* stream, uint32_t maxW, uint32_t maxH, HBITMAP* phBitmap)
+HRESULT agaliaDecoderOpenJPEG::decodeThumbnail(agaliaBitmap** ppBitmap, const agaliaContainer* image, uint32_t maxW, uint32_t maxH)
 {
-	UNREFERENCED_PARAMETER(maxW);
+    UNREFERENCED_PARAMETER(maxW);
 	UNREFERENCED_PARAMETER(maxH);
-    return decode(stream, phBitmap);
-}
-
-
-HRESULT agaliaDecoderOpenJPEG::decode(IStream* stream, uint32_t maxW, uint32_t maxH, agaliaHeap** bmpInfo, void** ppBits)
-{
-    UNREFERENCED_PARAMETER(stream);
-	UNREFERENCED_PARAMETER(maxW);
-	UNREFERENCED_PARAMETER(maxH);
-	UNREFERENCED_PARAMETER(bmpInfo);
-	UNREFERENCED_PARAMETER(ppBits);
-    return E_NOTIMPL;
+	return decode(ppBitmap, image);
 }
 
 

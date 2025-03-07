@@ -369,7 +369,7 @@
     <ClInclude Include="stringcnv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="decode_DCM.h">
+    <ClInclude Include="agaliaDecoderDCM.h">
       <Filter>Header Files\DICOM</Filter>
     </ClInclude>
   </ItemGroup>
@@ -653,7 +653,7 @@
     <ClCompile Include="stream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="decode_DCM.cpp">
+    <ClCompile Include="agaliaDecoderDCM.cpp">
       <Filter>Source Files\DICOM</Filter>
     </ClCompile>
   </ItemGroup>

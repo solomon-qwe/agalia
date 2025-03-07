@@ -157,10 +157,15 @@ HRESULT container_TIFF::getPropertyValue(PropertyType type, agaliaString** str) 
 }
 
 
-
-HRESULT container_TIFF::getThumbnailImage(HBITMAP* phBitmap, uint32_t maxW, uint32_t maxH) const
+HRESULT container_TIFF::loadBitmap(agaliaBitmap** ppBitmap) const
 {
-	return loadThumbnailBitmap(phBitmap, maxW, maxH, data_stream);
+	return ::loadBitmap(ppBitmap, this);
+}
+
+
+HRESULT container_TIFF::loadThumbnail(agaliaBitmap** ppBitmap, uint32_t maxW, uint32_t maxH) const
+{
+	return ::loadThumbnail(ppBitmap, this, maxW, maxH);
 }
 
 

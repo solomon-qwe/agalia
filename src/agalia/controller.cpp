@@ -36,12 +36,15 @@ void controller::load_registry(void)
 	int force_dictionary_vr = ::AfxGetApp()->GetProfileIntW(L"2.0", L"ForceDictionaryVR", 0);
 	setAgaliaPreference(dicom_force_dictionary_vr, force_dictionary_vr ? 1 : 0);
 
-	temp = ::AfxGetApp()->GetProfileStringW(L"2.0", L"RenderingEngine", L"Direct2D");
+	temp = ::AfxGetApp()->GetProfileStringW(L"2.0", L"RenderingEngine", L"Direct2D_1_1");
 	if (temp == L"GDI") {
 		rendering_engine = rendering_GDI;
 	}
+	else if (temp == L"Direct2D_1_3") {
+		rendering_engine = rendering_D2D_1_3;
+	}
 	else {
-		rendering_engine = rendering_D2D;
+		rendering_engine = rendering_D2D_1_1;
 	}
 
 	temp = ::AfxGetApp()->GetProfileStringW(L"2.0", L"MonitorColorProfile", L"sRGB");
@@ -90,11 +93,17 @@ void controller::save_registry(void)
 	getAgaliaPreference(dicom_force_dictionary_vr, &force_dictionary_vr);
 	::AfxGetApp()->WriteProfileInt(L"2.0", L"ForceDictionaryVR", force_dictionary_vr);
 
-	if (rendering_engine == rendering_GDI) {
+	switch(rendering_engine) {
+	case rendering_GDI:
 		temp = L"GDI";
-	}
-	else {
-		temp = L"Direct2D";
+		break;
+	case rendering_D2D_1_1:
+		temp = L"Direct2D_1_1";
+		break;
+	case rendering_D2D_1_3:
+	default:
+		temp = L"Direct2D_1_3";
+		break;
 	}
 	::AfxGetApp()->WriteProfileStringW(L"2.0", L"RenderingEngine", temp);
 
