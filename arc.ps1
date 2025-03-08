@@ -15,10 +15,12 @@ Compress-Archive `
 		bin\x64\Release\agalia.com, `
 		bin\x64\Release\agalia.exe, `
 		bin\x64\Release\agaliarept.dll, `
+		bin\x64\Release\agaliaUtil.dll, `
 		bin\x64\Release\decode.dll, `
 		bin\x64\Release\decode_MF.dll, `
 		bin\x64\Release\decode_openjpeg.dll, `
-		bin\x64\Release\decode_WIC.dll `
+		bin\x64\Release\decode_WIC.dll, `
+		bin\x64\Release\openjp2.dll `
 	-DestinationPath `
 		docs\agalia_X.X.X_x64.zip `
 	-CompressionLevel `
@@ -33,10 +35,12 @@ Compress-Archive `
 		bin\x86\Release\agalia.com, `
 		bin\x86\Release\agalia.exe, `
 		bin\x86\Release\agaliarept.dll, `
+		bin\x86\Release\agaliaUtil.dll, `
 		bin\x86\Release\decode.dll, `
 		bin\x86\Release\decode_MF.dll, `
 		bin\x86\Release\decode_openjpeg.dll, `
-		bin\x86\Release\decode_WIC.dll `
+		bin\x86\Release\decode_WIC.dll, `
+		bin\x86\Release\openjp2.dll `
 	-DestinationPath `
 		docs\agalia_X.X.X_x86.zip `
 	-CompressionLevel `
