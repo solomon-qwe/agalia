@@ -321,6 +321,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_D5CE8EA3CB6B49EA8DDEE180886178FB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D60153E24F564D68BCCE9C8889E681CB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -620,7 +626,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1004,6 +1010,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D5CE8EA3CB6B49EA8DDEE180886178FB"
+            {
+            "SourcePath" = "8:..\\..\\src\\decode_openjpeg\\openjpeg\\bin\\x64\\openjp2.dll"
+            "TargetName" = "8:openjp2.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_BAE1949E366E4465B4F7FD5BBAF5DCB9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D9CF7BCAEF77B2EA11954873CC32A7E9"
             {
             "SourcePath" = "8:api-ms-win-crt-string-l1-1-0.dll"
@@ -1151,15 +1177,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:agalia"
-        "ProductCode" = "8:{D39429A6-EA51-4739-B53C-2830E9995B21}"
-        "PackageCode" = "8:{6034CD3D-638A-42F6-B7C5-78DE08087000}"
+        "ProductCode" = "8:{5490FF3A-9F6A-4E11-9000-6B781AE9560D}"
+        "PackageCode" = "8:{92F868B9-7295-4CE2-9EC2-81994022950C}"
         "UpgradeCode" = "8:{4A23654E-07F6-445D-A77F-4044BFC6E96F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.5.0"
+        "ProductVersion" = "8:1.5.1"
         "Manufacturer" = "8:Solomon QWE"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://solomon-qwe.github.io/agalia/"

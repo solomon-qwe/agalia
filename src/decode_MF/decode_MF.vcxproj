@@ -178,6 +178,9 @@
       <Project>{b83c2a23-9889-4ea3-a3d5-6c94fbd29c0d}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\decode_MF.rc2" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

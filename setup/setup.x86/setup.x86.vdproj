@@ -64,12 +64,6 @@
         "Entry"
         {
         "MsmKey" = "8:_256B58D44B93E42F73D8102A3041FCC8"
-        "OwnerKey" = "8:_66CF5AC4F19A43D091AE91F283904307"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_256B58D44B93E42F73D8102A3041FCC8"
         "OwnerKey" = "8:_28E93C6A05FE45E8A946E84F2BD17BEF"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -95,6 +89,12 @@
         {
         "MsmKey" = "8:_256B58D44B93E42F73D8102A3041FCC8"
         "OwnerKey" = "8:_8973C4259FC24641A3AF61D7D07885B9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_256B58D44B93E42F73D8102A3041FCC8"
+        "OwnerKey" = "8:_66CF5AC4F19A43D091AE91F283904307"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -106,12 +106,6 @@
         "Entry"
         {
         "MsmKey" = "8:_2F8799224644ACC5ADEBF93BCE0D0427"
-        "OwnerKey" = "8:_66CF5AC4F19A43D091AE91F283904307"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2F8799224644ACC5ADEBF93BCE0D0427"
         "OwnerKey" = "8:_28E93C6A05FE45E8A946E84F2BD17BEF"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -137,6 +131,12 @@
         {
         "MsmKey" = "8:_2F8799224644ACC5ADEBF93BCE0D0427"
         "OwnerKey" = "8:_8973C4259FC24641A3AF61D7D07885B9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2F8799224644ACC5ADEBF93BCE0D0427"
+        "OwnerKey" = "8:_66CF5AC4F19A43D091AE91F283904307"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -184,12 +184,6 @@
         "Entry"
         {
         "MsmKey" = "8:_4FD5C378D4AA884632F30F918D1A7AB3"
-        "OwnerKey" = "8:_66CF5AC4F19A43D091AE91F283904307"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4FD5C378D4AA884632F30F918D1A7AB3"
         "OwnerKey" = "8:_28E93C6A05FE45E8A946E84F2BD17BEF"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -215,6 +209,12 @@
         {
         "MsmKey" = "8:_4FD5C378D4AA884632F30F918D1A7AB3"
         "OwnerKey" = "8:_8973C4259FC24641A3AF61D7D07885B9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4FD5C378D4AA884632F30F918D1A7AB3"
+        "OwnerKey" = "8:_66CF5AC4F19A43D091AE91F283904307"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -274,6 +274,12 @@
         "Entry"
         {
         "MsmKey" = "8:_8B7BF20AEF3F44C682B99A9D3B080C2B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8E05B9190E144FF087680956A14C5504"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -834,6 +840,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8E05B9190E144FF087680956A14C5504"
+            {
+            "SourcePath" = "8:..\\..\\src\\decode_openjpeg\\openjpeg\\bin\\x86\\openjp2.dll"
+            "TargetName" = "8:openjp2.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_81898414F0C24E949D2755F0E67AA67D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8EAAD576A750A76CE2C55330951B44B1"
             {
             "SourcePath" = "8:OLEACC.dll"
@@ -990,7 +1016,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1101,15 +1127,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:agalia"
-        "ProductCode" = "8:{388B7438-6D29-43A8-A6FA-3EC5590278F3}"
-        "PackageCode" = "8:{51250CF9-3B3E-4D70-BFB1-2C6687E42D0D}"
+        "ProductCode" = "8:{252CFA33-5693-4137-B484-FC754FFF688A}"
+        "PackageCode" = "8:{1E4A475E-A80F-4FA7-B7CE-71B69F6B9A66}"
         "UpgradeCode" = "8:{98223F72-D157-42ED-9692-DE71E02AA948}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.5.0"
+        "ProductVersion" = "8:1.5.1"
         "Manufacturer" = "8:Solomon QWE"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://solomon-qwe.github.io/agalia/"
