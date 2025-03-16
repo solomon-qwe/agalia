@@ -11,7 +11,6 @@ using namespace analyze_DCM;
 
 namespace analyze_DCM
 {
-
 	inline void remove_trailing_space(char* str)
 	{
 		if (str && *str) {
@@ -19,8 +18,6 @@ namespace analyze_DCM
 			if (str[last] == ' ') str[last] = '\0';
 		}
 	}
-
-
 
 	enum Photometric_Interpretation
 	{
@@ -120,7 +117,6 @@ namespace analyze_DCM
 		return S_OK;
 	}
 
-
 	static HRESULT getValueDS(const container_DCM_Impl* container, uint16_t group, uint16_t element, double* result)
 	{
 		if (container == nullptr) return E_POINTER;
@@ -139,8 +135,6 @@ namespace analyze_DCM
 		*result = strtod(buf, nullptr);
 		return S_OK;
 	}
-
-
 
 	template <typename T>
 	HRESULT getTagValueT(const container_DCM_Impl* container, uint16_t group, uint16_t element, T* p)
@@ -286,13 +280,193 @@ namespace analyze_DCM
 		*b = static_cast<uint8_t>(max(min(b0, 255), 0));
 	}
 
-	static HRESULT getPallet(const container_DCM_Impl* container, uint16_t group, uint16_t element, CHeapPtr<uint16_t>& pallet)
+	enum PaletteSegmentType
 	{
-		uint64_t tag_offset = 0;
-		auto hr = findTag(container, group, element, &tag_offset);
+		Discrete = 0,
+		Linear = 1,
+		Indirect = 2
+	};
+
+	template<typename T>
+	static size_t process_pal_discrete(uint16_t* palette, size_t& out_index, const T* seg_palette, size_t seg_palette_size, size_t byte_offset)
+	{
+		struct discrete_segment
+		{
+			T opcode;
+			T length;
+			T data[1];
+		};
+
+		if (seg_palette_size < byte_offset + sizeof(discrete_segment)) return 0;
+
+		const discrete_segment* p = reinterpret_cast<const discrete_segment*>(reinterpret_cast<const uint8_t*>(seg_palette) + byte_offset);
+		if (p->opcode != Discrete) return 0;
+
+		if (out_index + p->length > 0x10000) return 0;
+		size_t discrete_segment_size = sizeof(discrete_segment) + sizeof(discrete_segment::data[0]) * (p->length - 1);
+		if (seg_palette_size < byte_offset + discrete_segment_size) return 0;
+
+		for (size_t i = 0; i < p->length; i++)
+			palette[out_index++] = p->data[i];
+
+		return byte_offset + discrete_segment_size;
+	}
+
+	template<typename T>
+	static size_t process_pal_linear(uint16_t* palette, size_t& out_index, const T* seg_palette, size_t seg_palette_size, size_t byte_offset)
+	{
+		if (out_index == 0) return 0;
+
+		struct linear_segment
+		{
+			T opcode;
+			T length;
+			T Y1;
+		};
+
+		if (seg_palette_size < byte_offset + sizeof(linear_segment)) return 0;
+
+		const linear_segment* p = reinterpret_cast<const linear_segment*>(reinterpret_cast<const uint8_t*>(seg_palette) + byte_offset);
+		if (p->opcode != Linear) return 0;
+
+		if (out_index + p->length > 0x10000) return 0;
+
+		uint16_t Y0 = palette[out_index - 1];
+		uint16_t Y1 = p->Y1;
+		for (size_t i = 0; i < p->length; i++)
+			palette[out_index++] = static_cast<uint16_t>(Y0 + (Y1 - Y0) * i / p->length);
+
+		return byte_offset + sizeof(linear_segment);
+	}
+
+	template<typename T>
+	static size_t process_pal_indirect(uint16_t* palette, size_t& out_index, const T* seg_palette, size_t seg_palette_size, size_t byte_offset)
+	{
+		struct indirect_segment
+		{
+			T opcode;
+			T counts;
+			uint32_t offset;
+		};
+
+		if (seg_palette_size < byte_offset + sizeof(indirect_segment)) return 0;
+
+		const indirect_segment* p = reinterpret_cast<const indirect_segment*>(reinterpret_cast<const uint8_t*>(seg_palette) + byte_offset);
+		if (p->opcode != Indirect) return 0;
+
+		const uint8_t* p1 = reinterpret_cast<const uint8_t*>(seg_palette);
+		const uint8_t* p2 = p1 + p->offset;
+		if (p1 + seg_palette_size < p2) return 0;
+
+		const T* indirect_palette = reinterpret_cast<const T*>(p2);
+		size_t indirect_size = seg_palette_size - p->offset;
+
+		size_t indirect_offset = 0;
+		for (size_t i = 0; i < p->counts; i++)
+		{
+			size_t indirect_next_offset = 0;
+			switch (indirect_palette[i])
+			{
+			case Discrete:
+				indirect_next_offset = process_pal_discrete(palette, out_index, indirect_palette, indirect_size, indirect_offset);
+				break;
+			case Linear:
+				indirect_next_offset = process_pal_linear(palette, out_index, indirect_palette, indirect_size, indirect_offset);
+				break;
+			case Indirect:
+				indirect_next_offset = process_pal_indirect(palette, out_index, indirect_palette, indirect_size, indirect_offset);
+				break;
+			}
+			if (indirect_next_offset == 0) return 0;
+			indirect_offset = indirect_next_offset;
+		}
+		return byte_offset + sizeof(indirect_segment);
+	}
+
+	template<typename T>
+	static HRESULT process_segmented_palette(CHeapPtr<uint16_t>& palette, uint16_t* desc, const T* seg_palette, size_t seg_palette_size)
+	{
+		int entries = (1 << desc[2]);
+		if (!palette.Allocate(entries)) return E_OUTOFMEMORY;
+		memset(palette.m_pData, 0, sizeof(uint16_t) * entries);
+
+		size_t out_index = 0;
+		const T* p = seg_palette;
+		while (reinterpret_cast<const uint8_t*>(p) + sizeof(T) < reinterpret_cast<const uint8_t*>(seg_palette) + seg_palette_size)
+		{
+			size_t next_offset = 0;
+			switch (*p)
+			{
+			case Discrete:
+				next_offset = process_pal_discrete(palette, out_index, seg_palette, seg_palette_size, reinterpret_cast<const uint8_t*>(p) - reinterpret_cast<const uint8_t*>(seg_palette));
+				break;
+			case Linear:
+				next_offset = process_pal_linear(palette, out_index, seg_palette, seg_palette_size, reinterpret_cast<const uint8_t*>(p) - reinterpret_cast<const uint8_t*>(seg_palette));
+				break;
+			case Indirect:
+				next_offset = process_pal_indirect(palette, out_index, seg_palette, seg_palette_size, reinterpret_cast<const uint8_t*>(p) - reinterpret_cast<const uint8_t*>(seg_palette));
+				break;
+			default:
+				return E_FAIL;
+			}
+			if (next_offset == 0) return E_FAIL;
+			p = reinterpret_cast<const T*>(reinterpret_cast<const uint8_t*>(seg_palette) + next_offset);
+		}
+		return S_OK;
+	}
+
+	static HRESULT load_palette(CHeapPtr<uint16_t>& palette, size_t* palette_size, const container_DCM_Impl* image, int index)
+	{
+		CHeapPtr<uint16_t> desc;
+		size_t desc_size = 0;
+		auto hr = getTagValue(image, 0x0028, static_cast<uint16_t>(0x1100 + index), desc, &desc_size);
 		if (FAILED(hr)) return hr;
-		dicom_element elem(container, tag_offset);
-		return loadValue(elem, pallet);
+		if (desc_size < 6) return E_FAIL;
+
+		size_t buffer_size = 0;
+		if (desc[2] == 8)
+		{
+			CHeapPtr<uint8_t> seg_palette;
+			hr = getTagValue(image, 0x0028, static_cast<uint16_t>(0x1220 + index), seg_palette, &buffer_size);
+			if (SUCCEEDED(hr))
+			{
+				hr = process_segmented_palette(palette, desc, seg_palette.m_pData, buffer_size);
+				if (FAILED(hr)) return hr;
+				*palette_size = 1 << 8;
+			}
+			else
+			{
+				CHeapPtr<uint8_t> temp;
+				hr = getTagValue(image, 0x0028, static_cast<uint16_t>(0x1200 + index), temp, &buffer_size);
+				if (FAILED(hr)) return hr;
+				if (!palette.Allocate(buffer_size)) return E_OUTOFMEMORY;
+				for (size_t i = 0; i < buffer_size; i++)
+					palette.m_pData[i] = temp.m_pData[i];
+				*palette_size = buffer_size / sizeof(uint8_t);
+			}
+		}
+		else if (desc[2] == 16)
+		{
+			CHeapPtr<uint16_t> seg_palette;
+			hr = getTagValue(image, 0x0028, static_cast<uint16_t>(0x1220 + index), seg_palette, &buffer_size);
+			if (SUCCEEDED(hr))
+			{
+				hr = process_segmented_palette(palette, desc, seg_palette.m_pData, buffer_size);
+				if (FAILED(hr)) return hr;
+				*palette_size = 1 << 16;
+			}
+			else
+			{
+				hr = getTagValue(image, 0x0028, static_cast<uint16_t>(0x1200 + index), palette, &buffer_size);
+				if (FAILED(hr)) return hr;
+				*palette_size = buffer_size / sizeof(uint16_t);
+			}
+		}
+		else
+		{
+			return E_FAIL;
+		}
+		return S_OK;
 	}
 
 	static HRESULT decodeRLE8(const uint8_t* srcData, uint64_t srcSize, size_t expectedPixels, uint16_t samples_per_pixel, std::vector<uint8_t>& decodedData)
@@ -662,6 +836,80 @@ namespace analyze_DCM
 	};
 
 	template<class T>
+	class decoderPaletteColor8 : public decoderBase<T>, public decoderProcess<T>
+	{
+	public:
+		HRESULT decode(const container_DCM_Impl* image, const param& param) override
+		{
+			const uint32_t dstColorBits = decoderProcess<T>::bpc;
+
+			CHeapPtr<uint8_t> bufSrc;
+			size_t bufSrcSize = 0;
+			auto hr = getTagValue(image, 0x7FE0, 0x0010, bufSrc, &bufSrcSize);
+			if (FAILED(hr)) return hr;
+
+			if (!param.rows) return E_FAIL;
+			uint16_t rows = *param.rows;
+
+			if (!param.columns) return E_FAIL;
+			uint16_t columns = *param.columns;
+
+			CHeapPtr<uint16_t> r_palette;
+			size_t r_palette_size = 0;
+			hr = load_palette(r_palette, &r_palette_size, image, 1);
+			if (FAILED(hr)) return hr;
+
+			CHeapPtr<uint16_t> g_palette;
+			size_t g_palette_size = 0;
+			hr = load_palette(g_palette, &g_palette_size, image, 2);
+			if (FAILED(hr)) return hr;
+
+			CHeapPtr<uint16_t> b_palette;
+			size_t b_palette_size = 0;
+			hr = load_palette(b_palette, &b_palette_size, image, 3);
+			if (FAILED(hr)) return hr;
+
+			void* pBits = nullptr;
+			hr = decoderProcess<T>::createBuffer(columns, rows, &pBits);
+			if (FAILED(hr)) return hr;
+
+			using type = decltype(decoderProcess<T>::dummy);
+			type alpha = ~static_cast<type>(0) ^ ((static_cast<type>(1) << (dstColorBits * 3)) - 1);
+
+			uint8_t* src = reinterpret_cast<uint8_t*>(bufSrc.m_pData);
+			type* dst = reinterpret_cast<type*>(decoderProcess<T>::getScan0());
+			for (size_t y = 0; y < rows; y++)
+			{
+				for (size_t x = 0; x < columns; x += 1)
+				{
+					uint16_t index = src[x];
+					if (index >= r_palette_size ||
+						index >= g_palette_size ||
+						index >= b_palette_size)
+						return E_FAIL;
+
+					uint16_t r = r_palette[index];
+					uint16_t g = g_palette[index];
+					uint16_t b = b_palette[index];
+					dst[x] = alpha |
+						((type)r << (dstColorBits * decoderProcess<T>::getRIndex() + (dstColorBits - 8))) |
+						((type)g << (dstColorBits * decoderProcess<T>::getGIndex() + (dstColorBits - 8))) |
+						((type)b << (dstColorBits * decoderProcess<T>::getBIndex() + (dstColorBits - 8)));
+				}
+				src += columns;
+				dst += decoderProcess<T>::getScanOffset();
+			}
+
+			return decoderProcess<T>::postProcess();
+		}
+
+		virtual HRESULT getResult(T** ppBitmap) override
+		{
+			return decoderProcess<T>::detachInnerObject(ppBitmap);
+		}
+	};
+
+	template<class T>
 	class decoderGrayscale16_unsigned : public decoderBase<T>, public decoderProcess<T>
 	{
 	public:
@@ -864,14 +1112,19 @@ namespace analyze_DCM
 			if (!param.columns) return E_FAIL;
 			uint16_t columns = *param.columns;
 
-			CHeapPtr<uint16_t> r_pallet;
-			CHeapPtr<uint16_t> g_pallet;
-			CHeapPtr<uint16_t> b_pallet;
-			hr = getPallet(image, 0x0028, 0x1201, r_pallet);
+			CHeapPtr<uint16_t> r_palette;
+			size_t r_palette_size = 0;
+			hr = load_palette(r_palette, &r_palette_size, image, 1);
 			if (FAILED(hr)) return hr;
-			hr = getPallet(image, 0x0028, 0x1202, g_pallet);
+
+			CHeapPtr<uint16_t> g_palette;
+			size_t g_palette_size = 0;
+			hr = load_palette(g_palette, &g_palette_size, image, 2);
 			if (FAILED(hr)) return hr;
-			hr = getPallet(image, 0x0028, 0x1203, b_pallet);
+
+			CHeapPtr<uint16_t> b_palette;
+			size_t b_palette_size = 0;
+			hr = load_palette(b_palette, &b_palette_size, image, 3);
 			if (FAILED(hr)) return hr;
 
 			void* pBits = nullptr;
@@ -887,11 +1140,15 @@ namespace analyze_DCM
 			{
 				for (size_t x = 0; x < columns; x += 1)
 				{
-					uint16_t index = src[x];
-					if (index >= bufSrcSize / 2) return E_FAIL;
-					uint16_t r = r_pallet[index];
-					uint16_t g = g_pallet[index];
-					uint16_t b = b_pallet[index];
+					const uint16_t& v = src[x];
+					if (v >= r_palette_size ||
+						v >= g_palette_size || 
+						v >= b_palette_size)
+						return E_FAIL;
+					
+					uint16_t r = r_palette[v];
+					uint16_t g = g_palette[v];
+					uint16_t b = b_palette[v];
 					dst[x] = alpha |
 						(((type)r >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getRIndex())) |
 						(((type)g >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getGIndex())) |
@@ -1056,14 +1313,19 @@ namespace analyze_DCM
 			auto hr = decodeRLE8(bufSrc.m_pData, bufSrcSize, columns * rows, samples_per_pixel, decodedData);
 			if (FAILED(hr)) return hr;
 
-			CHeapPtr<uint16_t> r_pallet;
-			CHeapPtr<uint16_t> g_pallet;
-			CHeapPtr<uint16_t> b_pallet;
-			hr = getPallet(image, 0x0028, 0x1201, r_pallet);
+			CHeapPtr<uint16_t> r_palette;
+			size_t r_palette_size = 0;
+			hr = load_palette(r_palette, &r_palette_size, image, 1);
 			if (FAILED(hr)) return hr;
-			hr = getPallet(image, 0x0028, 0x1202, g_pallet);
+
+			CHeapPtr<uint16_t> g_palette;
+			size_t g_palette_size = 0;
+			hr = load_palette(g_palette, &g_palette_size, image, 2);
 			if (FAILED(hr)) return hr;
-			hr = getPallet(image, 0x0028, 0x1203, b_pallet);
+
+			CHeapPtr<uint16_t> b_palette;
+			size_t b_palette_size = 0;
+			hr = load_palette(b_palette, &b_palette_size, image, 3);
 			if (FAILED(hr)) return hr;
 
 			void* pBits = nullptr;
@@ -1080,10 +1342,15 @@ namespace analyze_DCM
 				for (int x = 0; x < columns; x++)
 				{
 					const uint8_t& v = src[x];
+					if (v >= r_palette_size ||
+						v >= g_palette_size ||
+						v >= b_palette_size)
+						return E_FAIL;
+
 					dst[x] = alpha |
-						(((type)r_pallet[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getRIndex())) |
-						(((type)g_pallet[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getGIndex())) |
-						(((type)b_pallet[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getBIndex()));
+						(((type)r_palette[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getRIndex())) |
+						(((type)g_palette[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getGIndex())) |
+						(((type)b_palette[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getBIndex()));
 
 				}
 				src += columns;
@@ -1140,14 +1407,19 @@ namespace analyze_DCM
 			auto hr = decodeRLE16(bufSrc, bufSrcSize, columns * rows, samples_per_pixel, decodedData);
 			if (FAILED(hr)) return hr;
 
-			CHeapPtr<uint16_t> r_pallet;
-			CHeapPtr<uint16_t> g_pallet;
-			CHeapPtr<uint16_t> b_pallet;
-			hr = getPallet(image, 0x0028, 0x1201, r_pallet);
+			CHeapPtr<uint16_t> r_palette;
+			size_t r_palette_size = 0;
+			hr = load_palette(r_palette, &r_palette_size, image, 1);
 			if (FAILED(hr)) return hr;
-			hr = getPallet(image, 0x0028, 0x1202, g_pallet);
+
+			CHeapPtr<uint16_t> g_palette;
+			size_t g_palette_size = 0;
+			hr = load_palette(g_palette, &g_palette_size, image, 2);
 			if (FAILED(hr)) return hr;
-			hr = getPallet(image, 0x0028, 0x1203, b_pallet);
+
+			CHeapPtr<uint16_t> b_palette;
+			size_t b_palette_size = 0;
+			hr = load_palette(b_palette, &b_palette_size, image, 3);
 			if (FAILED(hr)) return hr;
 
 			void* pBits = nullptr;
@@ -1164,10 +1436,15 @@ namespace analyze_DCM
 				for (int x = 0; x < columns; x++)
 				{
 					const uint16_t& v = src[x];
+					if (v >= r_palette_size ||
+						v >= g_palette_size ||
+						v >= b_palette_size)
+						return E_FAIL;
+
 					dst[x] = alpha |
-						(((type)r_pallet[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getRIndex())) |
-						(((type)g_pallet[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getGIndex())) |
-						(((type)b_pallet[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getBIndex()));
+						(((type)r_palette[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getRIndex())) |
+						(((type)g_palette[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getGIndex())) |
+						(((type)b_palette[v] >> (16 - dstColorBits)) << (dstColorBits * decoderProcess<T>::getBIndex()));
 				}
 				src += columns;
 				dst += decoderProcess<T>::getScanOffset();
@@ -1396,10 +1673,25 @@ namespace analyze_DCM
 				{
 				case 8:
 				{
-					decoderGrayscale8<T> decoder;
-					hr = decoder.decode(image, param);
-					if (FAILED(hr)) return hr;
-					return decoder.getResult(ppBitmap);
+					if (!param.photometric_interpretation) return E_FAIL;
+					switch (*param.photometric_interpretation)
+					{
+					case MONOCHROME1:
+					case MONOCHROME2:
+					{
+						decoderGrayscale8<T> decoder;
+						hr = decoder.decode(image, param);
+						if (FAILED(hr)) return hr;
+						return decoder.getResult(ppBitmap);
+					}
+					case PALETTE_COLOR:
+					{
+						decoderPaletteColor8<T> decoder;
+						hr = decoder.decode(image, param);
+						if (FAILED(hr)) return hr;
+						return decoder.getResult(ppBitmap);
+					}
+					}
 				}
 				case 16:
 					if (!param.photometric_interpretation) return E_FAIL;
@@ -1420,7 +1712,6 @@ namespace analyze_DCM
 							if (FAILED(hr)) return hr;
 							return decoder.getResult(ppBitmap);
 						}
-						break;
 					case PALETTE_COLOR:
 					{
 						decoderPaletteColor16<T> decoder;
